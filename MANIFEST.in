@@ -1,0 +1,3 @@
+recursive-include image_cropping *.py *.txt *.rst * *.css
+recursive-include image_cropping/static *.py *.txt *.rst * *.css
+
