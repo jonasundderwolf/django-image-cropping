@@ -8,40 +8,50 @@ $(window).load(function() {
     var $images = $('img.admin-thumb[data-field-name=' + field + ']:visible');
     if (!$images.length) {return;}
     var image = $images.get(0);
-    var width = $this.data('width');
-    var height = $this.data('height');
+    var org_width = $(image).data('org-width')
+    var org_height = $(image).data('org-height')
+    var min_width = $this.data('width');
+    var min_height = $this.data('height');
 
     if ($this.data('adapt-rotation') == true) {
       if (image.width < image.height) {
         // cropping height/width need to be switched, picture is in portrait mode
-        var x = width;
-        width = height;
-        height = x;
+        var x = min_width;
+        min_width = min_height;
+        min_height = x;
       }
     }
-    var rx = 1000/image.width;
-    var ry = 1000/image.height;
     var options = {
       parent: 'body',
-      aspectRatio: width + ':' + height,
-      minWidth: width / rx,
-      minHeight: height / ry,
+      aspectRatio: min_width + ':' + min_height,
+      minWidth: min_width,
+      minHeight: min_height,
+      imageWidth: org_width,
+      imageHeight: org_height,
       handles: true,
       instance: true,
       onSelectEnd: update_selection($this)
     }
     var initial;
     if ($this.val()) {
-      initial = initial_cropping($this.val(), rx, ry);
+      initial = initial_cropping($this.val());
     } else {
-      initial = max_cropping(width, height, image.width, image.height);
-      // set cropfield to initial value
+      initial = max_cropping(min_width, min_height, org_width, org_height);
+
+        // set cropfield to initial value
       $this.val(new Array(
-        Math.round(initial.x1 * rx),
-        Math.round(initial.y1 * ry),
-        Math.round(initial.x2 * rx),
-        Math.round(initial.y2 * ry)
+        initial.x1,
+        initial.y1,
+        initial.x2,
+        initial.y2
       ).join(','));
+
+      if (org_width < min_width || org_height < min_height) {
+          // image is too small
+          // use max available area
+          options.minWidth = initial.x2 - initial.x1;
+          options.minHeight = initial.y2 - initial.y1;
+      }
     }
     $.extend(options, initial);
     $images.each(function() {
@@ -74,25 +84,23 @@ function max_cropping(width, height, image_width, image_height) {
   }
 }
 
-function initial_cropping(val, rx, ry) {
+function initial_cropping(val) {
   if (val == '') { return; }
   var s = val.split(',');
   return {
-    x1: Math.round(parseInt(s[0])/rx),
-    y1: Math.round(parseInt(s[1])/ry),
-    x2: Math.round(parseInt(s[2])/rx),
-    y2: Math.round(parseInt(s[3])/ry)
+    x1: parseInt(s[0]),
+    y1: parseInt(s[1]),
+    x2: parseInt(s[2]),
+    y2: parseInt(s[3])
   }
 }
 
 function _update_selection(img, sel, $crop_field) {
-  var rx = 1000 / img.width;
-  var ry = 1000 / img.height;
   $crop_field.val(new Array(
-    Math.round(sel.x1 * rx),
-    Math.round(sel.y1 * ry),
-    Math.round(sel.x2 * rx),
-    Math.round(sel.y2 * ry)
+    sel.x1,
+    sel.y1,
+    sel.x2,
+    sel.y2
   ).join(','));
 
   $('img.admin-thumb[data-field-name=' + $(img).data('field-name')+ ']:visible').each(function() {

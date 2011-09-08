@@ -1,7 +1,7 @@
 import re
 from django.utils.safestring import mark_safe
 from django.contrib.admin.widgets import AdminFileWidget
-from django.db.models.fields.files import FieldFile
+from django.db.models.fields.files import ImageFieldFile
 from django.conf import settings
 
 from easy_thumbnails.files import get_thumbnailer, Thumbnailer
@@ -29,12 +29,12 @@ class AdminCropImageWidget(AdminFileWidget):
 
     def render(self, name, value, attrs=None):
         output = []
-        if value and (isinstance(value, FieldFile) or isinstance(value,
+        if value and (isinstance(value, ImageFieldFile) or isinstance(value,
             Thumbnailer)):
             field_name = name
 
-            output.append('<img src="%s" class="admin-thumb" data-field-name="%s">' % (
-                thumbnail(value), field_name
+            output.append('<img src="%s" class="admin-thumb" data-field-name="%s" data-org-width="%s" data-org-height="%s">' % (
+                thumbnail(value), field_name, value.width, value.height
             ))
         output.append(super(AdminFileWidget, self).render(name, value, attrs))
         return mark_safe(u''.join(output))
