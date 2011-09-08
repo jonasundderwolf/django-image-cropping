@@ -2,11 +2,12 @@ import re
 from django.utils.safestring import mark_safe
 from django.contrib.admin.widgets import AdminFileWidget
 from django.db.models.fields.files import FieldFile
+from django.conf import settings
 
 from easy_thumbnails.files import get_thumbnailer, Thumbnailer
 
 
-ADMIN_THUMBNAIL_SIZE = (300, 300)
+ADMIN_THUMBNAIL_SIZE = getattr(settings, 'IMAGE_CROPPING_THUMB_SIZE', (300, 300))
 def thumbnail(image_path):
     thumbnailer = get_thumbnailer(image_path)
     thumbnail_options = {

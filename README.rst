@@ -15,6 +15,8 @@ Installation
 
     pip install -e git+ssh://git@github.com/anrie/django-image-cropping.git#egg=django-image-cropping
 
+#. Add ``easy_thumbnails`` and ``image_cropping`` to your INSTALLED_APPS. Image_cropping is required if you are using Django 1.3 and ``contrib.staticfiles``
+
 #. Adjust the thumbnail processors for ``easy_thumbnails`` in your ``settings.py``::
 
     from easy_thumbnails import defaults
@@ -24,8 +26,8 @@ Installation
 
 #. Deploy the necessary static files::
 
-   If you are using Django 1.3 and ``contrib.staticfiles`` the necessary static files should be picked up atomatically.   
-   In all other cases you have to copy or symlink the static files. Depending on your setup your command should look similiar to this:: 
+   If you are using Django 1.3 and ``contrib.staticfiles`` the necessary static files should be picked up atomatically.
+   In all other cases you have to copy or symlink the static files. Depending on your setup your command should look similiar to this:
 
        ln -s ~/.virtualenvs/yourenv/src/django-image-cropping/image_cropping/static/image_cropping/
 
@@ -37,7 +39,7 @@ Configuration
 
 You have to add two fields to your model. An ``ImageCropField`` and an ``ImageRatioField``.
 The ``ImageRatioField`` expects the name of the associated ImageCropField as first argument.
-Optionally you can define the ratio: Once set, your selection area is locked to the defined value.
+Optionally you can define the ratio, which also represents the minimal size: Once set, your selection area is locked to the defined value.
 
 #. Model fields and options::
 
@@ -53,6 +55,11 @@ Optionally you can define the ratio: Once set, your selection area is locked to 
 #. Example usage of the thumbnail processor::
 
     {% thumbnail yourmodel.image 195x195 box=yourmodel.cropping crop detail %}
+
+
+#. Additionaly you can define the size of the preview thumbnail in your settings.py:
+
+    IMAGE_CROPPING_THUMB_SIZE = (width, height)
 
 
 
