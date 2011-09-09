@@ -8,12 +8,14 @@ It provides the necessary fields, widgets and a (`easy_thumbnails
 <http://github.com/SmileyChris/easy-thumbnails>`_) thumbnail processor for displaying the 
 cropped image in your templates. 
 
+Screenshot: http://www.jonasundderwolf.de/media/uploads/judw_logo.png
+
 Installation
 ------------
 
-#. Install the django-image-cropping using pip. For example::
+#. Install django-image-cropping using pip. For example::
 
-    pip install -e git+ssh://git@github.com/anrie/django-image-cropping.git#egg=django-image-cropping
+    pip install -e git+ssh://git@github.com/jonasundderwolf/django-image-cropping.git#egg=django-image-cropping
 
 #. Add ``easy_thumbnails`` and ``image_cropping`` to your INSTALLED_APPS. ``image_cropping`` is only required if you are using Django 1.3 and ``contrib.staticfiles``
 
@@ -49,8 +51,6 @@ Optionally you can define the ratio, which also represents the minimal size: Onc
     cropping = ImageRatioField('image', '430x360')
 
 #. If your setup is correct you should automatically see the enhanced image widget that provides a selection area for the image in the admin backend. 
-
-    See: http://dl.dropbox.com/u/6900359/pselect.png
 
 #. Example usage of the thumbnail processor::
 
