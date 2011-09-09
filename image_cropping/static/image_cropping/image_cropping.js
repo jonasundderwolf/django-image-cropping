@@ -32,10 +32,26 @@ $(window).load(function() {
       instance: true,
       onSelectEnd: update_selection($this)
     }
+
+    var cropping_allowed = ((org_width > min_width) && (org_height > min_height)) 
+    options.cropping_allowed = cropping_allowed;
+
+    // if the image is smaller than the minimal cropping warn the user
+    // but allow a smaller cropping. we use a fixed minimal size to prevent
+    // negative values (that result in a crazy selection behaviour).
+
+    if (!cropping_allowed) {
+      options.minWidth = 30;
+      options.minHeight = 30;
+    };
+   
+    // is the image bigger than the minimal cropping values?
+    // other lock cropping area on full image 
     var initial;
     if ($this.val()) {
       initial = initial_cropping($this.val());
     } else {
+
       initial = max_cropping(min_width, min_height, org_width, org_height);
 
         // set cropfield to initial value
@@ -45,16 +61,14 @@ $(window).load(function() {
         initial.x2,
         initial.y2
       ).join(','));
-
-      if (org_width < min_width || org_height < min_height) {
-          // image is too small
-          // use max available area
-          options.minWidth = initial.x2 - initial.x1;
-          options.minHeight = initial.y2 - initial.y1;
-      }
     }
+
     $.extend(options, initial);
+
     $images.each(function() {
+      if (!options.cropping_allowed) {
+        $(this).css("border", "solid 2px red");
+      }
       $(this).data('imgareaselect', $(this).imgAreaSelect(options));
     });
   });
@@ -96,6 +110,7 @@ function initial_cropping(val) {
 }
 
 function _update_selection(img, sel, $crop_field) {
+
   $crop_field.val(new Array(
     sel.x1,
     sel.y1,
