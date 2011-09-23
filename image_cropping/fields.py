@@ -1,10 +1,11 @@
 from django.db import models
 from django import forms
-from .widgets import AdminCropImageWidget
+from .widgets import ImageCropWidget
+
 
 class ImageCropField(models.ImageField):
     def formfield(self, *args, **kwargs):
-        kwargs['widget'] = AdminCropImageWidget
+        kwargs['widget'] = ImageCropWidget
         return super(ImageCropField, self).formfield(*args, **kwargs)
 
     def south_field_triple(self):

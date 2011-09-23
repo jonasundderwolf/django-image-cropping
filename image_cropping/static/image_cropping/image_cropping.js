@@ -1,20 +1,28 @@
-$(window).load(function() {
+$(function() {
   $('input.image-ratio').each(function() {
+    var $this = $(this);
     // find the image field corresponding to this cropping value
     // by stripping the last part of our id and appending the image field name
-    var $this = $(this);
-    $this.parents('div.form-row:first').hide();
     var field = $this.attr('name').replace($this.data('my-name'), $this.data('image-field'));
-    var $images = $('img.admin-thumb[data-field-name=' + field + ']:visible');
-    if (!$images.length) {return;}
-    var image = $images.get(0);
-    var org_width = $(image).data('org-width')
-    var org_height = $(image).data('org-height')
+
+    // there should only be one file field we're referencing but in special cases
+    // there can be several. Deal with it gracefully.
+    var $image_input = $('input.crop-thumb[data-field-name=' + field + ']:visible:first');
+
+    // skip this image if it's empty and hide the whole field
+    if (!$image_input.length || $image_input.data('thumbnail-url') == undefined) {
+      $this.parents('div.form-row:first').hide();
+      return;
+    }
+    var image_id = $this.attr('id') + '-image';
+
+    var org_width = $image_input.data('org-width')
+    var org_height = $image_input.data('org-height')
     var min_width = $this.data('width');
     var min_height = $this.data('height');
 
     if ($this.data('adapt-rotation') == true) {
-      if (image.width < image.height) {
+      if ($image.get(0).width < $image.get(0).height) {
         // cropping height/width need to be switched, picture is in portrait mode
         var x = min_width;
         min_width = min_height;
@@ -30,23 +38,21 @@ $(window).load(function() {
       imageHeight: org_height,
       handles: true,
       instance: true,
-      onSelectEnd: update_selection($this)
+      onSelectEnd: update_selection($this),
+      cropping_allowed: (org_width > min_width) && (org_height > min_height)
     }
-
-    var cropping_allowed = ((org_width > min_width) && (org_height > min_height)) 
-    options.cropping_allowed = cropping_allowed;
 
     // if the image is smaller than the minimal cropping warn the user
     // but allow a smaller cropping. we use a fixed minimal size to prevent
     // negative values (that result in a crazy selection behaviour).
 
-    if (!cropping_allowed) {
+    if (!options.cropping_allowed) {
       options.minWidth = 30;
       options.minHeight = 30;
     };
    
     // is the image bigger than the minimal cropping values?
-    // other lock cropping area on full image 
+    // otherwise lock cropping area on full image 
     var initial;
     if ($this.val()) {
       initial = initial_cropping($this.val());
@@ -65,12 +71,14 @@ $(window).load(function() {
 
     $.extend(options, initial);
 
-    $images.each(function() {
-      if (!options.cropping_allowed) {
-        $(this).css("border", "solid 2px red");
-      }
-      $(this).data('imgareaselect', $(this).imgAreaSelect(options));
-    });
+    // hide the input field, show image to crop instead
+    $this.hide().after($('<img>', {
+      'id': image_id,
+      'src': $image_input.data('thumbnail-url'),
+      'style': options.cropping_allowed ? '' : 'border:2px solid red'
+    }));
+
+    $this.data('imgareaselect', $('#' + image_id).imgAreaSelect(options));
   });
 });
 
@@ -118,7 +126,7 @@ function _update_selection(img, sel, $crop_field) {
     sel.y2
   ).join(','));
 
-  $('img.admin-thumb[data-field-name=' + $(img).data('field-name')+ ']:visible').each(function() {
+  $('img.crop-thumb[data-field-name=' + $(img).data('field-name')+ ']:visible').each(function() {
     var ias = $(this).data('imgareaselect');
     if (ias !== undefined) {
       ias.setSelection(sel.x1, sel.y1, sel.x2, sel.y2, true);

@@ -1,10 +1,7 @@
-import re
-from django.utils.safestring import mark_safe
 from django.contrib.admin.widgets import AdminFileWidget
-from django.db.models.fields.files import ImageFieldFile
 from django.conf import settings
 
-from easy_thumbnails.files import get_thumbnailer, Thumbnailer
+from easy_thumbnails.files import get_thumbnailer
 
 
 ADMIN_THUMBNAIL_SIZE = getattr(settings, 'IMAGE_CROPPING_THUMB_SIZE', (300, 300))
@@ -18,23 +15,26 @@ def thumbnail(image_path):
     return thumb.url
 
 
-class AdminCropImageWidget(AdminFileWidget):
+class ImageCropWidget(AdminFileWidget):
+    def render(self, name, value, attrs=None):
+        if not attrs:
+            attrs = {}
+        if value:
+            attrs.update({
+                'class': "crop-thumb",
+                'data-thumbnail-url': thumbnail(value),
+                'data-field-name': name,
+                'data-org-width': value.width,
+                'data-org-height': value.height,
+            })
+        return super(AdminFileWidget, self).render(name, value, attrs)
+
     class Media:
         js = (
-            'https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js',
+            getattr(settings, 'JQUERY_URL',
+                'https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js'),
             "image_cropping/jquery.imgareaselect.min.js",
             "image_cropping/image_cropping.js",
         )
         css= {'all' : ("image_cropping/imgareaselect-default.css",)}
 
-    def render(self, name, value, attrs=None):
-        output = []
-        if value and (isinstance(value, ImageFieldFile) or isinstance(value,
-            Thumbnailer)):
-            field_name = name
-
-            output.append('<img src="%s" class="admin-thumb" data-field-name="%s" data-org-width="%s" data-org-height="%s">' % (
-                thumbnail(value), field_name, value.width, value.height
-            ))
-        output.append(super(AdminFileWidget, self).render(name, value, attrs))
-        return mark_safe(u''.join(output))
