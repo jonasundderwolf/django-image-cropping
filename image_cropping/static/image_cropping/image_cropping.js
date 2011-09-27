@@ -38,6 +38,7 @@ $(function() {
       imageHeight: org_height,
       handles: true,
       instance: true,
+      onInit: update_selection($this),
       onSelectEnd: update_selection($this),
       cropping_allowed: (org_width > min_width) && (org_height > min_height)
     }
