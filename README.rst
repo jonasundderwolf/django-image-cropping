@@ -33,12 +33,11 @@ Installation
         'image_cropping.thumbnail_processors.crop_corners',
     ) + defaults.PROCESSORS
 
-#. Deploy the necessary static files::
+#. Deploy the necessary static files. If you are using Django 1.3 and ``contrib.staticfiles`` the 
+   necessary static files should be picked up automatically. In all other cases you have to copy or
+   symlink the static files. Depending on your setup the command should look similiar to this::
 
-   If you are using Django 1.3 and ``contrib.staticfiles`` the necessary static files should be picked up automatically.
-   In all other cases you have to copy or symlink the static files. Depending on your setup the command should look similiar to this::
-
-       ln -s ~/.virtualenvs/yourenv/src/django-image-cropping/image_cropping/static/image_cropping/
+        ln -s ~/.virtualenvs/yourenv/src/django-image-cropping/image_cropping/static/image_cropping/
 
     
 
