@@ -22,7 +22,7 @@ Installation
 
 #. Install django-image-cropping using pip. For example::
 
-    pip install -e git+ssh://git@github.com/jonasundderwolf/django-image-cropping.git#egg=django-image-cropping
+    pip install django-image-cropping
 
 #. Add ``easy_thumbnails`` and ``image_cropping`` to your INSTALLED_APPS. ``image_cropping`` is only required if you are using Django 1.3 and ``contrib.staticfiles``
 
