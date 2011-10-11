@@ -1,3 +1,6 @@
+include LICENSE.txt
+include CONTRIBUTORS
+include README.rst
+include MANIFEST.in
 recursive-include image_cropping *.py *.txt *.rst * *.css
 recursive-include image_cropping/static *.py *.txt *.rst * *.css
-

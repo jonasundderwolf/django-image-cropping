@@ -1,12 +1,13 @@
 from distutils.core import setup
 from setuptools import setup, find_packages
 
-setup(name = "image_cropping",
-    version = "0.1",
-    description = "an app for cropping images",
-    author = "JVP",
+setup(name = "django-image-cropping",
+    version = "0.2.2",
+    description = "A reusable app for cropping images easily and non-destructively in Django",
+    long_description=open('README.rst').read(),
+    author = "jonasvp",
     author_email = "jvp@jonasundderwolf.de",
-    url = "dev.jonasundderwolf.de:image_cropping.git",
+    url = "http://github.com/jonasundderwolf/django-image-cropping",
     #Name the folder where your packages live:
     #(If you have other packages (dirs) or modules (py files) then
     #put them into the package directory - they will be found
@@ -17,5 +18,14 @@ setup(name = "image_cropping",
         'docutils',
         'PIL',
         'easy_thumbnails',
+    ],
+    classifiers = [
+        'Development Status :: 4 - Beta',
+        'Environment :: Web Environment',
+        'Framework :: Django',
+        'Intended Audience :: Developers',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python',
+        'Topic :: Software Development :: Libraries :: Python Modules',
     ],
 )
