@@ -67,7 +67,7 @@ $(function() {
     $this.hide().after($('<img>', {
       'id': image_id,
       'src': $image_input.data('thumbnail-url'),
-      'style': options.cropping_allowed ? 'border:2px solid green' : 'border:2px solid red'
+      'style': options.cropping_allowed ? '' : 'border:2px solid red'
     }));
 
     $this.data('imgareaselect', $('#' + image_id).imgAreaSelect(options));
@@ -124,13 +124,11 @@ function update_selection($crop_field) {
   return function(img, sel) { _update_selection(img, sel, $crop_field); };
 }
 
-function crop_indication(img, sel,$crop_field) {
+function crop_indication(img, sel, $crop_field) {
   var min_width = $crop_field.data("width");
   var min_height = $crop_field.data("height");
   // indicate if cropped area gets smaller than the specified minimal cropping
-  if ((sel.width < min_width) && (sel.height < min_height)) {
+  if ((sel.width < min_width) || (sel.height < min_height)) {
     $(img).css("border", "2px solid red");
-  } else {
-    $(img).css("border", "2px solid green");
-  }
+  } 
 }
