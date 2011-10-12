@@ -20,11 +20,11 @@ class ImageCropField(models.ImageField):
 
 
 class ImageRatioField(models.CharField):
-    def __init__(self, image_field, size, adapt_rotation=False):
+    def __init__(self, image_field, size, adapt_rotation=False, verbose_name=None):
         self.width, self.height = size.split('x')
         self.image_field = image_field
         self.adapt_rotation = adapt_rotation
-        super(ImageRatioField, self).__init__(max_length=255, blank=True)
+        super(ImageRatioField, self).__init__(max_length=255, blank=True, verbose_name=verbose_name)
 
     def formfield(self, *args, **kwargs):
         kwargs['widget'] =  forms.TextInput(attrs={
