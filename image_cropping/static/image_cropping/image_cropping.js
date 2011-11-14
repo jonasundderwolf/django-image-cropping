@@ -15,7 +15,7 @@ $(function() {
       return;
     }
     var image_id = $this.attr('id') + '-image';
-
+    var $imgparent = $this.parents('div.form-row').parent().parent();
     var org_width = $image_input.data('org-width')
     var org_height = $image_input.data('org-height')
     var min_width = $this.data('width');
@@ -30,7 +30,7 @@ $(function() {
       }
     }
     var options = {
-      parent: 'body',
+      parent: $imgparent,
       aspectRatio: min_width + ':' + min_height,
       minWidth: 5,
       minHeight: 5,
