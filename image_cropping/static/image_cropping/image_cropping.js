@@ -15,9 +15,14 @@ $(function() {
       return;
     }
     var image_id = $this.attr('id') + '-image';
+
     var $imgparent = $this.parents('div.form-row').parent().parent();
-    var org_width = $image_input.data('org-width')
-    var org_height = $image_input.data('org-height')
+    if (!$imgparent.length) {
+      $imgparent = 'body';
+    }
+
+    var org_width = $image_input.data('org-width');
+    var org_height = $image_input.data('org-height');
     var min_width = $this.data('width');
     var min_height = $this.data('height');
 
@@ -42,7 +47,6 @@ $(function() {
       onSelectEnd: update_selection($this),
       cropping_allowed: (org_width > min_width) && (org_height > min_height)
     }
-
     // is the image bigger than the minimal cropping values?
     // otherwise lock cropping area on full image 
     var initial;
