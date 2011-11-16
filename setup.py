@@ -15,8 +15,6 @@ setup(name = "django-image-cropping",
     packages = find_packages(),
     include_package_data=True,
     install_requires = [
-        'docutils',
-        'PIL',
         'easy_thumbnails',
     ],
     classifiers = [
