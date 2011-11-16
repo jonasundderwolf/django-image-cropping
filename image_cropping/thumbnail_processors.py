@@ -8,7 +8,7 @@ def crop_corners(image, box=None, **kwargs):
         width = abs(values[2] - values[0])
         height = abs(values[3] - values[1])
         if width != image.size[0] or height != image.size[1]:
-            image = image.crop(*values)
+            image = image.crop(values)
 
     return image
 
