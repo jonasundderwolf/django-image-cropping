@@ -1,7 +1,7 @@
 from django.db import models
 from django import forms
 from django.conf import settings
-from .widgets import ImageCropWidget
+from .widgets import ImageCropWidget, CropForeignKeyWidget
 
 
 class ImageCropField(models.ImageField):
@@ -16,6 +16,32 @@ class ImageCropField(models.ImageField):
         # We'll just introspect ourselves, since we inherit.
         from south.modelsinspector import introspector
         field_class = "django.db.models.fields.files.ImageField"
+        args, kwargs = introspector(self)
+        return (field_class, args, kwargs)
+
+
+class CropForeignKey(models.ForeignKey):
+    '''
+    A croppable image field contained in another model. Only works in admin
+    for now, as it uses the raw_id widget.
+    '''
+
+    def __init__(self, model, field_name, *args, **kwargs):
+        self.field_name = field_name
+        super(CropForeignKey, self).__init__(model, *args, **kwargs)
+
+    def formfield(self, *args, **kwargs):
+        kwargs['widget'] = CropForeignKeyWidget(self.rel, field_name=self.field_name,
+            using=kwargs.get('using'))
+        return super(CropForeignKey, self).formfield(*args, **kwargs)
+
+    def south_field_triple(self):
+        """
+        Return a suitable description of this field for South.
+        """
+        # We'll just introspect ourselves, since we inherit.
+        from south.modelsinspector import introspector
+        field_class = "django.db.models.fields.related.ForeignKey"
         args, kwargs = introspector(self)
         return (field_class, args, kwargs)
 
