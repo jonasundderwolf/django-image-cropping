@@ -20,13 +20,17 @@ def thumbnail(image_path):
 
 
 def get_attrs(image, name):
-    return {
-        'class': "crop-thumb",
-        'data-thumbnail-url': thumbnail(image),
-        'data-field-name': name,
-        'data-org-width': image.width,
-        'data-org-height': image.height,
-    }
+    try:
+        return {
+            'class': "crop-thumb",
+            'data-thumbnail-url': thumbnail(image),
+            'data-field-name': name,
+            'data-org-width': image.width,
+            'data-org-height': image.height,
+        }
+    except ValueError:
+        # can't create thumbnail from image
+        return {}
 
 class CropWidget(object):
     class Media:
