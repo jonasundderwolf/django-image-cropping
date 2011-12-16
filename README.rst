@@ -64,9 +64,14 @@ size (see below).
 #. If your setup is correct you should automatically see the enhanced image widget that provides a selection
    area for the image in the admin backend. 
 
-#. Example usage of the thumbnail processor::
+#. We also provide an easy to use templatetag. You can adjust the image size with optional arguments like ``scale``,
+``width`` or ``height`` and even force to ``upscale``.::
+    {% load image_cropping %}
+    {% cropped_thumnail yourmodel ratiofieldname [scale=INT|width=INT|height=INT] [upscale] %}
 
-    {% thumbnail yourmodel.image 430x360 box=yourmodel.cropping crop detail %}
+Example usage::
+    {% load image_cropping %}
+    {% cropped_thumbnail yourmodel cropping %}
 
 #. Additionally you can define the maximum size of the preview thumbnail in your settings.py::
 
@@ -95,12 +100,11 @@ If you need the same image in multiple formats, simply specify another ImageRati
     # size is "width x height"
     list_page_cropping = ImageRatioField('image', '200x100')
     detail_page_cropping = ImageRatioField('image', '430x360')
- 
 
 In your templates, use the corresponding ratio field::
 
-    {% thumbnail yourmodel.image 200x100 box=yourmodel.list_page_cropping crop detail %}
-
+    {% load image_cropping %}
+    {% cropped_thumbnail yourmodel list_page_cropping %}
 
 If you need to crop an image contained within another model, referenced by a ForeignKey, use a ``CropForeignKey``. This
 field works like a regular ForeignKey but expects a keyword argument named ``field_name``. The model attribute with this
