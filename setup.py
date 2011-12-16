@@ -2,7 +2,7 @@ from distutils.core import setup
 from setuptools import setup, find_packages
 
 setup(name = "django-image-cropping",
-    version = "0.2.2",
+    version = "0.3.4",
     description = "A reusable app for cropping images easily and non-destructively in Django",
     long_description=open('README.rst').read(),
     author = "jonasvp",
@@ -15,8 +15,6 @@ setup(name = "django-image-cropping",
     packages = find_packages(),
     include_package_data=True,
     install_requires = [
-        'docutils',
-        'PIL',
         'easy_thumbnails',
     ],
     classifiers = [

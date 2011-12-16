@@ -5,13 +5,10 @@ def crop_corners(image, box=None, **kwargs):
 
     if box:
         values = [int(x) for x in box.split(',')]
-        box = (
-            int(values[0]),
-            int(values[1]),
-            int(values[2]),
-            int(values[3]),
-        )
-        image = image.crop(box)
+        width = abs(values[2] - values[0])
+        height = abs(values[3] - values[1])
+        if width != image.size[0] or height != image.size[1]:
+            image = image.crop(values)
 
     return image
 

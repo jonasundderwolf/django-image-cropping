@@ -16,8 +16,13 @@ $(function() {
     }
     var image_id = $this.attr('id') + '-image';
 
-    var org_width = $image_input.data('org-width')
-    var org_height = $image_input.data('org-height')
+    var $imgparent = $this.parents('div.form-row').parent().parent();
+    if (!$imgparent.length) {
+      $imgparent = 'body';
+    }
+
+    var org_width = $image_input.data('org-width');
+    var org_height = $image_input.data('org-height');
     var min_width = $this.data('width');
     var min_height = $this.data('height');
 
@@ -30,7 +35,7 @@ $(function() {
       }
     }
     var options = {
-      parent: 'body',
+      parent: $imgparent,
       aspectRatio: min_width + ':' + min_height,
       minWidth: 5,
       minHeight: 5,
@@ -40,9 +45,7 @@ $(function() {
       instance: true,
       onInit: update_selection($this),
       onSelectEnd: update_selection($this),
-      cropping_allowed: (org_width > min_width) && (org_height > min_height)
     }
-
     // is the image bigger than the minimal cropping values?
     // otherwise lock cropping area on full image 
     var initial;
@@ -67,7 +70,7 @@ $(function() {
     $this.hide().after($('<img>', {
       'id': image_id,
       'src': $image_input.data('thumbnail-url'),
-      'style': options.cropping_allowed ? 'border:2px solid green' : 'border:2px solid red'
+      'style': ($this.data('size-warning') && ((org_width < min_width) || (org_height < min_height))) ? 'border:2px solid red': ''
     }));
 
     $this.data('imgareaselect', $('#' + image_id).imgAreaSelect(options));
@@ -110,8 +113,9 @@ function initial_cropping(val) {
 }
 
 function _update_selection(img, sel, $crop_field) {
-
-  crop_indication(img, sel, $crop_field);
+  if ($crop_field.data('size-warning')) {
+    crop_indication(img, sel, $crop_field);
+  }
   $crop_field.val(new Array(
     sel.x1,
     sel.y1,
@@ -124,13 +128,13 @@ function update_selection($crop_field) {
   return function(img, sel) { _update_selection(img, sel, $crop_field); };
 }
 
-function crop_indication(img, sel,$crop_field) {
+function crop_indication(img, sel, $crop_field) {
+  // indicate if cropped area gets smaller than the specified minimal cropping
   var min_width = $crop_field.data("width");
   var min_height = $crop_field.data("height");
-  // indicate if cropped area gets smaller than the specified minimal cropping
-  if ((sel.width < min_width) && (sel.height < min_height)) {
+  if ((sel.width < min_width) || (sel.height < min_height)) {
     $(img).css("border", "2px solid red");
   } else {
-    $(img).css("border", "2px solid green");
+    $(img).css("border", "none");
   }
 }
