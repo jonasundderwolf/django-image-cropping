@@ -1,3 +1,4 @@
+import Image
 from django import template
 from easy_thumbnails.files import get_thumbnailer
 
@@ -50,7 +51,7 @@ class CroppingNode(template.Node):
 
     def render(self, context):
         instance = template.Variable(self.instance).resolve(context)
-        ratiofield =instance._meta.get_field(self.ratiofieldname)
+        ratiofield = instance._meta.get_field(self.ratiofieldname)
         image = getattr(instance, ratiofield.image_field)
         size = (int(ratiofield.width), int(ratiofield.height))
         box = getattr(instance, self.ratiofieldname)
@@ -67,6 +68,11 @@ class CroppingNode(template.Node):
                 height = option[1]
                 width = height * size[0] / size[1]
             size = (int(width), int(height))
+
+        if ratiofield.adapt_rotation:
+            if (image.height > image.width) != (size[1] > size[0]):
+                # box needs rotation
+                size = (size[1], size[0])
 
         thumbnailer = get_thumbnailer(image)
         thumbnail_options = {

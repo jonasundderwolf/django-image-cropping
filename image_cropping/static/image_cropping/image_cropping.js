@@ -26,8 +26,11 @@ $(function() {
     var min_width = $this.data('width');
     var min_height = $this.data('height');
 
+    var image_verticle = (org_height > org_width);
+    var select_verticle = (min_height > min_width);
+
     if ($this.data('adapt-rotation') == true) {
-      if ($image.get(0).width < $image.get(0).height) {
+      if (image_verticle != select_verticle) {
         // cropping height/width need to be switched, picture is in portrait mode
         var x = min_width;
         min_width = min_height;
