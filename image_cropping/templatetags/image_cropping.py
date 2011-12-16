@@ -3,21 +3,6 @@ from easy_thumbnails.files import get_thumbnailer
 
 register = template.Library()
 
-@register.simple_tag(takes_context=True)
-def cropped(context, obj, imagefield, croppingfield):
-    cropping = obj._meta.get_field(croppingfield)
-
-    thumbnailer = get_thumbnailer(getattr(obj, imagefield))
-    thumbnail_options = {
-        'size': (cropping.width, cropping.height),
-        'box': getattr(obj, croppingfield),
-        'crop': True,
-        'detail': True,
-    }
-    thumb = thumbnailer.get_thumbnail(thumbnail_options)
-
-    return thumb.url
-
 # Sytanx:
 # {% cropped2 instancename ratiofieldname [scale=0.1|width=100|height=200] %}
 @register.tag
@@ -33,11 +18,9 @@ def cropped2(parser, token):
         name, value = args[3].split('=')
         option = (name.lower(), float(value))
         if not option[0] in ('scale', 'width', 'height'):
-            raise template.TemplateSyntaxError("invalid optional argument %s" % arg[3])
+            raise template.TemplateSyntaxError("invalid optional argument %s" % args[3])
         if option[1] < 0:
             raise template.TemplateSyntaxError("%s must have a positive value" % option[0])
-        if option[0] == 'scale' and option[1] > 1:
-            raise template.TemplateSyntaxError("%s must be in range [0:1]" % option[0])
 
     except ValueError:
         raise template.TemplateSyntaxError("%s needs an numeric argument" % args[3])
