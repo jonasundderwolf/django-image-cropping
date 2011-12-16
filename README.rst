@@ -69,7 +69,7 @@ size (see below).
     {% load image_cropping %}
     {% cropped_thumnail yourmodel ratiofieldname [scale=INT|width=INT|height=INT] [upscale] %}
 
-  Example usage::
+   Example usage::
 
     {% load image_cropping %}
     {% cropped_thumnail yourmodel cropping scale=0.5 %}
