@@ -10,30 +10,44 @@ def cropped2(parser, token):
     args = token.split_contents()
 
     if len(args) < 3:
-        raise template.TemplateSyntaxError("%r tag requires exactly two arguments" % args[0])
-    if len(args) > 4:
-        raise template.TemplateSyntaxError("%r tag allows only one optional argument" % args[0])
+        # requites model and ratiofieldname
+        raise template.TemplateSyntaxError("%r tag requires at least two arguments" % args[0])
 
-    try:
-        name, value = args[3].split('=')
-        option = (name.lower(), float(value))
-        if not option[0] in ('scale', 'width', 'height'):
-            raise template.TemplateSyntaxError("invalid optional argument %s" % args[3])
-        if option[1] < 0:
-            raise template.TemplateSyntaxError("%s must have a positive value" % option[0])
 
-    except ValueError:
-        raise template.TemplateSyntaxError("%s needs an numeric argument" % args[3])
-    except IndexError:
-        option = None
+    option = None
+    upscale = False
 
-    return CroppingNode(args[1], args[2], option)
+    # parse additional arguments
+    for arg in args[3:]:
+        arg = arg.lower()
+        try:
+            name, value = arg.split('=')
+
+            if option:
+                raise template.TemplateSyntaxError("%s: there is already an option defined!" % arg)
+            try: # parse option
+                option = (name, float(value))
+                if not option[0] in ('scale', 'width', 'height'):
+                    raise template.TemplateSyntaxError("invalid optional argument %s" % args[3])
+                if option[1] < 0:
+                    raise template.TemplateSyntaxError("%s must have a positive value" % option[0])
+            except ValueError:
+                raise template.TemplateSyntaxError("%s needs an numeric argument" % args[3])
+
+        except ValueError: # check for upscale argument
+            if arg == 'upscale':
+                upscale = True
+            else:
+                raise template.TemplateSyntaxError("%s is an invalid option" % arg)
+
+    return CroppingNode(args[1], args[2], option, upscale)
 
 class CroppingNode(template.Node):
-    def __init__(self, instance, ratiofieldname, option=None):
+    def __init__(self, instance, ratiofieldname, option=None, upscale=False):
         self.instance = instance
         self.ratiofieldname = ratiofieldname
         self.option = option
+        self.upscale = upscale
 
     def render(self, context):
         instance = template.Variable(self.instance).resolve(context)
@@ -56,12 +70,12 @@ class CroppingNode(template.Node):
             size = (int(width), int(height))
 
         thumbnailer = get_thumbnailer(image)
-        # TODO force upscaling if requested
         thumbnail_options = {
             'size': size,
             'box': box,
             'crop': True,
             'detail': True,
+            'upscale': self.upscale
         }
         thumb = thumbnailer.get_thumbnail(thumbnail_options)
 
