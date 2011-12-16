@@ -4,15 +4,14 @@ from easy_thumbnails.files import get_thumbnailer
 register = template.Library()
 
 # Sytanx:
-# {% cropped2 instancename ratiofieldname [scale=0.1|width=100|height=200] %}
+# {% cropped_thumbnail instancename ratiofieldname [scale=0.1|width=100|height=200] [upscale] %}
 @register.tag
-def cropped2(parser, token):
+def cropped_thumbnail(parser, token):
     args = token.split_contents()
 
     if len(args) < 3:
         # requites model and ratiofieldname
         raise template.TemplateSyntaxError("%r tag requires at least two arguments" % args[0])
-
 
     option = None
     upscale = False
