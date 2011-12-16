@@ -64,14 +64,15 @@ size (see below).
 #. If your setup is correct you should automatically see the enhanced image widget that provides a selection
    area for the image in the admin backend. 
 
-#. We also provide an easy to use templatetag. You can adjust the image size with optional arguments like ``scale``,
-``width`` or ``height`` and even force to ``upscale``.::
+#. We also provide an easy to use templatetag. You can adjust the image size with optional arguments like ``scale``, ``width`` or ``height`` and even force to ``upscale``::
+
     {% load image_cropping %}
     {% cropped_thumnail yourmodel ratiofieldname [scale=INT|width=INT|height=INT] [upscale] %}
 
-Example usage::
+  Example usage::
+
     {% load image_cropping %}
-    {% cropped_thumbnail yourmodel cropping %}
+    {% cropped_thumnail yourmodel cropping scale=0.5 %}
 
 #. Additionally you can define the maximum size of the preview thumbnail in your settings.py::
 
