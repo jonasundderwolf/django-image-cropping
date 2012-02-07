@@ -2,7 +2,7 @@ var image_cropping = {
   $: jQuery.noConflict(),
   init: function() {
     image_cropping.$('input.image-ratio').each(function() {
-      var $this = $(this),
+      var $this = image_cropping.$(this),
       // find the image field corresponding to this cropping value
       // by stripping the last part of our id and appending the image field name
           field = $this.attr('name').replace($this.data('my-name'), $this.data('image-field')),
