@@ -49,7 +49,7 @@ var image_cropping = {
         $this.val(initial.join(','));
       }
 
-      $.extend(options, {setSelect: initial});
+      image_cropping.$.extend(options, {setSelect: initial});
 
       // hide the input field, show image to crop instead
       $this.hide().after(image_cropping.$('<img>', {
