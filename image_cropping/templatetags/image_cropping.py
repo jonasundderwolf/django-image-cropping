@@ -42,6 +42,9 @@ def cropped_thumbnail(parser, token):
 
     return CroppingNode(args[1], args[2], option, upscale)
 
+
+from django.db.models.fields.files import ImageFieldFile
+
 class CroppingNode(template.Node):
     def __init__(self, instance, ratiofieldname, option=None, upscale=False):
         self.instance = instance
@@ -55,6 +58,12 @@ class CroppingNode(template.Node):
         image = getattr(instance, ratiofield.image_field)
         size = (int(ratiofield.width), int(ratiofield.height))
         box = getattr(instance, self.ratiofieldname)
+
+        # get image_field from CropForeignKeyField
+        print type(image)
+        if not isinstance(image, ImageFieldFile):
+            fk_field = instance._meta.get_field(ratiofield.image_field)
+            image = getattr(image, fk_field.field_name)
 
         option = self.option
         if option:
