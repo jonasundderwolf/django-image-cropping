@@ -37,10 +37,10 @@ class CropWidget(object):
         js = (
             getattr(settings, 'JQUERY_URL',
                 'https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js'),
-            "image_cropping/jquery.imgareaselect.min.js",
+            "image_cropping/js/jquery.Jcrop.min.js",
             "image_cropping/image_cropping.js",
         )
-        css= {'all' : ("image_cropping/imgareaselect-default.css",)}
+        css= {'all' : ("image_cropping/css/jquery.Jcrop.min.css",)}
 
 
 class ImageCropWidget(AdminFileWidget, CropWidget):
