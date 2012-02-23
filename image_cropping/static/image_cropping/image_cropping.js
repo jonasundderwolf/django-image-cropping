@@ -2,9 +2,9 @@ var image_cropping = {
   $: jQuery.noConflict(),
   init: function() {
     // set styles for size-warning
-    var style_img_warning = 'div.jcrop-image.size-warning img{border:2px solid red !important;}';
-    var style_img_default = 'div.jcrop-image img{border:2px solid #ffffff !important}';
-    image_cropping.$("<style type='text/css'>" + style_img_warning + style_img_default + "</style>").appendTo('head');
+    var style_img_warning = 'div.jcrop-image.size-warning .jcrop-vline{border:1px solid red; background: none;}' +
+                            'div.jcrop-image.size-warning .jcrop-hline{border:1px solid red; background: none;}';
+    image_cropping.$("<style type='text/css'>" + style_img_warning + "</style>").appendTo('head');
 
     image_cropping.$('input.image-ratio').each(function() {
       var $this = image_cropping.$(this),
@@ -38,7 +38,7 @@ var image_cropping = {
 
       var $image = image_cropping.$('<img>', {
         'id': image_id,
-        'src': $image_input.data('thumbnail-url'),
+        'src': $image_input.data('thumbnail-url')
       });
 
       var options = {
@@ -115,8 +115,6 @@ var image_cropping = {
   crop_indication: function(sel, $crop_field) {
     // indicate if cropped area gets smaller than the specified minimal cropping
     var $jcrop_holder = $crop_field.siblings('.jcrop-holder');  
-    var $jcrop_img = $jcrop_holder.find('.jcrop-image');  
-
     var min_width = $crop_field.data("width");
     var min_height = $crop_field.data("height");
     if ((sel.w < min_width) || (sel.h < min_height)) {
