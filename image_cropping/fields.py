@@ -1,7 +1,7 @@
 from django.db import models
 from django import forms
 from django.conf import settings
-from .widgets import ImageCropWidget, CropForeignKeyWidget
+from .widgets import ImageCropWidget
 
 
 class ImageCropField(models.ImageField):
@@ -29,11 +29,6 @@ class CropForeignKey(models.ForeignKey):
     def __init__(self, model, field_name, *args, **kwargs):
         self.field_name = field_name
         super(CropForeignKey, self).__init__(model, *args, **kwargs)
-
-    def formfield(self, *args, **kwargs):
-        kwargs['widget'] = CropForeignKeyWidget(self.rel, field_name=self.field_name,
-            using=kwargs.get('using'))
-        return super(CropForeignKey, self).formfield(*args, **kwargs)
 
     def south_field_triple(self):
         """

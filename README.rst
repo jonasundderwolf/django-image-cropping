@@ -118,3 +118,4 @@ name needs to be an ImageField that will be cropped::
         cropping = ImageRatioField('image', '120x100')
 
 The CropForeignKey works only in the admin for now, as it uses the ``raw_id`` widget.
+To enable the widget your ModelAdmin has to inherit from ``ImageCroppingAdmin``.
