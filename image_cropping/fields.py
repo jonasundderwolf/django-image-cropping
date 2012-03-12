@@ -19,7 +19,7 @@ class ImageCropField(models.ImageField):
         args, kwargs = introspector(self)
         return (field_class, args, kwargs)
 
-
+#deprecated, as we now set the widget in the ModelAdmin
 class CropForeignKey(models.ForeignKey):
     '''
     A croppable image field contained in another model. Only works in admin
@@ -49,6 +49,14 @@ class ImageRatioField(models.CharField):
         self.adapt_rotation = adapt_rotation
         self.size_warning = size_warning
         super(ImageRatioField, self).__init__(max_length=255, blank=True, verbose_name=verbose_name)
+
+    def contribute_to_class(self, cls, name):
+        super(ImageRatioField, self).contribute_to_class(cls, name)
+        # attach a list of fields that are referenced by the ImageRatioField
+        # so we can set the correct widget in the ModelAdmin
+        if not hasattr(cls, 'crop_fk_fields'):
+            cls.add_to_class('crop_fk_fields', [])
+        cls.crop_fk_fields.append(self.image_field)
 
     def formfield(self, *args, **kwargs):
         kwargs['widget'] =  forms.TextInput(attrs={
