@@ -1,4 +1,5 @@
 import logging
+import inspect
 
 from django.db.models import get_model, ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
@@ -58,6 +59,10 @@ class ImageCropWidget(AdminFileWidget, CropWidget):
 class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
     def __init__(self, *args, **kwargs):
         self.field_name = kwargs.pop('field_name')
+        # special case for Django versions below 1.4 - they don't need the admin site
+        if 'admin_site' not in inspect.getargspec(ForeignKeyRawIdWidget.__init__)[0]:
+            del kwargs['admin_site']
+
         super(CropForeignKeyWidget, self).__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None):
