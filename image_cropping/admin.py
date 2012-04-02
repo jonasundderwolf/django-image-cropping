@@ -1,8 +1,8 @@
 from django import VERSION
-from django.contrib import admin
 from .widgets import CropForeignKeyWidget
 
-class ImageCroppingAdmin(admin.ModelAdmin):
+
+class ImageCroppingAdmin(object):
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         formfield = super(ImageCroppingAdmin, self).formfield_for_dbfield(db_field, **kwargs)
