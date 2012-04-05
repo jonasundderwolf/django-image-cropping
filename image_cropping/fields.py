@@ -1,7 +1,7 @@
 from django.db import models
 from django import forms
 from django.conf import settings
-from .widgets import ImageCropWidget, CropForeignKeyWidget
+from .widgets import ImageCropWidget
 
 
 class ImageCropField(models.ImageField):
@@ -30,11 +30,6 @@ class CropForeignKey(models.ForeignKey):
         self.field_name = field_name
         super(CropForeignKey, self).__init__(model, *args, **kwargs)
 
-    def formfield(self, *args, **kwargs):
-        kwargs['widget'] = CropForeignKeyWidget(self.rel, field_name=self.field_name,
-            using=kwargs.get('using'))
-        return super(CropForeignKey, self).formfield(*args, **kwargs)
-
     def south_field_triple(self):
         """
         Return a suitable description of this field for South.
@@ -55,8 +50,16 @@ class ImageRatioField(models.CharField):
         self.size_warning = size_warning
         super(ImageRatioField, self).__init__(max_length=255, blank=True, verbose_name=verbose_name)
 
+    def contribute_to_class(self, cls, name):
+        super(ImageRatioField, self).contribute_to_class(cls, name)
+        # attach a list of fields that are referenced by the ImageRatioField
+        # so we can set the correct widget in the ModelAdmin
+        if not hasattr(cls, 'crop_fk_fields'):
+            cls.add_to_class('crop_fk_fields', [])
+        cls.crop_fk_fields.append(self.image_field)
+
     def formfield(self, *args, **kwargs):
-        kwargs['widget'] =  forms.TextInput(attrs={
+        kwargs['widget'] = forms.TextInput(attrs={
             'data-width': int(self.width),
             'data-height': int(self.height),
             'data-image-field': self.image_field,
