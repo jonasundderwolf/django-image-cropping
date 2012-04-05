@@ -35,7 +35,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'easy_thumbnails',
     'image_cropping',
     'example',
 )
 
+from easy_thumbnails import defaults
+THUMBNAIL_PROCESSORS = (
+    'image_cropping.thumbnail_processors.crop_corners',
+) + defaults.PROCESSORS
