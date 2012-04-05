@@ -7,10 +7,14 @@
   </head>
   <body>
     <p><b>Preview only! Add/Edit Images in Admin.</b></p>
+    {% if not image or not imagefk %}
+      <p>Please upload an Image in Admin.</p>
+    {% endif %}
     <table>
       <thead>
-        <th>Form</th>
-        <th>Result</th>
+        <th>example form</th>
+        <th>cropped image</th>
+        <th>crop fk-image</th>
       </thead>
       <tbody>
         <tr>
@@ -22,7 +26,9 @@
           <td>
             <img src="{% thumbnail image.image_field 120x100 box=image.cropping crop detail %}" />
           </td>
-        </tr>
+          <td>
+            <img src="{% thumbnail imagefk.image.image_field 120x100 box=imagefk.cropping crop detail %}" />
+          </td>
       </tbody>
     </table>
   </body>

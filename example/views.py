@@ -1,10 +1,19 @@
 from django.shortcuts import render
 from forms import ImageForm
-from models import Image
+from models import Image, ImageFK
 
 
 def form(request):
-    image = Image.objects.all()[0]
-    form = ImageForm(instance=image)
+    try:
+        image = Image.objects.all()[0]
+        form = ImageForm(instance=image)
+    except Image.DoesNotExist:
+        image = None
+        form = ImageForm
 
-    return render(request, 'form.html', {'form': form, 'image': image})
+    try:
+        imagefk = ImageFK.objects.all()[0]
+    except ImageFK.DoesNotExist:
+        imagefk = None
+
+    return render(request, 'form.html', {'form': form, 'image': image, 'imagefk': imagefk})
