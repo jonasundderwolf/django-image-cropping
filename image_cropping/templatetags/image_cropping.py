@@ -54,6 +54,9 @@ class CroppingNode(template.Node):
 
     def render(self, context):
         instance = template.Variable(self.instance).resolve(context)
+        if not instance:
+            return
+
         ratiofield = instance._meta.get_field(self.ratiofieldname)
         image = getattr(instance, ratiofield.image_field)
         size = (int(ratiofield.width), int(ratiofield.height))
