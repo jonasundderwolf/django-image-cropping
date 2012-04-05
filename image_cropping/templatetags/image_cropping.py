@@ -63,7 +63,6 @@ class CroppingNode(template.Node):
         box = getattr(instance, self.ratiofieldname)
 
         # get image_field from CropForeignKeyField
-        print type(image)
         if not isinstance(image, ImageFieldFile):
             fk_field = instance._meta.get_field(ratiofield.image_field)
             image = getattr(image, fk_field.field_name)
