@@ -1,3 +1,4 @@
+{% load thumbnail %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -5,6 +6,24 @@
     {{ form.media }}
   </head>
   <body>
-    <table>{{ form }}</table>
+    <p><b>Preview only! Add/Edit Images in Admin.</b></p>
+    <table>
+      <thead>
+        <th>Form</th>
+        <th>Result</th>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <table>
+              {{ form }}
+            </table>
+          </td>
+          <td>
+            <img src="{% thumbnail image.image_field 120x100 box=image.cropping crop detail %}" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </body>
 </html>
