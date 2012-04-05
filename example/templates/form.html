@@ -1,4 +1,4 @@
-{% load thumbnail %}
+{% load image_cropping %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -24,10 +24,11 @@
             </table>
           </td>
           <td>
-            <img src="{% thumbnail image.image_field 120x100 box=image.cropping crop detail %}" />
+            <img src="{% cropped_thumbnail image cropping %}" /><br />
+            <img src="{% cropped_thumbnail image cropping scale=2 %}" />
           </td>
           <td>
-            <img src="{% thumbnail imagefk.image.image_field 120x100 box=imagefk.cropping crop detail %}" />
+            <img src="{% cropped_thumbnail imagefk cropping %}" />
           </td>
       </tbody>
     </table>
