@@ -7,14 +7,14 @@ var image_cropping = {
     image_cropping.$("<style type='text/css'>" + style_img_warning + "</style>").appendTo('head');
 
     image_cropping.$('input.image-ratio').each(function() {
-      var $this = image_cropping.$(this),
+      var $this = image_cropping.$(this);
       // find the image field corresponding to this cropping value
       // by stripping the last part of our id and appending the image field name
-          field = $this.attr('name').replace($this.data('my-name'), $this.data('image-field')),
+      field = $this.attr('name').replace($this.data('my-name'), $this.data('image-field'));
 
       // there should only be one file field we're referencing but in special cases
       // there can be several. Deal with it gracefully.
-          $image_input = image_cropping.$('input.crop-thumb[data-field-name=' + field + ']:first');
+      $image_input = image_cropping.$('input.crop-thumb[data-field-name=' + field + ']:first');
 
       // skip this image if it's empty and hide the whole field
       if (!$image_input.length || $image_input.data('thumbnail-url') == undefined) {
