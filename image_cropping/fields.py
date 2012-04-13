@@ -19,7 +19,7 @@ class ImageCropField(models.ImageField):
         args, kwargs = introspector(self)
         return (field_class, args, kwargs)
 
-
+#deprecated, as we now set the widget in the ModelAdmin
 class CropForeignKey(models.ForeignKey):
     '''
     A croppable image field contained in another model. Only works in admin
@@ -59,7 +59,7 @@ class ImageRatioField(models.CharField):
         cls.crop_fk_fields.append(self.image_field)
 
     def formfield(self, *args, **kwargs):
-        kwargs['widget'] = forms.TextInput(attrs={
+        kwargs['widget'] =  forms.TextInput(attrs={
             'data-width': int(self.width),
             'data-height': int(self.height),
             'data-image-field': self.image_field,
