@@ -1,5 +1,5 @@
 from django.db import models
-from image_cropping.fields import ImageRatioField, ImageCropField, CropForeignKey
+from image_cropping.fields import ImageRatioField, ImageCropField
 
 
 class Image(models.Model):
@@ -11,8 +11,8 @@ class Image(models.Model):
 
 
 class ImageFK(models.Model):
-    image = CropForeignKey(Image, 'image_field')
-    cropping = ImageRatioField('image', '120x100')
+    image = models.ForeignKey(Image)
+    cropping = ImageRatioField('image__image_field', '120x100')
 
     class Meta:
         app_label = 'example'

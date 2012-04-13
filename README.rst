@@ -95,29 +95,28 @@ If you need the same image in multiple formats, simply specify another ImageRati
     # size is "width x height"
     list_page_cropping = ImageRatioField('image', '200x100')
     detail_page_cropping = ImageRatioField('image', '430x360')
- 
+
 
 In your templates, use the corresponding ratio field::
 
     {% thumbnail yourmodel.image 200x100 box=yourmodel.list_page_cropping crop detail %}
 
 
-If you need to crop an image contained within another model, referenced by a ForeignKey, use a ``CropForeignKey``. This
-field works like a regular ForeignKey but expects a keyword argument named ``field_name``. The model attribute with this
-name needs to be an ImageField that will be cropped::
+If you need to crop an image contained within another model, referenced by a ForeignKey, use a ``ForeignKey``. The fieldname
+in the ``ImageRadioField`` is now composed of the ``ForeignKey`` name, double underscore and the ``ImageField`` name::
 
     from django.db import models
     from image_cropping.fields import ImageRatioField, CropForeignKey
-    
+
     class Image(models.Model):
         image_field = models.ImageField(upload_to='image/')
 
     class NewsItem(models.Model):
         title = models.CharField(max_length=255)
-        image = CropForeignKey(Image, 'image_field')
-        cropping = ImageRatioField('image', '120x100')
+        image = ForeignKey(Image)
+        cropping = ImageRatioField('image__image_field', '120x100')
 
-The CropForeignKey works only in the admin for now, as it uses the ``raw_id`` widget.
+The ForeignKey works only in the admin for now, as it uses the ``raw_id`` widget.
 
 To enable the widget the ModelAdmin containing your field has to inherit from ``ImageCroppingAdmin``.
 
