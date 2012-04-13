@@ -121,3 +121,8 @@ The CropForeignKey works only in the admin for now, as it uses the ``raw_id`` wi
 
 To enable the widget the ModelAdmin containing your field has to inherit from ``ImageCroppingAdmin``.
 
+Deprecation Warning
+-------------------
+
+In future versions of ``django-image-cropping`` the ``CropForeignKey`` will be removed.
+You can now simply use a regular ``ForeignKey`` instead.
