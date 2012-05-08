@@ -1,15 +1,20 @@
 var image_cropping = {
   $: jQuery.noConflict(),
   init: function() {
+    // set styles for size-warning
+    var style_img_warning = 'div.jcrop-image.size-warning .jcrop-vline{border:1px solid red; background: none;}' +
+                            'div.jcrop-image.size-warning .jcrop-hline{border:1px solid red; background: none;}';
+    image_cropping.$("<style type='text/css'>" + style_img_warning + "</style>").appendTo('head');
+
     image_cropping.$('input.image-ratio').each(function() {
-      var $this = image_cropping.$(this),
+      var $this = image_cropping.$(this);
       // find the image field corresponding to this cropping value
       // by stripping the last part of our id and appending the image field name
-          field = $this.attr('name').replace($this.data('my-name'), $this.data('image-field')),
+      field = $this.attr('name').replace($this.data('my-name'), $this.data('image-field'));
 
       // there should only be one file field we're referencing but in special cases
       // there can be several. Deal with it gracefully.
-          $image_input = image_cropping.$('input.crop-thumb[data-field-name=' + field + ']:first');
+      $image_input = image_cropping.$('input.crop-thumb[data-field-name=' + field + ']:first');
 
       // skip this image if it's empty and hide the whole field
       if (!$image_input.length || $image_input.data('thumbnail-url') == undefined) {
@@ -33,11 +38,18 @@ var image_cropping = {
               min_height = x;
           }
       }
+
+      var $image = image_cropping.$('<img>', {
+        'id': image_id,
+        'src': $image_input.data('thumbnail-url')
+      });
+
       var options = {
         aspectRatio: min_width/min_height,
         minSize: [5, 5],
         trueSize: [org_width, org_height],
-        onSelect: image_cropping.update_selection($this)
+        onSelect: image_cropping.update_selection($this),
+        addClass: ($this.data('size-warning') && ((org_width < min_width) || (org_height < min_height))) ? 'size-warning jcrop-image': 'jcrop-image'
       }
       // is the image bigger than the minimal cropping values?
       // otherwise lock cropping area on full image 
@@ -55,11 +67,7 @@ var image_cropping = {
       image_cropping.$.extend(options, {setSelect: initial});
 
       // hide the input field, show image to crop instead
-      $this.hide().after(image_cropping.$('<img>', {
-        'id': image_id,
-        'src': $image_input.data('thumbnail-url'),
-        'style': ($this.data('size-warning') && ((org_width < min_width) || (org_height < min_height))) ? 'border:2px solid red': ''
-      }));
+      $this.hide().after($image);
 
       image_cropping.$('#' + image_id).Jcrop(options);
     });
@@ -95,7 +103,7 @@ var image_cropping = {
   },
   _update_selection: function(sel, $crop_field) {
     if ($crop_field.data('size-warning')) {
-      image_cropping.crop_indication(img, sel, $crop_field);
+      image_cropping.crop_indication(sel, $crop_field);
     }
     $crop_field.val(new Array(
       sel.x,
@@ -109,12 +117,13 @@ var image_cropping = {
   },
   crop_indication: function(sel, $crop_field) {
     // indicate if cropped area gets smaller than the specified minimal cropping
+    var $jcrop_holder = $crop_field.siblings('.jcrop-holder');  
     var min_width = $crop_field.data("width");
     var min_height = $crop_field.data("height");
-    if ((sel.width < min_width) || (sel.height < min_height)) {
-      image_cropping.$(img).css("border", "2px solid red");
+    if ((sel.w < min_width) || (sel.h < min_height)) {
+      $jcrop_holder.addClass('size-warning');
     } else {
-      image_cropping.$(img).css("border", "none");
+      $jcrop_holder.removeClass('size-warning');
     }
   }
 };

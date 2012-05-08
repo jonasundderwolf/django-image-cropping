@@ -54,13 +54,15 @@ class CroppingNode(template.Node):
 
     def render(self, context):
         instance = template.Variable(self.instance).resolve(context)
+        if not instance:
+            return
+
         ratiofield = instance._meta.get_field(self.ratiofieldname)
         image = getattr(instance, ratiofield.image_field)
         size = (int(ratiofield.width), int(ratiofield.height))
         box = getattr(instance, self.ratiofieldname)
 
         # get image_field from CropForeignKeyField
-        print type(image)
         if not isinstance(image, ImageFieldFile):
             fk_field = instance._meta.get_field(ratiofield.image_field)
             image = getattr(image, fk_field.field_name)

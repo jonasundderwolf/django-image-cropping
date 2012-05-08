@@ -1,4 +1,5 @@
 import logging
+import inspect
 
 from django.db.models import get_model, ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
@@ -9,6 +10,8 @@ from easy_thumbnails.files import get_thumbnailer
 logger = logging.getLogger(__name__)
 
 ADMIN_THUMBNAIL_SIZE = getattr(settings, 'IMAGE_CROPPING_THUMB_SIZE', (300, 300))
+
+
 def thumbnail(image_path):
     thumbnailer = get_thumbnailer(image_path)
     thumbnail_options = {
@@ -32,11 +35,12 @@ def get_attrs(image, name):
         # can't create thumbnail from image
         return {}
 
+
 class CropWidget(object):
     class Media:
         js = (
             getattr(settings, 'JQUERY_URL',
-                'https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js'),
+                'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'),
             "image_cropping/js/jquery.Jcrop.min.js",
             "image_cropping/image_cropping.js",
         )
@@ -55,6 +59,10 @@ class ImageCropWidget(AdminFileWidget, CropWidget):
 class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
     def __init__(self, *args, **kwargs):
         self.field_name = kwargs.pop('field_name')
+        # special case for Django versions below 1.4 - they don't need the admin site
+        if 'admin_site' not in inspect.getargspec(ForeignKeyRawIdWidget.__init__)[0]:
+            del kwargs['admin_site']
+
         super(CropForeignKeyWidget, self).__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None):
