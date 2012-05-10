@@ -48,6 +48,13 @@ var image_cropping = {
         onSelect: image_cropping.update_selection($this),
         addClass: ($this.data('size-warning') && ((org_width < min_width) || (org_height < min_height))) ? 'size-warning jcrop-image': 'jcrop-image'
       }
+
+      var cropping_disabled = false;
+      if($this.val()[0] == "-"){
+        cropping_disabled = true;
+        $this.val($this.val().substr(1));
+      }
+
       // is the image bigger than the minimal cropping values?
       // otherwise lock cropping area on full image 
       var initial;
@@ -69,29 +76,24 @@ var image_cropping = {
       image_cropping.$('#' + image_id).Jcrop(options, function(){jcrop=this;});
 
       if ($this.data('allow-fullsize') == true) {
-        $this.val(initial); // JCrop resets negative values, get them back
-        if($this.val().match(/\-/)){
+        if(cropping_disabled){
           jcrop.release();
-          $this.data('cropping-disabled', true);
+          $this.val('-'+$this.val());
         }
         var label = 'allow-fullsize-'+image_id;
-        var checked = $this.data('cropping-disabled') ? ' checked="checked"' : '';
+        var checked = cropping_disabled ? ' checked="checked"' : '';
         image_cropping.$('<div class="field-box allow-fullsize">' +
-                         '<input type="checkbox" id="'+label+'" name="'+label+'"'+checked+'>' +
-                         '<label class="vCheckboxLabel" for="'+label+'">Disabled</label></div>').appendTo($this.parent());
+                         '<input type="checkbox" id="'+label+'" name="'+label+'"'+checked+'></div>').appendTo($this.parent());
         image_cropping.$('<style type="text/css">div.allow-fullsize{padding: 5px 0 0 10px;}</style>').appendTo('head');
         image_cropping.$('#'+label).click(function(){
-          var vals = $this.val().split(",");
-          for(var i=0; i< vals.length; i++) {
-            vals[i] = vals[i]*(-1);
-          }
-          $this.val(vals.join(','));
-          if ($this.data('cropping-disabled') == true){
-            jcrop.setSelect(vals);
-            $this.data('cropping-disabled',false);
+          if (cropping_disabled==true){
+            $this.val($this.val().substr(1));
+            jcrop.setSelect($this.val().split(','));
+            cropping_disabled = false;
           } else {
+            $this.val('-'+$this.val());
             jcrop.release();
-            $this.data('cropping-disabled', true);
+            cropping_disabled = true;
           }
         });
         $this.parent().find('.jcrop-tracker').mousedown(function(){
