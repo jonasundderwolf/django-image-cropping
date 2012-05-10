@@ -81,7 +81,7 @@ var image_cropping = {
           $this.val('-'+$this.val());
         }
         var label = 'allow-fullsize-'+image_id;
-        var checked = cropping_disabled ? ' checked="checked"' : '';
+        var checked = cropping_disabled ? '' : ' checked="checked"';
         image_cropping.$('<div class="field-box allow-fullsize">' +
                          '<input type="checkbox" id="'+label+'" name="'+label+'"'+checked+'></div>').appendTo($this.parent());
         image_cropping.$('<style type="text/css">div.allow-fullsize{padding: 5px 0 0 10px;}</style>').appendTo('head');
@@ -97,7 +97,10 @@ var image_cropping = {
           }
         });
         $this.parent().find('.jcrop-tracker').mousedown(function(){
-            image_cropping.$('#'+label).removeAttr("checked");
+            if (cropping_disabled){
+              image_cropping.$('#'+label).attr('checked','checked')
+              cropping_disabled = false;
+            }
         });
       }
     });
