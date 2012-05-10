@@ -8,7 +8,7 @@ def crop_corners(image, box=None, **kwargs):
     Crop corners to the selection defined by image_cropping
     """
 
-    if box:
+    if box and box[0] != '-':
         try:
             values = [int(x) for x in box.split(',')]
             if sum(values) < 0:
