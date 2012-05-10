@@ -94,6 +94,9 @@ var image_cropping = {
             $this.data('cropping-disabled', true);
           }
         });
+        $this.parent().find('.jcrop-tracker').mousedown(function(){
+            image_cropping.$('#'+label).removeAttr("checked");
+        });
       }
     });
 
