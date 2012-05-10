@@ -66,7 +66,35 @@ var image_cropping = {
       // hide the input field, show image to crop instead
       $this.hide().after($image);
 
-      image_cropping.$('#' + image_id).Jcrop(options);
+      image_cropping.$('#' + image_id).Jcrop(options, function(){jcrop=this;});
+
+      if ($this.data('allow-fullsize') == true) {
+        $this.val(initial); // JCrop resets negative values, get them back
+        if($this.val().match(/\-/)){
+          jcrop.release();
+          $this.data('cropping-disabled', true);
+        }
+        var label = 'allow-fullsize-'+image_id;
+        var checked = $this.data('cropping-disabled') ? ' checked="checked"' : '';
+        image_cropping.$('<div class="field-box allow-fullsize">' +
+                         '<input type="checkbox" id="'+label+'" name="'+label+'"'+checked+'>' +
+                         '<label class="vCheckboxLabel" for="'+label+'">Disabled</label></div>').appendTo($this.parent());
+        image_cropping.$('<style type="text/css">div.allow-fullsize{padding: 5px 0 0 10px;}</style>').appendTo('head');
+        image_cropping.$('#'+label).click(function(){
+          var vals = $this.val().split(",");
+          for(var i=0; i< vals.length; i++) {
+            vals[i] = vals[i]*(-1);
+          }
+          $this.val(vals.join(','));
+          if ($this.data('cropping-disabled') == true){
+            jcrop.setSelect(vals);
+            $this.data('cropping-disabled',false);
+          } else {
+            jcrop.release();
+            $this.data('cropping-disabled', true);
+          }
+        });
+      }
     });
 
     if (image_cropping.$('body').hasClass('change-form')) {
