@@ -118,3 +118,6 @@ name needs to be an ImageField that will be cropped::
         cropping = ImageRatioField('image', '120x100')
 
 The CropForeignKey works only in the admin for now, as it uses the ``raw_id`` widget.
+
+
+If you want cropping to be optional, just use ``allow_fullsize=True`` as an additional keyword argument in your ``ImageRatioField``. It should now be possible to switch off cropping by unchecking the checkbox next to the image cropping widget.
