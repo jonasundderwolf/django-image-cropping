@@ -28,10 +28,10 @@ Installation
 
 #. Adjust the thumbnail processors for ``easy_thumbnails`` in your ``settings.py``::
 
-    from easy_thumbnails import defaults
+    from easy_thumbnails.conf import settings as thumbnail_settings
     THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
-    ) + defaults.PROCESSORS
+    ) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
 #. Deploy the necessary static files. If you are using Django 1.3 and ``contrib.staticfiles`` the 
    necessary static files should be picked up automatically. In all other cases you have to copy or
