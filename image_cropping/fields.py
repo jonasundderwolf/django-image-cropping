@@ -94,12 +94,14 @@ class ImageMultipleRatioField(ImageRatioField):
             'data-size-warning': str(self.size_warning).lower(),
             'class': 'image-ratio multiple-ratio',
         }
-        choices=zip(self.sizes, self.sizes)
+        choices = zip(self.sizes, self.sizes)
         return ImageMultipleRatioFormField(choices, text_input_attrs, *args, **kwargs)
 
     def to_python(self, value):
         if(isinstance(value, Ratio)):
             return value
+        if(len(value.split(',')) == 4):
+            return Ratio('', value)
         return Ratio(*value.split(',', 1))
 
     def get_prep_value(self, value):
@@ -117,6 +119,8 @@ class Ratio(object):
         return self.coordinates
 
     def to_str(self):
+        if not self.ratio:
+            return self.coordinates
         return "%s,%s" % (self.ratio, self.coordinates)
 
     def __len__(self):
