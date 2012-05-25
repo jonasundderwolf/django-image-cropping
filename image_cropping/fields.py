@@ -1,7 +1,7 @@
 from django.db import models
 from django import forms
 from django.conf import settings
-from .widgets import ImageCropWidget, CropForeignKeyWidget
+from .widgets import ImageCropWidget, CropForeignKeyWidget, ImageMultipleRatioWidget
 
 
 class ImageCropField(models.ImageField):
@@ -78,3 +78,65 @@ class ImageRatioField(models.CharField):
         field_class = "django.db.models.fields.CharField"
         args, kwargs = introspector(self)
         return (field_class, args, kwargs)
+
+
+class ImageMultipleRatioField(ImageRatioField):
+    def __init__(self, image_field, sizes, *args, **kwargs):
+        self.sizes = sizes
+        super(ImageMultipleRatioField, self).__init__(image_field, '0x0', *args, **kwargs)
+
+    def formfield(self, *args, **kwargs):
+        text_input_attrs = {
+            'data-image-field': self.image_field,
+            'data-my-name': self.name,
+            'data-adapt-rotation': str(self.adapt_rotation).lower(),
+            'data-allow-fullsize': str(self.allow_fullsize).lower(),
+            'data-size-warning': str(self.size_warning).lower(),
+            'class': 'image-ratio multiple-ratio',
+        }
+        choices=zip(self.sizes, self.sizes)
+        return ImageMultipleRatioFormField(choices, text_input_attrs, *args, **kwargs)
+
+    def to_python(self, value):
+        if(isinstance(value, Ratio)):
+            return value
+        return Ratio(*value.split(',', 1))
+
+    def get_prep_value(self, value):
+        return value.to_str()
+
+    __metaclass__ = models.SubfieldBase
+
+
+class Ratio(object):
+    def __init__(self, ratio='', coordinates=''):
+        self.ratio = ratio
+        self.coordinates = coordinates
+
+    def __str__(self):
+        return self.coordinates
+
+    def to_str(self):
+        return "%s,%s" % (self.ratio, self.coordinates)
+
+    def __len__(self):
+        return len(self.to_str())
+
+    def __repr__(self):
+        return str(self)
+    
+    def split(self, *args, **kwargs):
+        return self.coordinates.split(*args, **kwargs)
+
+
+class ImageMultipleRatioFormField(forms.MultiValueField):
+    def __init__(self, ratio_choices, text_input_attrs, *args, **kwargs):
+        fields = (
+            forms.ChoiceField(ratio_choices),
+            forms.CharField(),
+        )
+        kwargs['widget'] = ImageMultipleRatioWidget(ratio_choices, text_input_attrs)
+        super(ImageMultipleRatioFormField, self).__init__(fields, *args, **kwargs)
+
+    def compress(self, values):
+        return Ratio(values[0], values[1])
