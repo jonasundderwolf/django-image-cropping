@@ -1,6 +1,8 @@
 from django.db import models
 from django import forms
 from django.conf import settings
+from django.utils.text import capfirst
+
 from .widgets import ImageCropWidget, CropForeignKeyWidget, ImageMultipleRatioWidget
 
 
@@ -95,7 +97,12 @@ class ImageMultipleRatioField(ImageRatioField):
             'class': 'image-ratio multiple-ratio',
         }
         choices = zip(self.sizes, self.sizes)
-        return ImageMultipleRatioFormField(choices, text_input_attrs, *args, **kwargs)
+        defaults = {'required': not self.blank,
+            'label': capfirst(self.verbose_name),
+            'help_text': self.help_text,
+        }
+        defaults.update(kwargs)
+        return ImageMultipleRatioFormField(choices, text_input_attrs, *args, **defaults)
 
     def to_python(self, value):
         if(isinstance(value, Ratio)):
@@ -143,4 +150,6 @@ class ImageMultipleRatioFormField(forms.MultiValueField):
         super(ImageMultipleRatioFormField, self).__init__(fields, *args, **kwargs)
 
     def compress(self, values):
+        if not values:
+            return Ratio()
         return Ratio(values[0], values[1])

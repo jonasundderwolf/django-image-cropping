@@ -7,6 +7,7 @@ from django.contrib.admin.sites import site
 from django.conf import settings
 from django.forms.widgets import MultiWidget, Select, TextInput
 
+
 from easy_thumbnails.files import get_thumbnailer
 
 logger = logging.getLogger(__name__)
@@ -64,6 +65,8 @@ class ImageMultipleRatioWidget(MultiWidget):
         super(ImageMultipleRatioWidget, self).__init__(widgets, attrs)
 
     def decompress(self, value):
+        if value is None:
+            return None, None
         return value.ratio, value.coordinates
 
 
