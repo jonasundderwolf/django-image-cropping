@@ -1,8 +1,8 @@
 django-image-cropping
 =====================
 
-``django-image-cropping`` is an app for cropping uploaded images via Django's admin backend using `jCrop
-<http://deepliquid.com/content/Jcrop.html>`_. It keeps the original image intact, only cropping when the image
+``django-image-cropping`` is an app for cropping uploaded images via Django's admin backend using `imgareaselect 
+<https://github.com/odyniec/imgareaselect>`_. It keeps the original image intact, only cropping when the image
 is being displayed. Large images are presented in a small format, so even very big images can easily be cropped.
 
 ``django-image-cropping`` is perfect when you need images with a specific size for your templates but want your
@@ -24,14 +24,14 @@ Installation
 
     pip install django-image-cropping
 
-#. Add ``easy_thumbnails`` and ``image_cropping`` to your INSTALLED_APPS. ``image_cropping`` is only required if you are using Django 1.3+ and ``contrib.staticfiles``
+#. Add ``easy_thumbnails`` and ``image_cropping`` to your INSTALLED_APPS. ``image_cropping`` is only required if you are using Django 1.3 and ``contrib.staticfiles``
 
 #. Adjust the thumbnail processors for ``easy_thumbnails`` in your ``settings.py``::
 
-    from easy_thumbnails import defaults
+    from easy_thumbnails.conf import settings as thumbnail_settings
     THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
-    ) + defaults.PROCESSORS
+    ) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
 #. Deploy the necessary static files. If you are using Django 1.3 and ``contrib.staticfiles`` the 
    necessary static files should be picked up automatically. In all other cases you have to copy or
@@ -127,8 +127,4 @@ The ForeignKey works only in the admin for now, as it uses the ``raw_id`` widget
 
 To enable the widget the ModelAdmin containing your field has to inherit from ``ImageCroppingAdmin``.
 
-Deprecation Warning
--------------------
-
-In future versions of ``django-image-cropping`` the ``CropForeignKey`` will be removed.
-You can now simply use a regular ``ForeignKey`` instead.
+If you want cropping to be optional, just use ``allow_fullsize=True`` as an additional keyword argument in your ``ImageRatioField``. It should now be possible to switch off cropping by unchecking the checkbox next to the image cropping widget.
