@@ -3,7 +3,6 @@ import inspect
 
 from django.db.models import get_model, ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
-from django.contrib.admin.sites import site
 from django.conf import settings
 
 from easy_thumbnails.files import get_thumbnailer
@@ -11,6 +10,8 @@ from easy_thumbnails.files import get_thumbnailer
 logger = logging.getLogger(__name__)
 
 ADMIN_THUMBNAIL_SIZE = getattr(settings, 'IMAGE_CROPPING_THUMB_SIZE', (300, 300))
+
+
 def thumbnail(image_path):
     thumbnailer = get_thumbnailer(image_path)
     thumbnail_options = {
@@ -34,11 +35,12 @@ def get_attrs(image, name):
         # can't create thumbnail from image
         return {}
 
+
 class CropWidget(object):
     class Media:
         js = (
             getattr(settings, 'JQUERY_URL',
-                'https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js'),
+                'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'),
             "image_cropping/js/jquery.Jcrop.min.js",
             "image_cropping/image_cropping.js",
         )
@@ -57,8 +59,10 @@ class ImageCropWidget(AdminFileWidget, CropWidget):
 class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
     def __init__(self, *args, **kwargs):
         self.field_name = kwargs.pop('field_name')
-        if 'admin_site' in inspect.getargspec(ForeignKeyRawIdWidget.__init__)[0]:  # Django 1.4
-            kwargs['admin_site'] = site
+        # special case for Django versions below 1.4 - they don't need the admin site
+        if 'admin_site' not in inspect.getargspec(ForeignKeyRawIdWidget.__init__)[0]:
+            del kwargs['admin_site']
+
         super(CropForeignKeyWidget, self).__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None):
@@ -71,11 +75,12 @@ class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
             try:
                 image = getattr(get_model(app_name, model_name
                     ).objects.get(pk=value), self.field_name)
-                attrs.update(get_attrs(image, name))
             except ObjectDoesNotExist:
                 logger.error("Can't find object: %s.%s with primary key %s "
                     "for cropping." % (app_name, model_name, value))
             except AttributeError:
                 logger.error("Object %s.%s doesn't have an attribute named '%s'." % (
                     app_name, model_name, self.field_name))
+
+            attrs.update(get_attrs(image, name))
         return super(CropForeignKeyWidget, self).render(name, value, attrs)

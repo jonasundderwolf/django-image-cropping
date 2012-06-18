@@ -7,14 +7,14 @@ var image_cropping = {
     image_cropping.$("<style type='text/css'>" + style_img_warning + "</style>").appendTo('head');
 
     image_cropping.$('input.image-ratio').each(function() {
-      var $this = image_cropping.$(this),
+      var $this = image_cropping.$(this);
       // find the image field corresponding to this cropping value
       // by stripping the last part of our id and appending the image field name
-          field = $this.attr('name').replace($this.data('my-name'), $this.data('image-field')),
+      field = $this.attr('name').replace($this.data('my-name'), $this.data('image-field'));
 
       // there should only be one file field we're referencing but in special cases
       // there can be several. Deal with it gracefully.
-          $image_input = image_cropping.$('input.crop-thumb[data-field-name=' + field + ']:first');
+      $image_input = image_cropping.$('input.crop-thumb[data-field-name=' + field + ']:first');
 
       // skip this image if it's empty and hide the whole field
       if (!$image_input.length || $image_input.data('thumbnail-url') == undefined) {
@@ -27,13 +27,16 @@ var image_cropping = {
           min_width = $this.data('width'),
           min_height = $this.data('height');
 
+      var image_verticle = (org_height > org_width);
+      var select_verticle = (min_height > min_width);
+
       if ($this.data('adapt-rotation') == true) {
-        if ($image.get(0).width < $image.get(0).height) {
-          // cropping height/width need to be switched, picture is in portrait mode
-          var x = min_width;
-          min_width = min_height;
-          min_height = x;
-        }
+          if (image_verticle != select_verticle) {
+              // cropping height/width need to be switched, picture is in portrait mode
+              var x = min_width;
+              min_width = min_height;
+              min_height = x;
+          }
       }
 
       var $image = image_cropping.$('<img>', {
