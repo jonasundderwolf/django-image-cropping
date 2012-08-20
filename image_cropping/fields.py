@@ -47,14 +47,14 @@ class CropForeignKey(models.ForeignKey):
 
 
 class ImageRatioField(models.CharField):
-    def __init__(self, image_field, size, adapt_rotation=False, allow_fullsize=False, verbose_name=None,
+    def __init__(self, image_field, size, adapt_rotation=False, allow_fullsize=False, verbose_name=None, help_text=None,
                  size_warning=getattr(settings, 'IMAGE_CROPPING_SIZE_WARNING', False)):
         self.width, self.height = size.split('x')
         self.image_field = image_field
         self.adapt_rotation = adapt_rotation
         self.allow_fullsize = allow_fullsize
         self.size_warning = size_warning
-        super(ImageRatioField, self).__init__(max_length=255, blank=True, verbose_name=verbose_name)
+        super(ImageRatioField, self).__init__(max_length=255, blank=True, verbose_name=verbose_name, help_text=help_text)
 
     def formfield(self, *args, **kwargs):
         kwargs['widget'] =  forms.TextInput(attrs={
