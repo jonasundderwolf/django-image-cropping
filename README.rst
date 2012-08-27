@@ -24,7 +24,7 @@ Installation
 
     pip install django-image-cropping
 
-#. Add ``easy_thumbnails`` and ``image_cropping`` to your INSTALLED_APPS. ``image_cropping`` is only required if you are using Django 1.3 and ``contrib.staticfiles``
+#. Add ``easy_thumbnails`` and ``image_cropping`` to your INSTALLED_APPS. ``image_cropping`` is only required if you are using Django 1.3+ and ``contrib.staticfiles``
 
 #. Adjust the thumbnail processors for ``easy_thumbnails`` in your ``settings.py``::
 
@@ -53,7 +53,7 @@ The size is passed in as a string and defines the aspect ratio of the selection 
 size for the final image. You can configure a warning if users try to crop a selection smaller than this
 size (see below).
 
-#. Model fields and options::
+1. Model fields and options::
 
     from image_cropping.fields import ImageRatioField, ImageCropField
 
@@ -61,19 +61,30 @@ size (see below).
     # size is "width x height"
     cropping = ImageRatioField('image', '430x360')
 
-#. If your setup is correct you should automatically see the enhanced image widget that provides a selection
+2. If your setup is correct you should automatically see the enhanced image widget that provides a selection
    area for the image in the admin backend. 
 
-#. Example usage of the thumbnail processor::
+3. Example usage of the thumbnail processor in a template::
 
+    {% load thumbnails %}
     {% thumbnail yourmodel.image 430x360 box=yourmodel.cropping crop detail %}
 
-#. Additionally you can define the maximum size of the preview thumbnail in your settings.py::
+Or in Python code::
+
+    from easy_thumbnails.files import get_thumbnailer
+    thumbnail_url = get_thumbnailer(yourmodel.image).get_thumbnail({
+        'size': (430, 360),
+        'box': yourmodel.cropping,
+        'crop': True,
+        'detail': True,
+    }).url
+
+4. Additionally you can define the maximum size of the preview thumbnail in your settings.py::
 
     # size is "width x height"
     IMAGE_CROPPING_THUMB_SIZE = (300, 300)
 
-#. You can warn users about crop selections that are smaller than the size defined in the ImageRatioField.
+5. You can warn users about crop selections that are smaller than the size defined in the ImageRatioField.
    When users try to do a smaller selection, a red border appears around the image. To use this functionality,
    add the parameter to the ImageRatioField::
 
