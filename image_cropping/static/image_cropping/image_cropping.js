@@ -73,11 +73,13 @@ var image_cropping = {
       // hide the input field, show image to crop instead
       $this.hide().after($image);
 
-      image_cropping.$('#' + image_id).Jcrop(options, function(){jcrop=this;});
+      var jcrop = {};
+
+      image_cropping.$('#' + image_id).Jcrop(options, function(){jcrop[image_id]=this;});
 
       if ($this.data('allow-fullsize') == true) {
         if(cropping_disabled){
-          jcrop.release();
+          jcrop[image_id].release();
           $this.val('-'+$this.val());
         }
         var label = 'allow-fullsize-'+image_id;
@@ -88,11 +90,11 @@ var image_cropping = {
         image_cropping.$('#'+label).click(function(){
           if (cropping_disabled==true){
             $this.val($this.val().substr(1));
-            jcrop.setSelect($this.val().split(','));
+            jcrop[image_id].setSelect($this.val().split(','));
             cropping_disabled = false;
           } else {
             $this.val('-'+$this.val());
-            jcrop.release();
+            jcrop[image_id].release();
             cropping_disabled = true;
           }
         });
