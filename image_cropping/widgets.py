@@ -11,6 +11,8 @@ from easy_thumbnails.files import get_thumbnailer
 logger = logging.getLogger(__name__)
 
 ADMIN_THUMBNAIL_SIZE = getattr(settings, 'IMAGE_CROPPING_THUMB_SIZE', (300, 300))
+
+
 def thumbnail(image_path):
     thumbnailer = get_thumbnailer(image_path)
     thumbnail_options = {
@@ -34,11 +36,12 @@ def get_attrs(image, name):
         # can't create thumbnail from image
         return {}
 
+
 class CropWidget(object):
     class Media:
         js = (
             getattr(settings, 'JQUERY_URL',
-                'https://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js'),
+                'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'),
             "image_cropping/js/jquery.Jcrop.min.js",
             "image_cropping/image_cropping.js",
         )
