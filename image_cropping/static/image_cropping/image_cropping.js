@@ -27,13 +27,16 @@ var image_cropping = {
           min_width = $this.data('width'),
           min_height = $this.data('height');
 
+      var is_image_portrait = (org_height > org_width);
+      var is_select_portrait = (min_height > min_width);
+
       if ($this.data('adapt-rotation') == true) {
-        if ($image.get(0).width < $image.get(0).height) {
-          // cropping height/width need to be switched, picture is in portrait mode
-          var x = min_width;
-          min_width = min_height;
-          min_height = x;
-        }
+          if (is_image_portrait != is_select_portrait) {
+              // cropping height/width need to be switched, picture is in portrait mode
+              var x = min_width;
+              min_width = min_height;
+              min_height = x;
+          }
       }
 
       var $image = image_cropping.$('<img>', {
