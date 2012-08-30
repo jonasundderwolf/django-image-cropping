@@ -74,11 +74,12 @@ class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
             try:
                 image = getattr(get_model(app_name, model_name
                     ).objects.get(pk=value), self.field_name)
-                attrs.update(get_attrs(image, name))
             except ObjectDoesNotExist:
                 logger.error("Can't find object: %s.%s with primary key %s "
                     "for cropping." % (app_name, model_name, value))
             except AttributeError:
                 logger.error("Object %s.%s doesn't have an attribute named '%s'." % (
                     app_name, model_name, self.field_name))
+
+            attrs.update(get_attrs(image, name))
         return super(CropForeignKeyWidget, self).render(name, value, attrs)
