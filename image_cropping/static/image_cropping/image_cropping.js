@@ -7,15 +7,25 @@ var image_cropping = {
     image_cropping.$("<style type='text/css'>" + style_img_warning + "</style>").appendTo('head');
 
     image_cropping.$('input.image-ratio').each(function() {
-      var $this = image_cropping.$(this),
+      var jcrop;
+      var $this = image_cropping.$(this);
+      var multiple_ratios = false;
+      var $select_field;
+      if($this.hasClass('multiple-ratio'))
+        multiple_ratios = true;
+
       // find the image field corresponding to this cropping value
       // by stripping the last part of our id and appending the image field name
-          field = $this.attr('name').replace($this.data('my-name'), $this.data('image-field')),
+      var field = $this.attr('name');
+      if (multiple_ratios){
+        field = field.slice(0, field.lastIndexOf('_'));
+        $select_field = image_cropping.$('[name="' + field + '_0"]');
+      }
+      field = field.replace($this.data('my-name'), $this.data('image-field'));
 
       // there should only be one file field we're referencing but in special cases
       // there can be several. Deal with it gracefully.
-          $image_input = image_cropping.$('input.crop-thumb[data-field-name=' + field + ']:first');
-
+      var $image_input = image_cropping.$('input.crop-thumb[data-field-name=' + field + ']:first');
       // skip this image if it's empty and hide the whole field
       if (!$image_input.length || $image_input.data('thumbnail-url') == undefined) {
         $this.parents('div.form-row:first').hide();
@@ -26,6 +36,15 @@ var image_cropping = {
           org_height = $image_input.data('org-height'),
           min_width = $this.data('width'),
           min_height = $this.data('height');
+
+      function setSize(){
+        var values = $select_field.attr('value').split('x');
+        min_width = Number(values[0]);
+        min_height = Number(values[1]);
+      }
+
+      if(multiple_ratios)
+        setSize();
 
       if ($this.data('adapt-rotation') == true) {
         if ($image.get(0).width < $image.get(0).height) {
@@ -66,6 +85,16 @@ var image_cropping = {
 
           // set cropfield to initial value
         $this.val(initial.join(','));
+      }
+      if(multiple_ratios){
+        $select_field.change(function(){
+          setSize();
+          jcrop.setOptions({
+            aspectRatio: min_width/min_height
+          });
+          initial = image_cropping.max_cropping(min_width, min_height, org_width, org_height);
+          jcrop.setSelect(initial);
+        });
       }
 
       image_cropping.$.extend(options, {setSelect: initial});

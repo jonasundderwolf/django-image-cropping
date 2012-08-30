@@ -5,6 +5,8 @@ from django.db.models import get_model, ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
 from django.contrib.admin.sites import site
 from django.conf import settings
+from django.forms.widgets import MultiWidget, Select, TextInput
+
 
 from easy_thumbnails.files import get_thumbnailer
 
@@ -52,6 +54,20 @@ class ImageCropWidget(AdminFileWidget, CropWidget):
         if value:
             attrs.update(get_attrs(value, name))
         return super(AdminFileWidget, self).render(name, value, attrs)
+
+
+class ImageMultipleRatioWidget(MultiWidget):
+    def __init__(self, choices, text_input_attrs, attrs=None):
+        widgets = (
+            Select(choices=choices),
+            TextInput(attrs=text_input_attrs)
+        )
+        super(ImageMultipleRatioWidget, self).__init__(widgets, attrs)
+
+    def decompress(self, value):
+        if value is None:
+            return None, None
+        return value.ratio, value.coordinates
 
 
 class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
