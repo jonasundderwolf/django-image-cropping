@@ -16,6 +16,10 @@ def cropped_thumbnail(parser, token):
     option = None
     upscale = False
 
+    instance = args[1]
+    # strip quotes from ratio field
+    ratiofieldname = args[2].strip('"\'')
+
     # parse additional arguments
     for arg in args[3:]:
         arg = arg.lower()
@@ -39,7 +43,7 @@ def cropped_thumbnail(parser, token):
             else:
                 raise template.TemplateSyntaxError("%s is an invalid option" % arg)
 
-    return CroppingNode(args[1], args[2], option, upscale)
+    return CroppingNode(instance, ratiofieldname, option, upscale)
 
 
 class CroppingNode(template.Node):
