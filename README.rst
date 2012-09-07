@@ -1,8 +1,8 @@
 django-image-cropping
 =====================
 
-``django-image-cropping`` is an app for cropping uploaded images via Django's admin backend using `imgareaselect 
-<https://github.com/odyniec/imgareaselect>`_. It keeps the original image intact, only cropping when the image
+``django-image-cropping`` is an app for cropping uploaded images via Django's admin backend using `Jcrop 
+<https://github.com/tapmodo/Jcrop>`_. It keeps the original image intact, only cropping when the image
 is being displayed. Large images are presented in a small format, so even very big images can easily be cropped.
 
 ``django-image-cropping`` is perfect when you need images with a specific size for your templates but want your
@@ -36,7 +36,7 @@ Installation
 
 #. Deploy the necessary static files. If you are using Django 1.3 and ``contrib.staticfiles`` the 
    necessary static files should be picked up automatically. In all other cases you have to copy or
-   symlink the static files. Depending on your setup the command should look similiar to this::
+   symlink the static files. Depending on your setup the command should look similar to this::
 
         ln -s ~/.virtualenvs/yourenv/src/django-image-cropping/image_cropping/static/image_cropping/
 
@@ -101,7 +101,7 @@ For your frontend code, ``django-image-cropping`` provides a templatetag to use 
 Example usage::
 
     {% load cropping %}
-    <img src="{% cropped_thumnail yourmodel "cropping" scale=0.5 %}">
+    <img src="{% cropped_thumbnail yourmodel "cropping" scale=0.5 %}">
 
 You can also use the standard ``easy_thumbnails`` templatetag with the "box" parameter::
 
