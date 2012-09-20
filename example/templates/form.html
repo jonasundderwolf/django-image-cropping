@@ -1,0 +1,53 @@
+{% load cropping %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image cropping example</title>
+    {{ form.media }}
+  </head>
+  <body>
+    <p><b>Preview only! Add/Edit Images in Admin.</b></p>
+
+    <h1>example usage</h1>
+
+    <h3>cropped image</h3>
+    {% if not image %}
+      <p style="color: #cc0000;"><b>Please upload an Image in Admin.</b></p>
+    {% endif %}
+    <img src="{% cropped_thumbnail image cropping %}" />
+
+    <h3>cropped foreignkey image</h3>
+    {% if not image %}
+      <p style="color: #cc0000;"><b>Please upload an Image in Admin.</b></p>
+    {% endif %}<img src="{% cropped_thumbnail imagefk cropping %}" />
+
+    <h3>scaled image</h3>
+    <div style="float: left; margin-left: 10px;">
+      scale=0.5<br />
+      <img src="{% cropped_thumbnail image cropping scale=0.5 %}" /><br />
+    </div>
+    <div style="float: left; margin-left: 10px;">
+      width=80<br />
+      <img src="{% cropped_thumbnail image cropping width=80 %}" /><br />
+    </div>
+    <div style="float: left; margin-left: 10px;">
+      height=150<br />
+      <img src="{% cropped_thumbnail image cropping height=150 %}" /><br />
+    </div>
+    <div style="float: left; margin-left: 10px;">
+      scale=2<br />
+      <img src="{% cropped_thumbnail image cropping scale=2 %}" /><br />
+    </div>
+    <div style="clear: both;"></div>
+
+    <div>
+      height=150 upscale<br />
+      <img src="{% cropped_thumbnail image cropping height=300 upscale %}" /><br />
+    </div>
+
+    <h3>Form example</h3>
+    <table>
+      {{ form }}
+    </table>
+  </body>
+</html>
