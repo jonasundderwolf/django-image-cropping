@@ -134,7 +134,7 @@ an ``ImageCropField``::
         cropping = ImageRatioField('image', '430x360')
 
 
-Alternatively, override the widget in your ModelForm::
+Alternatively, override the widget in your ModelForm (you just need to do one of these two, not both!)::
 
     from django import forms
     from image_cropping import ImageCropWidget
@@ -144,6 +144,22 @@ Alternatively, override the widget in your ModelForm::
             widgets = {
                 'image': ImageCropWidget,
             }
+
+
+Remember to include the form media in the ``<head>`` of your HTML::
+
+    <html>
+      <head>
+        {{ form.media }}
+      </head>
+      <body>
+        {{ form }}
+      </body>
+    </html>
+
+The cropping itself happens in the ImageRatioField, the ImageCropField will still be a regular file upload.
+If you're selectively including or excluding fields from the ModelForm, remember to include the ImageRatioField.
+
 
 Extras
 ------
