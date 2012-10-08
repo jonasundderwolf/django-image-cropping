@@ -11,6 +11,10 @@ env:
   - DJANGO=1.4.1
 notifications:
   email: false
+branches:
+  only:
+    - master
+    - testsuite
 script:
   - python setup.py test
 
