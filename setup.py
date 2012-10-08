@@ -17,6 +17,7 @@ setup(name = "django-image-cropping",
     install_requires = [
         'easy_thumbnails',
     ],
+    test_suite='example.runtests.runtests',
     classifiers = [
         'Development Status :: 4 - Beta',
         'Environment :: Web Environment',
