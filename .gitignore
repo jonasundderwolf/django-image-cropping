@@ -1,6 +1,9 @@
 *.pyc
+*.sqlite3
 *~
 *.swp
 *.egg-info*
 build/
 dist/
+media/
+settings_local.py
