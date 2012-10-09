@@ -28,7 +28,7 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -39,9 +39,17 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'image_cropping',
     'example',
-)
+]
 
 from easy_thumbnails.conf import settings as thumbnail_settings
 THUMBNAIL_PROCESSORS = (
     'image_cropping.thumbnail_processors.crop_corners',
 ) + thumbnail_settings.THUMBNAIL_PROCESSORS
+
+
+try:
+    import django_extensions
+except ImportError:
+    pass
+else:
+    INSTALLED_APPS += ['django_extensions',]
