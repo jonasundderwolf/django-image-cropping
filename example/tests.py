@@ -5,6 +5,10 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.test.client import Client
+from django.test import LiveServerTestCase
+from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.support.ui import WebDriverWait
+
 from example.models import Image, ImageFK
 
 TEST_CROPPING = (355,355)
@@ -58,3 +62,43 @@ class CroppingTestCase(TestCase):
         response = c.get(reverse('admin:example_image_change', args=[image.pk,]))
         test_url = 'data-thumbnail-url="%s.%sx%s' % (image.image_field.url, TEST_CROPPING[0], TEST_CROPPING[1])
         self.assertContains(response, test_url)
+
+
+class BrowserTestCase(LiveServerTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.selenium = WebDriver()
+        super(BrowserTestCase, cls).setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super(BrowserTestCase, cls).tearDownClass()
+
+    def login(self):
+        create_superuser()
+        self.selenium.get('%s%s' % (self.live_server_url, '/admin'))
+        username_input = self.selenium.find_element_by_id("id_username")
+        password_input = self.selenium.find_element_by_id("id_password")
+        username_input.send_keys('admin')
+        password_input.send_keys('admin')
+        self.selenium.find_element_by_xpath('//input[@value="Log in"]').click()
+        WebDriverWait(self.selenium, 10)
+
+    def test_login(self):
+        """Test if the admin user is able to login."""
+        self.login()
+        body = self.selenium.find_element_by_tag_name('body')
+        self.assertIn('Site administration', body.text)
+
+    def test_admin_cropping(self):
+        """Test if the the cropping thumbnail gets correctly embedded in the admin."""
+        image = create_cropped_image()
+        self.login()
+        edit_view = reverse('admin:example_image_change', args=[image.pk,])
+        self.selenium.get('%s%s' % (self.live_server_url, edit_view))
+        WebDriverWait(self.selenium, 5)
+        thumbnail = self.selenium.find_element_by_css_selector('.jcrop-holder img')
+        thumbnail_source = thumbnail.get_attribute('src')
+        self.assertTrue(image.image_field.url in thumbnail_source)
