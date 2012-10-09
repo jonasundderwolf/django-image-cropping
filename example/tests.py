@@ -1,10 +1,13 @@
 from django.core.files import File
 from django.core.urlresolvers import reverse
-from django.test import TestCase
-from django.test.client import Client
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.test import TestCase
+from django.test.utils import override_settings
+from django.test.client import Client
 from example.models import Image, ImageFK
 
+TEST_CROPPING = (355,355)
 
 def create_cropped_image(**kwargs):
     defaults = {
@@ -16,6 +19,16 @@ def create_cropped_image(**kwargs):
     image = Image.objects.create(**{'cropping': defaults['image_cropping']})
     image.image_field.save(defaults['image_name'], File(open(defaults['image_path'])), True)
     return image
+
+
+def create_superuser(**kwargs):
+    defaults = {
+        'password': 'admin',
+        'username': 'admin',
+        'email': 'admin@admin.test',
+    }
+    defaults.update(kwargs)
+    return User.objects.create_superuser(**defaults)
 
 
 class CroppingTestCase(TestCase):
@@ -34,3 +47,14 @@ class CroppingTestCase(TestCase):
         c = Client()
         response = c.get(reverse('thumbnail_foreign_key', args=(example.pk,)))
         self.assertContains(response, '120x100_q85_box-51%2C53%2C151%2C136_crop_detail')
+
+    @override_settings(IMAGE_CROPPING_THUMB_SIZE=TEST_CROPPING)
+    def test_override_image_thumb_size(self):
+        """Test if the IMAGE_CROPPING_THUMB_SIZE setting is respected."""
+        admin = create_superuser()
+        image = create_cropped_image()
+        c = Client()
+        c.login(username=admin.username, password='admin')
+        response = c.get(reverse('admin:example_image_change', args=[image.pk,]))
+        test_url = 'data-thumbnail-url="%s.%sx%s' % (image.image_field.url, TEST_CROPPING[0], TEST_CROPPING[1])
+        self.assertContains(response, test_url)
