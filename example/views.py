@@ -11,11 +11,17 @@ def thumbnail_options(request):
     return render(request, 'thumbnail_options.html', {'image': image})
 
 
-def thumbnail_foreign_key(request):
-    try:
-        imagefk = ImageFK.objects.all()[0]
-    except (ImageFK.DoesNotExist, IndexError,):
-        imagefk = None
+def thumbnail_foreign_key(request, instance_id=None):
+    if not instance_id:
+        try:
+            imagefk = ImageFK.objects.all()[0]
+        except (ImageFK.DoesNotExist, IndexError,):
+            imagefk = None
+    else:
+        try:
+            imagefk = ImageFK.objects.get(pk=instance_id)
+        except ImageFK.DoesNotExist:
+            imagefk = None
     return render(request, 'thumbnail_foreign_key.html', {'imagefk': imagefk})
 
 
