@@ -5,7 +5,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^$', 'example.views.form'),
+    url(r'^$', 'example.views.thumbnail_options', name='thumbnail_options'),
+    url(r'^show_foreignkey_thumbnail/$', 'example.views.thumbnail_foreign_key', name='thumbnail_foreign_key'),
     url(r'^show_thumbnail/(?P<image_id>\d+)/$', 'example.views.show_thumbnail', name='show_thumbnail'),
     url(r'^admin/', include(admin.site.urls)),
 )

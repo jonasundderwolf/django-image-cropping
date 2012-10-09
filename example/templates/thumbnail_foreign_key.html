@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load cropping %}
+{% block content %}
+  <h1>CropForeignKey Example</h1>
+  {% if imagefk %}
+    <img src="{% cropped_thumbnail imagefk cropping %}" />
+    <table>
+      <tr>
+        <th>Example model instance</th>
+        <td>{{ imagefk }}</td>
+      </tr>
+        <th>Example cropping</th>
+        <td>{{ imagefk.image.cropping }}</td>
+      </tr>
+        <th>Image</th>
+        <td>{{ imagefk.image }}</td>
+      </tr>
+    </table>
+  {% else %}
+    Please <a href="{% url admin:example_imagefk_changelist %}">create</a> an instance with a example foreign key relation to an image first.
+  {% endif %}
+{% endblock %}
