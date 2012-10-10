@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from easy_thumbnails.files import get_thumbnailer
 from .models import Image, ImageFK
+from .forms import ImageForm
 
 
 def thumbnail_options(request):
@@ -34,3 +37,14 @@ def show_thumbnail(request, image_id):
         'detail': True,
     }).url
     return render(request, 'thumbnail.html', {'thumbnail_url': thumbnail_url})
+
+
+def modelform_example(request, image_id=None):
+    image = get_object_or_404(Image, pk=image_id) if image_id else None
+    form = ImageForm(instance=image)
+    if request.method == "POST":
+        form = ImageForm(request.POST, request.FILES, instance=image)
+        if form.is_valid():
+            image = form.save()
+            return HttpResponseRedirect(reverse('modelform_example', args=(image.pk,)))
+    return render(request, 'modelform_example.html', {'form': form, 'image': image})
