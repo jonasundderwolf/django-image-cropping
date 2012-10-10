@@ -36,3 +36,13 @@ class BrowserTestCase(LiveServerTestCase):
         thumbnail = self.selenium.find_element_by_css_selector('.jcrop-holder img')
         thumbnail_source = thumbnail.get_attribute('src')
         self.assertTrue(image.image_field.url in thumbnail_source)
+
+    def test_modelform_cropping(self):
+        """Test if the thumbnail for cropping images gets correctly embedded when using modelforms."""
+        image = create_cropped_image()
+        edit_view = reverse('modelform_example', args=[image.pk,])
+        self.selenium.get('%s%s' % (self.live_server_url, edit_view))
+        WebDriverWait(self.selenium, 10)
+        thumbnail = self.selenium.find_element_by_css_selector('.jcrop-holder img')
+        thumbnail_source = thumbnail.get_attribute('src')
+        self.assertTrue(image.image_field.url in thumbnail_source)
