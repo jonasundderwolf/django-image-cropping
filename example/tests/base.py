@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.test.client import Client
+
 from example.models import ImageFK
 from .factory import create_cropped_image, create_superuser
 
