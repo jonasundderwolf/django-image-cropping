@@ -1,2 +1,2 @@
 django==1.4.1
-easy_thumbnails==1.1
+

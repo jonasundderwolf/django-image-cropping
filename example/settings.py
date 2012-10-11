@@ -19,6 +19,7 @@ SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 SECRET_KEY = '0pfuvtvasdlkjasd76723"b)lna4*f_-xxkszs4##!+wpo'
@@ -27,7 +28,7 @@ TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -38,9 +39,17 @@ INSTALLED_APPS = (
     'easy_thumbnails',
     'image_cropping',
     'example',
-)
+]
 
 from easy_thumbnails.conf import settings as thumbnail_settings
 THUMBNAIL_PROCESSORS = (
     'image_cropping.thumbnail_processors.crop_corners',
 ) + thumbnail_settings.THUMBNAIL_PROCESSORS
+
+
+try:
+    import django_extensions
+except ImportError:
+    pass
+else:
+    INSTALLED_APPS += ['django_extensions',]

@@ -10,14 +10,12 @@ from easy_thumbnails.files import get_thumbnailer
 
 logger = logging.getLogger(__name__)
 
-ADMIN_THUMBNAIL_SIZE = getattr(settings, 'IMAGE_CROPPING_THUMB_SIZE', (300, 300))
-
 
 def thumbnail(image_path):
     thumbnailer = get_thumbnailer(image_path)
     thumbnail_options = {
         'detail': True,
-        'size': ADMIN_THUMBNAIL_SIZE,
+        'size': getattr(settings, 'IMAGE_CROPPING_THUMB_SIZE', (300, 300)),
     }
     thumb = thumbnailer.get_thumbnail(thumbnail_options)
     return thumb.url
