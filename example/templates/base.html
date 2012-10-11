@@ -1,0 +1,22 @@
+{% load cropping %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image cropping example {% block title %}{% endblock %}</title>
+    <style type="text/css">
+      th {text-align: left;}
+      #navigation li {
+        display: inline;
+        list-style-type: none;
+        padding-right: 10px;
+      }
+    </style>
+    {% block extra_head %}
+    {% endblock %}
+  </head>
+  <body>
+    {% include "navigation.html" %}
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>
