@@ -1,5 +1,6 @@
 from django import template
 from easy_thumbnails.files import get_thumbnailer
+from easy_thumbnails.exceptions import InvalidImageFormatError
 
 register = template.Library()
 
@@ -94,6 +95,8 @@ class CroppingNode(template.Node):
             'detail': True,
             'upscale': self.upscale
         }
-        thumb = thumbnailer.get_thumbnail(thumbnail_options)
-
+        try:
+            thumb = thumbnailer.get_thumbnail(thumbnail_options)
+        except InvalidImageFormatError:
+            return ''
         return thumb.url
