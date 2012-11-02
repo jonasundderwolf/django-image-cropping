@@ -40,11 +40,11 @@ class CropWidget(object):
     class Media:
         js = (
             getattr(settings, 'JQUERY_URL',
-                'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'),
+                    'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'),
             "image_cropping/js/jquery.Jcrop.min.js",
             "image_cropping/image_cropping.js",
         )
-        css= {'all' : ("image_cropping/css/jquery.Jcrop.min.css",)}
+        css = {'all': ("image_cropping/css/jquery.Jcrop.min.css",)}
 
 
 class ImageCropWidget(AdminFileWidget, CropWidget):
@@ -94,12 +94,14 @@ class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
             app_name = self.rel.to._meta.app_label
             model_name = self.rel.to._meta.object_name.lower()
             try:
-                image = getattr(get_model(app_name, model_name
-                    ).objects.get(pk=value), self.field_name)
+                image = getattr(
+                    get_model(app_name, model_name).objects.get(pk=value),
+                    self.field_name,
+                )
                 attrs.update(get_attrs(image, name))
             except ObjectDoesNotExist:
                 logger.error("Can't find object: %s.%s with primary key %s "
-                    "for cropping." % (app_name, model_name, value))
+                             "for cropping." % (app_name, model_name, value))
             except AttributeError:
                 logger.error("Object %s.%s doesn't have an attribute named '%s'." % (
                     app_name, model_name, self.field_name))
