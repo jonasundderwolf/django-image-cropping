@@ -16,11 +16,16 @@ var image_cropping = {
       // there can be several. Deal with it gracefully.
           $image_input = image_cropping.$('input.crop-thumb[data-field-name=' + field + ']:first');
 
-      // skip this image if it's empty and hide the whole field
+      // skip this image if it's empty and hide the whole field, within admin and by itself
       if (!$image_input.length || $image_input.data('thumbnail-url') == undefined) {
-        $this.parents('div.form-row:first').hide();
+        $this.hide().parents('div.form-row:first').hide();
         return;
       }
+      // check if the image field should be hidden
+      if ($image_input.data('hide-field')) {
+        $image_input.hide().parents('div.form-row:first').hide();
+      }
+
       var image_id = $this.attr('id') + '-image',
           org_width = $image_input.data('org-width'),
           org_height = $image_input.data('org-height'),

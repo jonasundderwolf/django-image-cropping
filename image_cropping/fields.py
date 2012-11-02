@@ -46,8 +46,10 @@ class CropForeignKey(models.ForeignKey):
 
 
 class ImageRatioField(models.CharField):
-    def __init__(self, image_field, size, adapt_rotation=False, allow_fullsize=False, verbose_name=None, help_text=None,
-                 size_warning=getattr(settings, 'IMAGE_CROPPING_SIZE_WARNING', False)):
+    def __init__(self, image_field, size, adapt_rotation=False,
+                 allow_fullsize=False, verbose_name=None, help_text=None,
+                 hide_image_field=False, size_warning=getattr(
+                     settings, 'IMAGE_CROPPING_SIZE_WARNING', False)):
         if '__' in image_field:
             self.image_field, self.image_fk_field = image_field.split('__')
         else:
@@ -56,6 +58,7 @@ class ImageRatioField(models.CharField):
         self.adapt_rotation = adapt_rotation
         self.allow_fullsize = allow_fullsize
         self.size_warning = size_warning
+        self.hide_image_field = hide_image_field
         super(ImageRatioField, self).__init__(max_length=255, blank=True, verbose_name=verbose_name, help_text=help_text)
 
     def contribute_to_class(self, cls, name):
@@ -64,7 +67,10 @@ class ImageRatioField(models.CharField):
         # so we can set the correct widget in the ModelAdmin
         if not hasattr(cls, 'crop_fields'):
             cls.add_to_class('crop_fields', {})
-        cls.crop_fields[self.image_field] = self.image_fk_field
+        cls.crop_fields[self.image_field] = {
+            'fk_field': self.image_fk_field,
+            'hidden': self.hide_image_field,
+        }
 
     def formfield(self, *args, **kwargs):
         kwargs['widget'] = forms.TextInput(attrs={
