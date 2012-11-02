@@ -1,6 +1,8 @@
 django-image-cropping
 =====================
 
+.. image:: https://travis-ci.org/jonasundderwolf/django-image-cropping.png
+
 ``django-image-cropping`` is an app for cropping uploaded images via Django's admin backend using `Jcrop 
 <https://github.com/tapmodo/Jcrop>`_. It keeps the original image intact, only cropping when the image
 is being displayed. Large images are presented in a small format, so even very big images can easily be cropped.
