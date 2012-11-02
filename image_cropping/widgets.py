@@ -3,7 +3,6 @@ import inspect
 import warnings
 
 from django.db.models import get_model, ObjectDoesNotExist
-from django import forms
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
 from django.conf import settings
 
@@ -56,7 +55,7 @@ class ImageCropWidget(AdminFileWidget, CropWidget):
         return super(AdminFileWidget, self).render(name, value, attrs)
 
 
-class HiddenImageCropWidget(forms.HiddenInput, CropWidget):
+class HiddenImageCropWidget(ImageCropWidget):
     def render(self, name, value, attrs=None):
         if not attrs:
             attrs = {}
@@ -64,8 +63,6 @@ class HiddenImageCropWidget(forms.HiddenInput, CropWidget):
         # doesn't yet support hidden fields:
         # https://code.djangoproject.com/ticket/11277
         attrs['data-hide-field'] = True
-        if value:
-            attrs.update(get_attrs(value, name))
         return super(HiddenImageCropWidget, self).render(name, value, attrs)
 
 
