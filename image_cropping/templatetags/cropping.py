@@ -1,13 +1,15 @@
 from django import template
 from easy_thumbnails.files import get_thumbnailer
-from easy_thumbnails.exceptions import InvalidImageFormatError
 
 register = template.Library()
 
-# Sytanx:
-# {% cropped_thumbnail instancename ratiofieldname [scale=0.1|width=100|height=200] [upscale] %}
+
 @register.tag
 def cropped_thumbnail(parser, token):
+    '''
+    Syntax:
+    {% cropped_thumbnail instancename ratiofieldname [scale=0.1|width=100|height=200] [upscale] %}
+    '''
     args = token.split_contents()
 
     if len(args) < 3:
@@ -29,7 +31,7 @@ def cropped_thumbnail(parser, token):
 
             if option:
                 raise template.TemplateSyntaxError("%s: there is already an option defined!" % arg)
-            try: # parse option
+            try:  # parse option
                 option = (name, float(value))
                 if not option[0] in ('scale', 'width', 'height'):
                     raise template.TemplateSyntaxError("invalid optional argument %s" % args[3])
@@ -38,7 +40,7 @@ def cropped_thumbnail(parser, token):
             except ValueError:
                 raise template.TemplateSyntaxError("%s needs an numeric argument" % args[3])
 
-        except ValueError: # check for upscale argument
+        except ValueError:  # check for upscale argument
             if arg == 'upscale':
                 upscale = True
             else:
@@ -60,11 +62,13 @@ class CroppingNode(template.Node):
             return
 
         ratiofield = instance._meta.get_field(self.ratiofieldname)
-        image = getattr(instance, ratiofield.image_field) # get imagefield
+        image = getattr(instance, ratiofield.image_field)  # get imagefield
 
-        if ratiofield.image_fk_field: # image is ForeignKey
+        if ratiofield.image_fk_field:  # image is ForeignKey
             # get the imagefield
             image = getattr(image, ratiofield.image_fk_field)
+            if not image:
+                return
 
         size = (int(ratiofield.width), int(ratiofield.height))
         box = getattr(instance, self.ratiofieldname)
@@ -95,8 +99,4 @@ class CroppingNode(template.Node):
             'detail': True,
             'upscale': self.upscale
         }
-        try:
-            thumb = thumbnailer.get_thumbnail(thumbnail_options)
-        except InvalidImageFormatError:
-            return ''
-        return thumb.url
+        return thumbnailer.get_thumbnail(thumbnail_options).url
