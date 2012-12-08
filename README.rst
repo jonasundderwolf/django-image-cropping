@@ -31,7 +31,7 @@ Installation
 
 #. Adjust the thumbnail processors for ``easy_thumbnails`` in your ``settings.py``::
 
-    from easy_thumbnails.conf import settings as thumbnail_settings
+    from easy_thumbnails.conf import Settings as thumbnail_settings
     THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
     ) + thumbnail_settings.THUMBNAIL_PROCESSORS
