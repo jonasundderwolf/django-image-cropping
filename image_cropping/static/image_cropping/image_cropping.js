@@ -52,6 +52,7 @@ var image_cropping = {
       var options = {
         aspectRatio: min_width/min_height,
         minSize: [5, 5],
+        keySupport: false,
         trueSize: [org_width, org_height],
         onSelect: image_cropping.update_selection($this),
         addClass: ($this.data('size-warning') && ((org_width < min_width) || (org_height < min_height))) ? 'size-warning jcrop-image': 'jcrop-image'
