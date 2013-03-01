@@ -1,5 +1,5 @@
 var image_cropping = {
-  $: jQuery.noConflict(),
+  $: jQuery.noConflict(true),
   init: function() {
     // set styles for size-warning
     var style_img_warning = 'div.jcrop-image.size-warning .jcrop-vline{border:1px solid red; background: none;}' +
