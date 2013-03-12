@@ -5,7 +5,8 @@ from django.test.utils import override_settings
 from example.models import ImageFK
 from .factory import create_cropped_image, create_superuser
 
-TEST_CROPPING = (355,355)
+TEST_CROPPING = (355, 355)
+
 
 class CroppingTestCase(TestCase):
 
@@ -28,6 +29,6 @@ class CroppingTestCase(TestCase):
         admin = create_superuser()
         image = create_cropped_image()
         self.client.login(username=admin.username, password='admin')
-        response = self.client.get(reverse('admin:example_image_change', args=[image.pk,]))
+        response = self.client.get(reverse('admin:example_image_change', args=[image.pk]))
         test_url = 'data-thumbnail-url="%s.%sx%s' % (image.image_field.url, TEST_CROPPING[0], TEST_CROPPING[1])
         self.assertContains(response, test_url)
