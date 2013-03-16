@@ -17,6 +17,6 @@
       </tr>
     </table>
   {% else %}
-    Please <a href="{% url admin:example_imagefk_changelist %}">create</a> an instance with a example foreign key relation to an image first.
+    Please <a href="{% url 'admin:example_imagefk_changelist' %}">create</a> an instance with a example foreign key relation to an image first.
   {% endif %}
 {% endblock %}

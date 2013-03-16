@@ -1,4 +1,6 @@
 import os
+import django.template
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DEBUG = True
@@ -46,6 +48,7 @@ THUMBNAIL_PROCESSORS = (
     'image_cropping.thumbnail_processors.crop_corners',
 ) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
+django.template.add_to_builtins('django.templatetags.future')
 
 try:
     import django_extensions

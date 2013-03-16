@@ -3,7 +3,7 @@
 {% block content %}
   <h1>Image cropping examples</h1>
   {% if not image %}
-    Please <a href="{% url admin:example_image_changelist %}">create</a> an image first.
+    Please <a href="{% url 'admin:example_image_changelist' %}">create</a> an image first.
   {% else %}
     <h3>cropped image</h3>
     <img src="{% cropped_thumbnail image cropping %}" />
