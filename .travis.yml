@@ -6,9 +6,8 @@ env:
   - DJANGO=1.4.5
   - DJANGO=1.5
 install:
-  - sudo apt-get install -y python-imaging
-  - pip install -q Django==$DJANGO --use-mirrors
-  - pip install -q PIL==1.1.7 --use-mirrors
+  - pip install -q django==$DJANGO --use-mirrors
+  - pip install -q pillow==2.0 --use-mirrors
   - pip install -q selenium==2.31 --use-mirrors
   - pip install -q -e .
 notifications:
