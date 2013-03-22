@@ -15,7 +15,7 @@ setup(name="django-image-cropping",
     ],
     test_suite='example.runtests.runtests',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
