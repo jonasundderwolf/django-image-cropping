@@ -8,6 +8,11 @@ from django.conf import settings
 
 from easy_thumbnails.files import get_thumbnailer
 
+try:
+    from PIL import Image
+except ImportError:
+    import Image
+
 logger = logging.getLogger(__name__)
 
 
@@ -23,12 +28,42 @@ def thumbnail(image_path):
 
 def get_attrs(image, name):
     try:
+        width = image.width
+        height = image.height
+        
+        try:
+            # If the image file has already been closed, open it
+            if image.closed:
+                image.open()
+                
+            # Seek to the beginning of the file.  This is necessary if the 
+            # image has already been read using this file handler
+            image.seek(0)
+            
+            # Open the image using PIL
+            pil_image = Image.open(image)
+            
+            # Extract EXIF data
+            exif = pil_image._getexif()
+            
+            # Get EXIF orientation
+            orientation = exif.get(0x0112)
+            
+            # If orientation is rotated by 90 degrees in either direction
+            if orientation >= 5 and orientation <= 8:
+                # Swap height and width
+                new_height = width
+                width = height
+                height = new_height
+        except:
+            pass
+        
         return {
             'class': "crop-thumb",
             'data-thumbnail-url': thumbnail(image),
             'data-field-name': name,
-            'data-org-width': image.width,
-            'data-org-height': image.height,
+            'data-org-width': width,
+            'data-org-height': height,
         }
     except ValueError:
         # can't create thumbnail from image
