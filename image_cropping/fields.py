@@ -46,15 +46,18 @@ class CropForeignKey(models.ForeignKey):
 
 
 class ImageRatioField(models.CharField):
-    def __init__(self, image_field, size, adapt_rotation=False,
-                 allow_fullsize=False, verbose_name=None, help_text=None,
-                 hide_image_field=False, size_warning=getattr(
+    def __init__(self, image_field, size='0x0', free_crop=False,
+                 adapt_rotation=False, allow_fullsize=False, verbose_name=None,
+                 help_text=None,  hide_image_field=False,
+                 size_warning=getattr(
                      settings, 'IMAGE_CROPPING_SIZE_WARNING', False)):
         if '__' in image_field:
             self.image_field, self.image_fk_field = image_field.split('__')
         else:
             self.image_field, self.image_fk_field = image_field, None
-        self.width, self.height = size.split('x')
+
+        self.width, self.height = map(int, size.split('x'))
+        self.free_crop = free_crop
         self.adapt_rotation = adapt_rotation
         self.allow_fullsize = allow_fullsize
         self.size_warning = size_warning
@@ -73,9 +76,12 @@ class ImageRatioField(models.CharField):
         }
 
     def formfield(self, *args, **kwargs):
+        ratio = self.width / float(self.height) if not self.free_crop else 0
+
         kwargs['widget'] = forms.TextInput(attrs={
-            'data-width': int(self.width),
-            'data-height': int(self.height),
+            'data-min-width': self.width,
+            'data-min-height': self.height,
+            'data-ratio': ratio,
             'data-image-field': self.image_field,
             'data-my-name': self.name,
             'data-adapt-rotation': str(self.adapt_rotation).lower(),

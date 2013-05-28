@@ -29,8 +29,8 @@ var image_cropping = {
       var image_id = $this.attr('id') + '-image',
           org_width = $image_input.data('org-width'),
           org_height = $image_input.data('org-height'),
-          min_width = $this.data('width'),
-          min_height = $this.data('height');
+          min_width = $this.data('min-width'),
+          min_height = $this.data('min-height');
 
       var is_image_portrait = (org_height > org_width);
       var is_select_portrait = (min_height > min_width);
@@ -50,12 +50,14 @@ var image_cropping = {
       });
 
       var options = {
-        aspectRatio: min_width/min_height,
         minSize: [5, 5],
         keySupport: false,
         trueSize: [org_width, org_height],
         onSelect: image_cropping.update_selection($this),
         addClass: ($this.data('size-warning') && ((org_width < min_width) || (org_height < min_height))) ? 'size-warning jcrop-image': 'jcrop-image'
+      }
+      if ($this.data('ratio')) {
+        options['aspectRatio'] = $this.data('ratio');
       }
 
       var cropping_disabled = false;
@@ -162,8 +164,8 @@ var image_cropping = {
   crop_indication: function(sel, $crop_field) {
     // indicate if cropped area gets smaller than the specified minimal cropping
     var $jcrop_holder = $crop_field.siblings('.jcrop-holder');  
-    var min_width = $crop_field.data("width");
-    var min_height = $crop_field.data("height");
+    var min_width = $crop_field.data("min-width");
+    var min_height = $crop_field.data("min-height");
     if ((sel.w < min_width) || (sel.h < min_height)) {
       $jcrop_holder.addClass('size-warning');
     } else {
