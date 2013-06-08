@@ -7,5 +7,8 @@ class ImageFKAdmin(ImageCroppingMixin, admin.ModelAdmin):
     pass
 
 
-admin.site.register(Image)
+class ImageAdmin(ImageCroppingMixin, admin.ModelAdmin):
+    pass
+
+admin.site.register(Image, ImageAdmin)
 admin.site.register(ImageFK, ImageFKAdmin)
