@@ -3,7 +3,7 @@ django-image-cropping
 
 .. image:: https://travis-ci.org/jonasundderwolf/django-image-cropping.png
 
-``django-image-cropping`` is an app for cropping uploaded images via Django's admin backend using `Jcrop 
+``django-image-cropping`` is an app for cropping uploaded images via Django's admin backend using `Jcrop
 <https://github.com/tapmodo/Jcrop>`_. It keeps the original image intact, only cropping when the image
 is being displayed. Large images are presented in a small format, so even very big images can easily be cropped.
 
@@ -11,11 +11,11 @@ is being displayed. Large images are presented in a small format, so even very b
 users or editors to upload images of any dimension. It presents a selection with a fixed aspect ratio so your users
 can't break the layout with oddly-sized images.
 
-It provides the necessary fields, widgets and a (`easy_thumbnails 
-<http://github.com/SmileyChris/easy-thumbnails>`_) thumbnail processor for displaying the 
+It provides the necessary fields, widgets and a (`easy_thumbnails
+<http://github.com/SmileyChris/easy-thumbnails>`_) thumbnail processor for displaying the
 cropped image in your templates. Also works with `FeinCMS <https://github.com/feincms/feincms>`_ content types!
 
-Screenshot: 
+Screenshot:
 
 .. image:: http://www.jonasundderwolf.de/media/uploads/judw_logo.png
 
@@ -36,13 +36,13 @@ Installation
         'image_cropping.thumbnail_processors.crop_corners',
     ) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
-#. Deploy the necessary static files. If you are using Django 1.3 and ``contrib.staticfiles`` the 
+#. Deploy the necessary static files. If you are using Django 1.3 and ``contrib.staticfiles`` the
    necessary static files should be picked up automatically. In all other cases you have to copy or
    symlink the static files. Depending on your setup the command should look similar to this::
 
         ln -s ~/.virtualenvs/yourenv/src/django-image-cropping/image_cropping/static/image_cropping/
 
-    
+
 
 Configuration
 -------------
@@ -75,7 +75,7 @@ size (see below).
     admin.site.register(MyModel, MyModelAdmin)
 
    If your setup is correct you should now see the enhanced image widget that provides a selection
-   area for the image in the admin backend. 
+   area for the image in the admin backend.
 
 3. Additionally, you can define the maximum size of the preview thumbnail in the admin in your ``settings.py``::
 
@@ -107,7 +107,7 @@ Example usage::
 
 You can also use the standard ``easy_thumbnails`` templatetag with the "box" parameter::
 
-    {% load thumbnails %}
+    {% load thumbnail %}
     {% thumbnail yourmodel.image 430x360 box=yourmodel.cropping crop detail %}
 
 Or generate the URL from Python code in your view::
@@ -140,7 +140,7 @@ Alternatively, override the widget in your ModelForm (you just need to do one of
 
     from django import forms
     from image_cropping import ImageCropWidget
-    
+
     class MyModelForm(forms.ModelForm):
         class Meta:
             widgets = {
@@ -188,7 +188,7 @@ In your templates, use the corresponding ratio field::
 Foreign Keys
 ++++++++++++
 
-If you need to crop an image contained within another model, referenced by a ForeignKey, the ``ImageRatioField`` is 
+If you need to crop an image contained within another model, referenced by a ForeignKey, the ``ImageRatioField`` is
 composed of the ``ForeignKey`` name, double underscore, and the ``ImageField`` name::
 
     from django.db import models
