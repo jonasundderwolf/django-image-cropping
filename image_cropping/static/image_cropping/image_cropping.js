@@ -150,10 +150,10 @@ var image_cropping = {
       image_cropping.crop_indication(sel, $crop_field);
     }
     $crop_field.val(new Array(
-      sel.x,
-      sel.y,
-      sel.x2,
-      sel.y2
+      Math.round(sel.x),
+      Math.round(sel.y),
+      Math.round(sel.x2),
+      Math.round(sel.y2)
     ).join(','));
   },
   update_selection: function($crop_field) {
