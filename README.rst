@@ -171,9 +171,9 @@ Free cropping
 If you do not need a ratio, you can disable this contraint by setting ``free_crop=True``.
 In this case the size parameter is the desired minimum and is used for the size-warning.::
 
-    from image_cropping import ImageRatioField, ImageCropField
+    from image_cropping import ImageRatioField
 
-    image = ImageCropField(blank=True, null=True, upload_to='uploaded_images')
+    image = models.ImageField(blank=True, null=True, upload_to='uploaded_images')
     # size is "width x height"
     #   with minimum size of 200px x 100px
     min_free_cropping = ImageRatioField('image', '200x100', free_crop=True)
@@ -188,9 +188,9 @@ Multiple formats
 
 If you need the same image in multiple formats, simply specify another ImageRatioField. This will allow the image to be cropped twice::
 
-    from image_cropping import ImageRatioField, ImageCropField
+    from image_cropping import ImageRatioField
 
-    image = ImageCropField(blank=True, null=True, upload_to='uploaded_images')
+    image = models.ImageField(blank=True, null=True, upload_to='uploaded_images')
     # size is "width x height"
     list_page_cropping = ImageRatioField('image', '200x100')
     detail_page_cropping = ImageRatioField('image', '430x360')
