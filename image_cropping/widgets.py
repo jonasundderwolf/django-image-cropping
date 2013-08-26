@@ -43,7 +43,8 @@ class CropWidget(object):
             "image_cropping/js/jquery.Jcrop.min.js",
             "image_cropping/image_cropping.js",
         )
-        css = {'all': ("image_cropping/css/jquery.Jcrop.min.css",)}
+        css = {'all': ("image_cropping/css/jquery.Jcrop.min.css",
+                       "image_cropping/css/image_cropping.css",)}
 
 
 class ImageCropWidget(AdminFileWidget, CropWidget):
