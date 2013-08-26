@@ -6,9 +6,10 @@ from .widgets import ImageCropWidget
 
 
 class ImageCropField(models.ImageField):
-    def formfield(self, *args, **kwargs):
-        kwargs['widget'] = ImageCropWidget
-        return super(ImageCropField, self).formfield(*args, **kwargs)
+    def formfield(self, **kwargs):
+        defaults = {'widget': ImageCropWidget}
+        defaults.update(kwargs)
+        return super(ImageCropField, self).formfield(**defaults)
 
     def south_field_triple(self):
         """
