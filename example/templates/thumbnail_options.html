@@ -7,6 +7,10 @@
   {% else %}
     <h3>cropped image</h3>
     <img src="{% cropped_thumbnail image cropping %}" />
+
+    <h3>free cropped image</h3>
+    <img src="{% cropped_thumbnail image cropping_free %}" />
+
     <h3>scaled image</h3>
     <div style="float: left; margin-left: 10px;">
       scale=0.5<br />
@@ -26,7 +30,7 @@
     </div>
     <div style="clear: both;"></div>
     <div>
-      height=150 upscale<br />
+      height=300 upscale<br />
       <img src="{% cropped_thumbnail image cropping height=300 upscale %}" /><br />
     </div>
   {% endif %}

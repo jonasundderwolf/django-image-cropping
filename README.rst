@@ -100,7 +100,7 @@ Frontend
 
 For your frontend code, ``django-image-cropping`` provides a templatetag to use for displaying a cropped thumbnail::
 
-    {% cropped_thumbnail yourmodelinstance "ratiofieldname" [scale=INT|width=INT|height=INT] [upscale] %}
+    {% cropped_thumbnail yourmodelinstance "ratiofieldname" [scale=INT|width=INT|height=INT|max_size=INTxINT] [upscale] %}
 
 Example usage::
 
@@ -167,15 +167,32 @@ If you're selectively including or excluding fields from the ModelForm, remember
 
 Extras
 ------
+Free cropping
+++++++++++++++++
+
+If you do not need a ratio, you can disable this contraint by setting ``free_crop=True``.
+In this case the size parameter is the desired minimum and is used for the size-warning.::
+
+    from image_cropping import ImageRatioField
+
+    image = models.ImageField(blank=True, null=True, upload_to='uploaded_images')
+    # size is "width x height"
+    #   with minimum size of 200px x 100px
+    min_free_cropping = ImageRatioField('image', '200x100', free_crop=True)
+
+You may want to limit the thumbnail size, when displaying the image. Use the ``max_size`` parameter of the templatetag.::
+
+     <img src="{% cropped_thumbnail image cropping_free max_size=200x200 %}" />
+
 
 Multiple formats
 ++++++++++++++++
 
 If you need the same image in multiple formats, simply specify another ImageRatioField. This will allow the image to be cropped twice::
 
-    from image_cropping import ImageRatioField, ImageCropField
+    from image_cropping import ImageRatioField
 
-    image = ImageCropField(blank=True, null=True, upload_to='uploaded_images')
+    image = models.ImageField(blank=True, null=True, upload_to='uploaded_images')
     # size is "width x height"
     list_page_cropping = ImageRatioField('image', '200x100')
     detail_page_cropping = ImageRatioField('image', '430x360')

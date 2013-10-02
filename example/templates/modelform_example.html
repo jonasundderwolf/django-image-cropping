@@ -11,7 +11,8 @@
   {% if image %}
     <br />
     <h4>Preview</h4>
-      <img src="{% cropped_thumbnail image cropping %}" />
+      <img src="{% cropped_thumbnail image cropping %}" /><br />
+      <img src="{% cropped_thumbnail image cropping_free max_size=200x200 %}" />
   {% endif %}
 {% endblock %}
 
