@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load cropping %}
+{% load cropping thumbnail %}
 {% block extra_head %}
   {{ form.media }}
 {% endblock %}
@@ -11,7 +11,12 @@
   {% if image %}
     <br />
     <h4>Preview</h4>
+      <h5>using cropped_thumbnail tag</h5>
       <img src="{% cropped_thumbnail image cropping %}" />
+      <h5>using standard thumbnail tag with a cropping field value (string) as box argument</h5>
+      <img src="{% thumbnail image.image_field 120x100 box=image.cropping crop detail %}">
+      <h5>using standard thumbnail tag with a list of integers as box argument</h5>
+      <img src="{% thumbnail image.image_field 120x100 box=image.get_cropping_as_list crop detail %}">
   {% endif %}
 {% endblock %}
 

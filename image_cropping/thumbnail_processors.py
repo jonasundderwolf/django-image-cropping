@@ -10,23 +10,30 @@ def crop_corners(image, box=None, **kwargs):
 
     `box` is a string of the format 'x1,y1,x2,y1' or a four-tuple of integers.
     """
-    if box and not box.startswith('-'):
-        # a leading - indicates that cropping is disabled
+    if not box:
+        return image
+
+    if not isinstance(box, (list, tuple)):
+        # convert cropping string to a list of integers if necessary
         try:
             box = map(int, box.split(','))
         except ValueError:
             # there's garbage in the cropping field, ignore
             logger.warning(
                 'Unable to parse "box" parameter "%s". Ignoring.' % box)
+        except AttributeError:
+            pass
 
-        if len(box) == 4:
-            if sum(box) > 0:
-                # negative box values indicate that cropping is disabled
-                width = abs(box[2] - box[0])
-                height = abs(box[3] - box[1])
-                if width and height and (width, height) != image.size:
-                    image = image.crop(box)
-        else:
-            logger.warning(
-                '"box" parameter requires four values. Ignoring "%r".' % box)
+    if len(box) == 4:
+        if box[0] < 0:
+            # a negative first box value indicates that cropping is disabled
+            return image
+        width = abs(box[2] - box[0])
+        height = abs(box[3] - box[1])
+        if width and height and (width, height) != image.size:
+            image = image.crop(box)
+    else:
+        logger.warning(
+            '"box" parameter requires four values. Ignoring "%r".' % box)
+
     return image
