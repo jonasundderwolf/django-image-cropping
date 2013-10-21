@@ -4,6 +4,7 @@
 *.swp
 *.egg-info*
 build/
+_build/
 dist/
 media/
 settings_local.py
