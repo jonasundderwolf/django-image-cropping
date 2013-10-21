@@ -212,3 +212,13 @@ Disabling cropping
 
 If you want cropping to be optional, use ``allow_fullsize=True`` as an additional keyword argument in your ``ImageRatioField``.
 Editors can now switch off cropping by unchecking the checkbox next to the image cropping widget.
+
+Changelog
+---------
+
+0.7
++++
+
+- Made the widget for the ``ImageCropField`` overwriteable to allow custom widgets. (Remember to use the ``ImageCroppingMixin`` in the admin as the image cropping widgets are no longer implicitly set.)
+- Updated ``Jcrop`` and ``jQuery`` dependencies.
+- Moved docs to *Read the Docs*: https://django-image-cropping.readthedocs.org
