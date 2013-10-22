@@ -27,9 +27,6 @@ setup(name="django-image-cropping",
     url="http://github.com/jonasundderwolf/django-image-cropping",
     packages=find_packages(),
     include_package_data=True,
-    install_requires=[
-        'easy_thumbnails>=1.2',
-    ],
     test_suite='example.runtests.runtests',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
