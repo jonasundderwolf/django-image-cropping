@@ -3,12 +3,12 @@ python:
   - "2.6"
   - "2.7"
 env:
-  - DJANGO=1.4.5
-  - DJANGO=1.5
+  - DJANGO=1.4.8
+  - DJANGO=1.5.4
 install:
   - pip install -q django==$DJANGO --use-mirrors
   - pip install -q pillow==2.0 --use-mirrors
-  - pip install -q selenium==2.31 --use-mirrors
+  - pip install -q selenium==2.37.2 --use-mirrors
   - pip install -q -e .
 notifications:
   email: false
