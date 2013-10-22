@@ -1,6 +1,9 @@
 django-image-cropping
 =====================
 
+.. image:: https://pypip.in/v/django-image-cropping/badge.png
+        :target: https://pypi.python.org/pypi/django-image-cropping
+
 .. image:: https://travis-ci.org/jonasundderwolf/django-image-cropping.png
     :target: http://travis-ci.org/jonasundderwolf/django-image-cropping
     :alt: Build Status
