@@ -2,9 +2,5 @@ include LICENSE.txt
 include CONTRIBUTORS
 include README.rst
 include MANIFEST.in
-recursive-include image_cropping/static *
-recursive-include docs *
-recursive-include example *
-recursive-exclude example/media *
+recursive-exclude example *
 recursive-exclude docs/_build *
-exclude example/settings_local.py
