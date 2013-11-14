@@ -1,6 +1,6 @@
-(function($) {
-  var image_cropping = {
-    init: function() {
+var image_cropping = function ($) {
+
+    function init() {
       // set styles for size-warning
       var style_img_warning = 'div.jcrop-image.size-warning .jcrop-vline{border:1px solid red; background: none;}' +
                               'div.jcrop-image.size-warning .jcrop-hline{border:1px solid red; background: none;}';
@@ -54,7 +54,7 @@
           minSize: [5, 5],
           keySupport: false,
           trueSize: [org_width, org_height],
-          onSelect: image_cropping.update_selection($this),
+          onSelect: update_selection($this),
           addClass: ($this.data('size-warning') && ((org_width < min_width) || (org_height < min_height))) ? 'size-warning jcrop-image': 'jcrop-image'
         };
 
@@ -65,13 +65,13 @@
         }
 
         // is the image bigger than the minimal cropping values?
-        // otherwise lock cropping area on full image 
+        // otherwise lock cropping area on full image
         var initial;
         if ($this.val()) {
-          initial = image_cropping.initial_cropping($this.val());
+          initial = initial_cropping($this.val());
         } else {
 
-          initial = image_cropping.max_cropping(min_width, min_height, org_width, org_height);
+          initial = max_cropping(min_width, min_height, org_width, org_height);
 
             // set cropfield to initial value
           $this.val(initial.join(','));
@@ -121,8 +121,9 @@
         // so it clears the label
         $("<style type='text/css'>div.jcrop-holder{float:left;}</style>").appendTo('head');
       }
-    },
-    max_cropping: function(width, height, image_width, image_height) {
+    }
+
+    function max_cropping (width, height, image_width, image_height) {
       var ratio = width/height;
       var offset;
 
@@ -134,8 +135,9 @@
       // height fits fully, width needs to be cropped
       offset = Math.round((image_width-(image_height * ratio))/2);
       return [offset, 0, image_width - offset, image_height];
-    },
-    initial_cropping: function(val) {
+    }
+
+    function initial_cropping (val) {
       if (val === '') { return; }
       var s = val.split(',');
       return [
@@ -144,10 +146,11 @@
         parseInt(s[2], 10),
         parseInt(s[3], 10)
       ];
-    },
-    _update_selection: function(sel, $crop_field) {
+    }
+
+    function _update_selection (sel, $crop_field) {
       if ($crop_field.data('size-warning')) {
-        image_cropping.crop_indication(sel, $crop_field);
+        crop_indication(sel, $crop_field);
       }
       $crop_field.val(new Array(
         Math.round(sel.x),
@@ -155,13 +158,15 @@
         Math.round(sel.x2),
         Math.round(sel.y2)
       ).join(','));
-    },
-    update_selection: function($crop_field) {
-      return function(sel) { image_cropping._update_selection(sel, $crop_field); };
-    },
-    crop_indication: function(sel, $crop_field) {
+    }
+
+    function update_selection ($crop_field) {
+      return function(sel) { _update_selection(sel, $crop_field); };
+    }
+
+    function crop_indication (sel, $crop_field) {
       // indicate if cropped area gets smaller than the specified minimal cropping
-      var $jcrop_holder = $crop_field.siblings('.jcrop-holder');  
+      var $jcrop_holder = $crop_field.siblings('.jcrop-holder');
       var min_width = $crop_field.data("width");
       var min_height = $crop_field.data("height");
       if ((sel.w < min_width) || (sel.h < min_height)) {
@@ -170,9 +175,12 @@
         $jcrop_holder.removeClass('size-warning');
       }
     }
-  };
 
-  // init image cropping when DOM is ready
-  $(function() {image_cropping.init();});
+    return {
+      init: init
+    };
 
-}(jQuery));
+}(jQuery);
+
+// init image cropping when DOM is ready
+jQuery(function() {image_cropping.init();});
