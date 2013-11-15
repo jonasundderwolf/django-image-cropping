@@ -8,7 +8,7 @@ def crop_corners(image, box=None, **kwargs):
     """
     Crop corners to the selection defined by image_cropping
 
-    `box` is a string of the format 'x1,y1,x2,y1' or a four-tuple of integers.
+    `box` is a string of the format 'x1,y1,x2,y2' or a four-tuple of integers.
     """
     if not box:
         return image
