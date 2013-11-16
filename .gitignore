@@ -1,6 +1,7 @@
 *.pyc
 *.sqlite3
 *~
+*.bak
 *.swp
 *.egg-info*
 build/

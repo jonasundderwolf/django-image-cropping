@@ -1,12 +1,13 @@
 import re
 import os
 import codecs
-from distutils.core import setup
-from setuptools import find_packages
+from setuptools import setup, find_packages
 
 
 def read(*parts):
-    return codecs.open(os.path.join(os.path.dirname(__file__), *parts)).read()
+    filename = os.path.join(os.path.dirname(__file__), *parts)
+    with codecs.open(filename, encoding='utf-8') as fp:
+        return fp.read()
 
 
 def find_version(*file_paths):
@@ -18,7 +19,8 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 
-setup(name="django-image-cropping",
+setup(
+    name="django-image-cropping",
     version=find_version("image_cropping", "__init__.py"),
     description="A reusable app for cropping images easily and non-destructively in Django",
     long_description=open('README.rst').read(),
@@ -36,5 +38,8 @@ setup(name="django-image-cropping",
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Topic :: Software Development :: Libraries :: Python Modules',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.3',
     ],
 )

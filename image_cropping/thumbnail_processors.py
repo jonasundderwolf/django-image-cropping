@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import logging
 
 
@@ -16,7 +17,7 @@ def crop_corners(image, box=None, **kwargs):
     if not isinstance(box, (list, tuple)):
         # convert cropping string to a list of integers if necessary
         try:
-            box = map(int, box.split(','))
+            box = list(map(int, box.split(',')))
         except ValueError:
             # there's garbage in the cropping field, ignore
             logger.warning(

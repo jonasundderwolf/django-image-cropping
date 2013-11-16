@@ -1,2 +1,2 @@
-django==1.4.5
-
+django==1.6
+easy_thumbnails=1.4
