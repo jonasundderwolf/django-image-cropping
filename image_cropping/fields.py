@@ -23,30 +23,6 @@ class ImageCropField(models.ImageField):
         return (field_class, args, kwargs)
 
 
-#deprecated, as we now set the widget in the ModelAdmin
-class CropForeignKey(models.ForeignKey):
-    '''
-    A croppable image field contained in another model. Only works in admin
-    for now, as it uses the raw_id widget.
-    '''
-
-    def __init__(self, model, field_name, *args, **kwargs):
-        self.field_name = field_name
-        warnings.warn('Please use the ImageCroppingMixin in your ModelAdmin '
-                      'instead of a CropForeignKey!', DeprecationWarning)
-        super(CropForeignKey, self).__init__(model, *args, **kwargs)
-
-    def south_field_triple(self):
-        """
-        Return a suitable description of this field for South.
-        """
-        # We'll just introspect ourselves, since we inherit.
-        from south.modelsinspector import introspector
-        field_class = "django.db.models.fields.related.ForeignKey"
-        args, kwargs = introspector(self)
-        return (field_class, args, kwargs)
-
-
 class ImageRatioField(models.CharField):
     def __init__(self, image_field, size, adapt_rotation=False,
                  allow_fullsize=False, verbose_name=None, help_text=None,
