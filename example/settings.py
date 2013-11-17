@@ -48,8 +48,6 @@ THUMBNAIL_PROCESSORS = (
     'image_cropping.thumbnail_processors.crop_corners',
 ) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
-django.template.add_to_builtins('django.templatetags.future')
-
 try:
     import django_extensions
 except ImportError:

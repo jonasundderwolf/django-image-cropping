@@ -1,2 +1,2 @@
-from .base import *
-from .browser import *
+from .test_base import *
+from .test_browser import *
