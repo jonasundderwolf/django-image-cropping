@@ -8,4 +8,5 @@ build/
 _build/
 dist/
 media/
+.tox/
 settings_local.py
