@@ -3,13 +3,17 @@ python:
   - "2.6"
   - "2.7"
 env:
-  - DJANGO=1.4.8
-  - DJANGO=1.5.4
+  - DJANGO=1.4.10
+  - DJANGO=1.5.5
+matrix:
+  include:
+  - python: "3.3"
+    env: DJANGO=1.6
 install:
   - pip install -q django==$DJANGO --use-mirrors
-  - pip install -q pillow==2.0 --use-mirrors
+  - pip install -q pillow==2.1 --use-mirrors
   - pip install -q selenium==2.37.2 --use-mirrors
-  - pip install -q easy_thumbnails==1.3 --use-mirrors
+  - pip install -q easy_thumbnails==1.4 --use-mirrors
   - pip install -q -e .
 notifications:
   email: false
