@@ -183,4 +183,4 @@ var image_cropping = function ($) {
 }(jQuery);
 
 // init image cropping when DOM is ready
-jQuery(function() {image_cropping.init();});
+jQuery.noConflict(true)(function() {image_cropping.init();});
