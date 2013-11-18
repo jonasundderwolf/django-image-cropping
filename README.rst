@@ -31,8 +31,7 @@ Installation
 
     pip install django-image-cropping
 
-#. Add ``easy_thumbnails`` and ``image_cropping`` to your INSTALLED_APPS. ``image_cropping`` is only required
-   if you are using Django 1.3+ and ``contrib.staticfiles`` or want to use the ``image_cropping`` templatetag.
+#. Add ``easy_thumbnails`` and ``image_cropping`` to your INSTALLED_APPS.
 
 #. Adjust the thumbnail processors for ``easy_thumbnails`` in your ``settings.py``::
 
@@ -40,13 +39,6 @@ Installation
     THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
     ) + thumbnail_settings.THUMBNAIL_PROCESSORS
-
-#. Deploy the necessary static files. If you are using Django 1.3 and ``contrib.staticfiles`` the
-   necessary static files should be picked up automatically. In all other cases you have to copy or
-   symlink the static files. Depending on your setup the command should look similar to this::
-
-        ln -s ~/.virtualenvs/yourenv/src/django-image-cropping/image_cropping/static/image_cropping/
-
 
 
 Configuration
@@ -218,6 +210,12 @@ Editors can now switch off cropping by unchecking the checkbox next to the image
 
 Changelog
 ---------
+
+0.8
++++
+
+- Minimum requirements changed to **Django 1.4** and **easy_thumbnails 1.4**
+- Python 3 compatibility
 
 0.7
 +++
