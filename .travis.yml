@@ -5,6 +5,7 @@ python:
 env:
   - DJANGO=1.4.10
   - DJANGO=1.5.5
+  - DJANGO=1.6
 matrix:
   include:
   - python: "3.3"
