@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-import warnings
 from django.db import models
 from django import forms
 from django.conf import settings
@@ -37,7 +36,13 @@ class ImageRatioField(models.CharField):
         self.allow_fullsize = allow_fullsize
         self.size_warning = size_warning
         self.hide_image_field = hide_image_field
-        super(ImageRatioField, self).__init__(max_length=255, blank=True, verbose_name=verbose_name, help_text=help_text)
+        field_kwargs = {
+            'max_length': 255,
+            'blank': True,
+            'verbose_name': verbose_name,
+            'help_text': help_text
+        }
+        super(ImageRatioField, self).__init__(**field_kwargs)
 
     def contribute_to_class(self, cls, name):
         super(ImageRatioField, self).contribute_to_class(cls, name)
