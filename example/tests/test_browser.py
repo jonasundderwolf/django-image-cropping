@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.test import LiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
-from .factory import create_superuser, create_cropped_image
+from .test_factory import create_superuser, create_cropped_image
 
 
 class BrowserTestCase(LiveServerTestCase):

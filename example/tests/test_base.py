@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.test.utils import override_settings
 
 from example.models import ImageFK
-from .factory import create_cropped_image, create_superuser
+from .test_factory import create_cropped_image, create_superuser
 
 TEST_CROPPING = (355, 355)
 

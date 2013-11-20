@@ -1,9 +1,12 @@
 *.pyc
 *.sqlite3
 *~
+*.bak
 *.swp
 *.egg-info*
 build/
+_build/
 dist/
 media/
+.tox/
 settings_local.py

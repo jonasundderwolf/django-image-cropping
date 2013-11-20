@@ -1,6 +1,5 @@
+from __future__ import unicode_literals
 import logging
-import inspect
-import warnings
 
 from django.db.models import get_model, ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
@@ -39,7 +38,7 @@ class CropWidget(object):
     class Media:
         js = (
             getattr(settings, 'JQUERY_URL',
-                    'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'),
+                    'https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'),
             "image_cropping/js/jquery.Jcrop.min.js",
             "image_cropping/image_cropping.js",
         )
@@ -69,18 +68,6 @@ class HiddenImageCropWidget(ImageCropWidget):
 class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
     def __init__(self, *args, **kwargs):
         self.field_name = kwargs.pop('field_name')
-        # Django versions 1.4+ need the admin site passed in
-        if 'admin_site' in inspect.getargspec(ForeignKeyRawIdWidget.__init__)[0]:
-            # Django 1.4+
-            if 'admin_site' not in kwargs:
-                warnings.warn('Please use the ImageCroppingMixin in your ModelAdmin '
-                              'instead of the CropForeignKey.', DeprecationWarning)
-                from django.contrib.admin.sites import site
-                kwargs['admin_site'] = site
-        elif 'admin_site' in kwargs:
-            # Django < 1.4 and admin_site passed in from ImageCroppingMixin
-            del kwargs['admin_site']
-
         super(CropForeignKeyWidget, self).__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None):
