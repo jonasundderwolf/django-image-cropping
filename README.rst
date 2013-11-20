@@ -215,7 +215,7 @@ Changelog
 +++
 
 - Minimum requirements changed to **Django 1.4** and **easy_thumbnails 1.4**
-- Python 3 compatibility
+- Added Python 3 compatibility. Python 2.6 is now the minimum required Python version.
 
 0.7
 +++
