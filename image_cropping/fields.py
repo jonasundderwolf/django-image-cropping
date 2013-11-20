@@ -25,7 +25,7 @@ class ImageCropField(models.ImageField):
 class ImageRatioField(models.CharField):
     def __init__(self, image_field, size='0x0', free_crop=False,
                  adapt_rotation=False, allow_fullsize=False, verbose_name=None,
-                 help_text=None,  hide_image_field=False,
+                 help_text=None, hide_image_field=False,
                  size_warning=getattr(
                      settings, 'IMAGE_CROPPING_SIZE_WARNING', False)):
         if '__' in image_field:
@@ -33,7 +33,7 @@ class ImageRatioField(models.CharField):
         else:
             self.image_field, self.image_fk_field = image_field, None
 
-        self.width, self.height = map(int, size.split('x'))
+        self.width, self.height = list(map(int, size.split('x')))
         self.free_crop = free_crop
         self.adapt_rotation = adapt_rotation
         self.allow_fullsize = allow_fullsize

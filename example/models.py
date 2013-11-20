@@ -13,7 +13,7 @@ class Image(models.Model):
 
     def get_cropping_as_list(self):
         if self.cropping:
-            return map(int, self.cropping.split(','))
+            return list(map(int, self.cropping.split(',')))
 
 
 class ImageFK(models.Model):

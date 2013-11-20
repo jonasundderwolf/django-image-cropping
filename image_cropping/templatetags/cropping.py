@@ -39,7 +39,7 @@ def cropped_thumbnail(parser, token):
                         raise
                     if not 'x' in value:
                         raise template.TemplateSyntaxError("%s must match INTxINT" % args[3])
-                    option = (name, map(int, value.split('x')))
+                    option = (name, list(map(int, value.split('x'))))
                 else:
                     if not option[0] in ('scale', 'width', 'height'):
                         raise template.TemplateSyntaxError("invalid optional argument %s" % args[3])
@@ -83,7 +83,7 @@ class CroppingNode(template.Node):
             if not box:
                 size = (image.width, image.height)
             else:
-                box_values = map(int, box.split(','))
+                box_values = list(map(int, box.split(',')))
                 size = (box_values[2] - box_values[0],
                         box_values[3] - box_values[1])
         else:
