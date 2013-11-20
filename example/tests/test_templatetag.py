@@ -5,7 +5,8 @@ from django.core.management import call_command
 from .test_factory import create_cropped_image
 
 
-class CroppingTestCase(TestCase):
+class TemplateTagTestCase(TestCase):
+
     def setUp(self):
         # size of the example image is 400x400
         self.image = create_cropped_image()
