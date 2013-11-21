@@ -32,11 +32,19 @@ def cropped_thumbnail(parser, token):
             if option:
                 raise template.TemplateSyntaxError("%s: there is already an option defined!" % arg)
             try:  # parse option
-                option = (name, float(value))
-                if not option[0] in ('scale', 'width', 'height'):
-                    raise template.TemplateSyntaxError("invalid optional argument %s" % args[3])
-                if option[1] < 0:
-                    raise template.TemplateSyntaxError("%s must have a positive value" % option[0])
+                try:
+                    option = (name, float(value))
+                except ValueError:
+                    if name != 'max_size':
+                        raise
+                    if not 'x' in value:
+                        raise template.TemplateSyntaxError("%s must match INTxINT" % args[3])
+                    option = (name, list(map(int, value.split('x'))))
+                else:
+                    if not option[0] in ('scale', 'width', 'height'):
+                        raise template.TemplateSyntaxError("invalid optional argument %s" % args[3])
+                    if option[1] < 0:
+                        raise template.TemplateSyntaxError("%s must have a positive value" % option[0])
             except ValueError:
                 raise template.TemplateSyntaxError("%s needs an numeric argument" % args[3])
 
@@ -70,8 +78,16 @@ class CroppingNode(template.Node):
             if not image:
                 return
 
-        size = (int(ratiofield.width), int(ratiofield.height))
         box = getattr(instance, self.ratiofieldname)
+        if ratiofield.free_crop:
+            if not box:
+                size = (image.width, image.height)
+            else:
+                box_values = list(map(int, box.split(',')))
+                size = (box_values[2] - box_values[0],
+                        box_values[3] - box_values[1])
+        else:
+            size = (int(ratiofield.width), int(ratiofield.height))
 
         option = self.option
         if option:
@@ -84,6 +100,18 @@ class CroppingNode(template.Node):
             elif option[0] == 'height':
                 height = option[1]
                 width = height * size[0] / size[1]
+            elif option[0] == 'max_size':
+                max_width, max_height = option[1]
+                width, height = size
+                # recalculate height if needed
+                if max_width < width:
+                    height = height * max_width / width
+                    width = max_width
+                # recalculate width if needed
+                if max_height < height:
+                    width = max_height * width / height
+                    height = max_height
+
             size = (int(width), int(height))
 
         if ratiofield.adapt_rotation:

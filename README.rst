@@ -1,3 +1,4 @@
+=====================
 django-image-cropping
 =====================
 
@@ -8,51 +9,52 @@ django-image-cropping
     :target: http://travis-ci.org/jonasundderwolf/django-image-cropping
     :alt: Build Status
 
-``django-image-cropping`` is an app for cropping uploaded images via Django's admin backend using `Jcrop
-<https://github.com/tapmodo/Jcrop>`_. It keeps the original image intact, only cropping when the image
-is being displayed. Large images are presented in a small format, so even very big images can easily be cropped.
+django-image-cropping is an app for cropping uploaded images via Django's admin backend using `Jcrop
+<https://github.com/tapmodo/Jcrop>`_.
 
-``django-image-cropping`` is perfect when you need images with a specific size for your templates but want your
+django-image-cropping is perfect when you need images with a specific size for your templates but want your
 users or editors to upload images of any dimension. It presents a selection with a fixed aspect ratio so your users
 can't break the layout with oddly-sized images.
 
-It provides the necessary fields, widgets and a (`easy_thumbnails
-<http://github.com/SmileyChris/easy-thumbnails>`_) thumbnail processor for displaying the
-cropped image in your templates. Also works with `FeinCMS <https://github.com/feincms/feincms>`_ content types!
+The original images are kept intact and only get cropped when they are displayed.
+Large images are presented in a small format, so even very big images can easily be cropped.
+
+The necessary fields, widgets and a template tag for displaying the
+cropped image in your templates are provided.
+
+Also works with `FeinCMS <https://github.com/feincms/feincms>`_ content types!
 
 Screenshot:
 
 .. image:: http://www.jonasundderwolf.de/media/uploads/judw_logo.png
 
-Installation
-------------
 
-#. Install django-image-cropping using pip. For example::
+Installation
+============
+
+#. Install django-image-cropping using ``pip``::
 
     pip install django-image-cropping
 
-#. Add ``easy_thumbnails`` and ``image_cropping`` to your INSTALLED_APPS.
+#. Add ``easy_thumbnails`` and ``image_cropping`` to your ``INSTALLED_APPS``.
 
-#. Adjust the thumbnail processors for ``easy_thumbnails`` in your ``settings.py``::
+#. Adjust the thumbnail processors for ``easy-thumbnails`` in your ``settings``::
 
     from easy_thumbnails.conf import Settings as thumbnail_settings
     THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
     ) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
-
 Configuration
--------------
+=============
 
-To your model containing an ImageField, add an ``ImageRatioField``, which will contain the boundaries
-of the cropped image. The ``ImageRatioField`` expects the name of the associated ImageCropField as the
-first argument and the size of the final image to be displayed as the second argument.
+Add an ``ImageRatioField`` to the model that contains the ``ImageField`` for the images you want to crop.
 
-The size is passed in as a string and defines the aspect ratio of the selection as well as the minimum
-size for the final image. You can configure a warning if users try to crop a selection smaller than this
-size (see below).
+The ``ImageRatioField`` simply stores the boundaries of the cropped image.
+It expects the name of the associated ``ImageField`` and the desired size of the cropped image as arguments.
 
-1. Model fields and options::
+The size is passed in as a string and defines the aspect ratio of the selection *as well* as the minimum
+size for the final image::
 
     from django.db import models
     from image_cropping import ImageRatioField
@@ -62,47 +64,37 @@ size (see below).
         # size is "width x height"
         cropping = ImageRatioField('image', '430x360')
 
-2. In your admin class, add the ImageCroppingMixin in order to see the cropping widget::
+You can configure a `size warning`_ if users try to crop a selection smaller than the defined minimum.
+
+Admin Integration
+=================
+
+Add the ``ImageCroppingMixin`` to your ``ModelAdmin``::
 
     from django.contrib import admin
     from image_cropping import ImageCroppingMixin
 
     class MyModelAdmin(ImageCroppingMixin, admin.ModelAdmin):
         pass
+
     admin.site.register(MyModel, MyModelAdmin)
 
-   If your setup is correct you should now see the enhanced image widget that provides a selection
-   area for the image in the admin backend.
-
-3. Additionally, you can define the maximum size of the preview thumbnail in the admin in your ``settings.py``::
-
-    # size is "width x height"
-    IMAGE_CROPPING_THUMB_SIZE = (300, 300)
-
-4. You can warn users about crop selections that are smaller than the size defined in the ImageRatioField.
-   When users try to do a smaller selection, a red border appears around the image. To use this functionality,
-   add the parameter to the ImageRatioField::
-
-    cropping = ImageRatioField('image', '430x360', size_warning=True)
-
-   You can enable this functionality project-wide by adding the following line to your ``settings.py``::
-
-    IMAGE_CROPPING_SIZE_WARNING = True
-
+If your setup is correct you should now see the enhanced image widget that provides a selection
+area.
 
 Frontend
---------
+========
 
-For your frontend code, ``django-image-cropping`` provides a templatetag to use for displaying a cropped thumbnail::
+django-image-cropping provides a templatetag for displaying a cropped thumbnail::
 
-    {% cropped_thumbnail yourmodelinstance "ratiofieldname" [scale=INT|width=INT|height=INT] [upscale] %}
+    {% cropped_thumbnail yourmodelinstance "ratiofieldname" [scale=INT|width=INT|height=INT|max_size=INTxINT] [upscale] %}
 
 Example usage::
 
     {% load cropping %}
     <img src="{% cropped_thumbnail yourmodel "cropping" scale=0.5 %}">
 
-You can also use the standard ``easy_thumbnails`` templatetag with the "box" parameter::
+You can also use the standard ``easy-thumbnails`` templatetag with the ``box`` parameter::
 
     {% load thumbnail %}
     {% thumbnail yourmodel.image 430x360 box=yourmodel.cropping crop detail %}
@@ -118,8 +110,8 @@ Or generate the URL from Python code in your view::
     }).url
 
 
-Cropping from a ModelForm
-+++++++++++++++++++++++++
+ModelForm
+=========
 
 If you want to use the cropping widget outside the admin, you'll need to define the ``ImageField`` as
 an ``ImageCropField``::
@@ -156,17 +148,16 @@ Remember to include the form media in the ``<head>`` of your HTML::
       </body>
     </html>
 
-The cropping itself happens in the ImageRatioField, the ImageCropField will still be a regular file upload.
-If you're selectively including or excluding fields from the ModelForm, remember to include the ImageRatioField.
+The cropping itself happens in the ``ImageRatioField``, the ``ImageCropField`` will still behave like a regular ``ImageField``.
 
+If you're selectively including or excluding fields from the ModelForm, remember to include the ``ImageRatioField``.
 
-Extras
-------
 
 Multiple formats
-++++++++++++++++
+================
 
-If you need the same image in multiple formats, simply specify another ImageRatioField. This will allow the image to be cropped twice::
+If you need the same image in multiple formats, simply specify another ``ImageRatioField``. 
+This will allow the image to be cropped twice::
 
     from image_cropping import ImageRatioField, ImageCropField
 
@@ -175,7 +166,6 @@ If you need the same image in multiple formats, simply specify another ImageRati
     list_page_cropping = ImageRatioField('image', '200x100')
     detail_page_cropping = ImageRatioField('image', '430x360')
 
-
 In your templates, use the corresponding ratio field::
 
     {% load cropping %}
@@ -183,10 +173,10 @@ In your templates, use the corresponding ratio field::
 
 
 Foreign Keys
-++++++++++++
+============
 
 If you need to crop an image contained within another model, referenced by a ForeignKey, the ``ImageRatioField`` is
-composed of the ``ForeignKey`` name, double underscore, and the ``ImageField`` name::
+composed of the ``ForeignKey`` name, a double underscore, and the ``ImageField`` name::
 
     from django.db import models
     from image_cropping.fields import ImageRatioField
@@ -199,26 +189,90 @@ composed of the ``ForeignKey`` name, double underscore, and the ``ImageField`` n
         image = models.ForeignKey(Image)
         cropping = ImageRatioField('image__image_field', '120x100')
 
-Cropping foreign keys works only in the admin for now, as it uses the ``raw_id`` widget.
+Cropping foreign keys only works in the admin for now, as it reuses the ``raw_id`` widget.
+
+
+.. _free cropping:
+
+Free cropping
+=============
+
+If you do not need a *fixed* ratio, you can disable this constraint by setting ``free_crop`` to ``True``.
+In this case the size parameter is the desired minimum and is also used for the size-warning::
+
+    from image_cropping import ImageRatioField, ImageCropField
+
+    image = ImageCropField(blank=True, null=True, upload_to='uploaded_images')
+
+    # size is "width x height" so a minimum size of 200px x 100px would look like this:
+    min_free_cropping = ImageRatioField('image', '200x100', free_crop=True)
+
+Use the ``max_size`` parameter of the templatetag if you want to limit the display size of a thumbnail::
+
+     <img src="{% cropped_thumbnail image cropping_free max_size=200x200 %}" />
 
 
 Disabling cropping
-++++++++++++++++++
+==================
 
-If you want cropping to be optional, use ``allow_fullsize=True`` as an additional keyword argument in your ``ImageRatioField``.
-Editors can now switch off cropping by unchecking the checkbox next to the image cropping widget.
+If you want cropping to be optional, use ``allow_fullsize=True`` as an additional keyword argument for your ``ImageRatioField``.
+
+Editors can now switch off cropping by unchecking a checkbox next to the image cropping widget::
+
+     image_with_optional_cropping = ImageRatioField('image', '200x100', allow_fullsize=True)
+
+
+Settings
+========
+
+Thumbnail size
+--------------
+
+You can define the maximum size of the admin preview thumbnail in your ``settings``::
+
+    # size is "width x height"
+    IMAGE_CROPPING_THUMB_SIZE = (300, 300)
+
+.. _size warning:
+
+Size warning
+------------
+
+You can warn users about crop selections that are smaller than the size defined in the ``ImageRatioField``. 
+When users try to do a smaller selection, a red border appears around the image. 
+
+To use this functionality for a single image add the ``size_warning`` parameter to the ``ImageRatioField``::
+
+    cropping = ImageRatioField('image', '430x360', size_warning=True)
+
+You can enable this functionality project-wide by adding the following line to your ``settings``::
+
+    IMAGE_CROPPING_SIZE_WARNING = True
+
+
+Custom jQuery
+-------------
+
+By default the image cropping widget embeds a recent version of jQuery.
+
+You can point to another version using the ``JQUERY_URL`` setting, though compatibility
+issues may arise if your jQuery version differs from the one that's included
+and tested against.
+
 
 Changelog
----------
+=========
 
 0.8
-+++
+---
 
-- Minimum requirements changed to **Django 1.4** and **easy_thumbnails 1.4**
+- **Minimum** requirements changed to **Django 1.4** and **easy-thumbnails 1.4**
 - Added Python 3 compatibility. Python 2.6 is now the minimum required Python version.
+- Added a `free cropping`_ option, so cropping is no longer restricted to fixed ratios.
+- Removed the deprecated ``CropForeignKey`` field.
 
 0.7
-+++
+---
 
 - Made the widget for the ``ImageCropField`` overwriteable to allow custom widgets. (Remember to use the ``ImageCroppingMixin`` in the admin as the image cropping widgets are no longer implicitly set.)
 - Updated ``Jcrop`` and ``jQuery`` dependencies.
