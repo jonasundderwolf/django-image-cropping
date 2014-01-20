@@ -17,15 +17,15 @@ def cropped_thumbnail(parser, token):
         raise template.TemplateSyntaxError("%r tag requires at least two arguments" % args[0])
 
     option = None
-    upscale = False
     detail = False
-
+    upscale = False
+    
     instance = args[1]
     # strip quotes from ratio field
     ratiofieldname = args[2].strip('"\'')
 
     # parse additional arguments
-    for arg in args[4:]:
+    for arg in args[3:]:
         arg = arg.lower()
         try:
             name, value = arg.split('=')
@@ -57,7 +57,7 @@ def cropped_thumbnail(parser, token):
             else:
                 raise template.TemplateSyntaxError("%s is an invalid option" % arg)
 
-    return CroppingNode(instance, ratiofieldname, option, upscale)
+    return CroppingNode(instance, ratiofieldname, option, detail, upscale)
 
 
 class CroppingNode(template.Node):
