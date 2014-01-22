@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.template import Template, Context
 from django.core.management import call_command
 
-from .test_factory import create_cropped_image
+from .factory import create_cropped_image
 
 
 class TemplateTagTestCase(TestCase):

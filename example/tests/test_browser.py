@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 
-from .test_factory import create_superuser, create_cropped_image
+from .factory import create_superuser, create_cropped_image
 
 
 class BrowserTestBase(object):
@@ -47,8 +47,8 @@ class BrowserTestBase(object):
     def test_widget_rendered(self):
         widget = self.selenium.find_element_by_css_selector('.image-ratio')
 
-        self.assertEqual(int(widget.get_attribute('data-width')), 120)
-        self.assertEqual(int(widget.get_attribute('data-height')), 100)
+        self.assertEqual(int(widget.get_attribute('data-min-width')), 120)
+        self.assertEqual(int(widget.get_attribute('data-min-height')), 100)
         self.assertEqual(widget.get_attribute('data-image-field'),
                          'image_field')
         self.assertEqual(widget.get_attribute('data-my-name'), 'cropping')
@@ -75,6 +75,7 @@ class BrowserTestBase(object):
     #  - test ratio is preserved
     #  - test size warning
     #  - test allow_fullsize
+    #  - test free-cropping
 
 
 class AdminImageCroppingTestCase(BrowserTestBase, LiveServerTestCase):
