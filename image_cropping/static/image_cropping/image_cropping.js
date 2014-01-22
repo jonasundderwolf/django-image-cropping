@@ -1,11 +1,6 @@
 var image_cropping = function ($) {
 
     function init() {
-      // set styles for size-warning
-      var style_img_warning = 'div.jcrop-image.size-warning .jcrop-vline{border:1px solid red; background: none;}' +
-                              'div.jcrop-image.size-warning .jcrop-hline{border:1px solid red; background: none;}';
-      $("<style type='text/css'>" + style_img_warning + "</style>").appendTo('head');
-
       $('input.image-ratio').each(function() {
         var $this = $(this),
         // find the image field corresponding to this cropping value
@@ -97,7 +92,6 @@ var image_cropping = function ($) {
           var checked = cropping_disabled ? '' : ' checked="checked"';
           $('<div class="field-box allow-fullsize">' +
                            '<input type="checkbox" id="'+label+'" name="'+label+'"'+checked+'></div>').appendTo($this.parent());
-          $('<style type="text/css">div.allow-fullsize{padding: 5px 0 0 10px;}</style>').appendTo('head');
           $('#'+label).click(function(){
             if (cropping_disabled === true){
               $this.val($this.val().substr(1));
@@ -117,12 +111,6 @@ var image_cropping = function ($) {
           });
         }
       });
-
-      if ($('body').hasClass('change-form')) {
-        // if we're in the Django admin, the holder needs to be floated
-        // so it clears the label
-        $("<style type='text/css'>div.jcrop-holder{float:left;}</style>").appendTo('head');
-      }
     }
 
     function max_cropping (width, height, image_width, image_height) {
