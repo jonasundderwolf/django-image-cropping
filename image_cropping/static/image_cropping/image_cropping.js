@@ -90,8 +90,15 @@ var image_cropping = function ($) {
           }
           var label = 'allow-fullsize-'+image_id;
           var checked = cropping_disabled ? '' : ' checked="checked"';
-          $('<div class="field-box allow-fullsize">' +
-                           '<input type="checkbox" id="'+label+'" name="'+label+'"'+checked+'></div>').appendTo($this.parent());
+          var fullsize = $('<div class="field-box allow-fullsize">' +
+                           '<input type="checkbox" id="'+label+'" name="'+label+'"'+checked+'></div>');
+
+          if ($this.parent().find('.help').length) {
+            fullsize.insertBefore($this.parent().find('.help'));
+          } else {
+            fullsize.appendTo($this.parent());
+          }
+
           $('#'+label).click(function(){
             if (cropping_disabled === true){
               $this.val($this.val().substr(1));

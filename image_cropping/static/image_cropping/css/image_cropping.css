@@ -3,6 +3,7 @@ div.jcrop-image.size-warning .jcrop-vline {
   border: 1px solid red;
   background: none;
 }
-body.change-form .jcrop-holder + .help { clear: left; }
+body.change-form .jcrop-holder + .help,
+body.change-form .allow-fullsize + .help { clear: left; }
 body.change-form .jcrop-holder { float:left; }
 div.allow-fullsize { padding: 5px 0 0 10px; }
