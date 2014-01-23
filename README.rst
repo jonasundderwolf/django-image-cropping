@@ -87,7 +87,7 @@ Frontend
 
 django-image-cropping provides a templatetag for displaying a cropped thumbnail::
 
-    {% cropped_thumbnail yourmodelinstance "ratiofieldname" [scale=INT|width=INT|height=INT|max_size=INTxINT] [upscale] %}
+    {% cropped_thumbnail yourmodelinstance "ratiofieldname" [scale=INT|width=INT|height=INT|max_size="INTxINT"] [upscale=True] %}
 
 Example usage::
 
@@ -169,7 +169,7 @@ This will allow the image to be cropped twice::
 In your templates, use the corresponding ratio field::
 
     {% load cropping %}
-    {% cropped_thumbnail yourmodel list_page_cropping %}
+    {% cropped_thumbnail yourmodel "list_page_cropping" %}
 
 
 Foreign Keys
@@ -209,7 +209,7 @@ In this case the size parameter is the desired minimum and is also used for the 
 
 Use the ``max_size`` parameter of the templatetag if you want to limit the display size of a thumbnail::
 
-     <img src="{% cropped_thumbnail image cropping_free max_size=200x200 %}" />
+     <img src="{% cropped_thumbnail image "cropping_free" max_size="200x200" %}" />
 
 
 Disabling cropping

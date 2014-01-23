@@ -3,7 +3,7 @@
 {% block content %}
   <h1>CropForeignKey Example</h1>
   {% if imagefk %}
-    <img src="{% cropped_thumbnail imagefk cropping %}" />
+    <img src="{% cropped_thumbnail imagefk "cropping" %}" />
     <table>
       <tr>
         <th>Example model instance</th>

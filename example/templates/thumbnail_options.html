@@ -6,32 +6,32 @@
     Please <a href="{% url 'admin:example_image_changelist' %}">create</a> an image first.
   {% else %}
     <h3>cropped image</h3>
-    <img src="{% cropped_thumbnail image cropping %}" />
+    <img src="{% cropped_thumbnail image "cropping" %}" />
 
     <h3>free cropped image</h3>
-    <img src="{% cropped_thumbnail image cropping_free %}" />
+    <img src="{% cropped_thumbnail image "cropping_free" %}" />
 
     <h3>scaled image</h3>
     <div style="float: left; margin-left: 10px;">
       scale=0.5<br />
-      <img src="{% cropped_thumbnail image cropping scale=0.5 %}" /><br />
+      <img src="{% cropped_thumbnail image "cropping" scale=0.5 %}" /><br />
     </div>
     <div style="float: left; margin-left: 10px;">
       width=80<br />
-      <img src="{% cropped_thumbnail image cropping width=80 %}" /><br />
+      <img src="{% cropped_thumbnail image "cropping" width=80 %}" /><br />
     </div>
     <div style="float: left; margin-left: 10px;">
       height=150<br />
-      <img src="{% cropped_thumbnail image cropping height=150 %}" /><br />
+      <img src="{% cropped_thumbnail image "cropping" height=150 %}" /><br />
     </div>
     <div style="float: left; margin-left: 10px;">
       scale=2<br />
-      <img src="{% cropped_thumbnail image cropping scale=2 %}" /><br />
+      <img src="{% cropped_thumbnail image "cropping" scale=2 %}" /><br />
     </div>
     <div style="clear: both;"></div>
     <div>
       height=300 upscale<br />
-      <img src="{% cropped_thumbnail image cropping height=300 upscale %}" /><br />
+      <img src="{% cropped_thumbnail image "cropping" height=300 upscale=True %}" /><br />
     </div>
   {% endif %}
 {% endblock %}
