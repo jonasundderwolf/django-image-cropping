@@ -7,7 +7,7 @@ from example.models import Image
 
 def create_cropped_image(**kwargs):
     defaults = {
-        'image_cropping': '51,53,151,136',
+        'image_cropping': '50,50,170,100',  # size: 120x100  as in model.py
         'image_path': '%s%s' % (settings.STATIC_ROOT, "/images/example_image.jpg"),
         'image_name': 'example_image',
     }
