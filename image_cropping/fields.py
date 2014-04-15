@@ -47,6 +47,28 @@ class ImageRatioField(models.CharField):
         }
         super(ImageRatioField, self).__init__(**field_kwargs)
 
+    def deconstruct(self):
+        """
+        Needed for Django 1.7+ migrations. Generate args and kwargs from current
+        field values.
+        """
+        if self.image_fk_field:
+            image_field = '%s__%s' % (self.image_field, self.image_fk_field)
+        else:
+            image_field = self.image_field
+
+        args = (image_field, '%dx%d' % (self.width, self.height))
+        kwargs = {
+            'free_crop': self.free_crop,
+            'adapt_rotation': self.adapt_rotation,
+            'allow_fullsize': self.allow_fullsize,
+            'verbose_name': self.verbose_name,
+            'help_text': self.help_text,
+            'hide_image_field': self.hide_image_field,
+            'size_warning': self.size_warning,
+        }
+        return self.name, 'image_cropping.fields.ImageRatioField', args, kwargs
+
     def contribute_to_class(self, cls, name):
         super(ImageRatioField, self).contribute_to_class(cls, name)
         # attach a list of fields that are referenced by the ImageRatioField
