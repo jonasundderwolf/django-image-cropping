@@ -8,11 +8,6 @@ from django.conf import settings
 from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.source_generators import pil_image
 
-try:
-    from PIL import Image
-except ImportError:
-    import Image
-
 logger = logging.getLogger(__name__)
 
 
