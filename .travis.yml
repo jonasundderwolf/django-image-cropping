@@ -10,6 +10,8 @@ matrix:
   include:
   - python: "3.3"
     env: DJANGO=1.6
+  - python: "3.4"
+    env: DJANGO=1.6
 install:
   - pip install -q django==$DJANGO --use-mirrors
   - pip install -q pillow==2.1 --use-mirrors
