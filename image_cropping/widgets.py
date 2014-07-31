@@ -6,6 +6,7 @@ from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
 from django.conf import settings
 
 from easy_thumbnails.files import get_thumbnailer
+from easy_thumbnails.source_generators import pil_image
 
 logger = logging.getLogger(__name__)
 
@@ -22,12 +23,28 @@ def thumbnail(image_path):
 
 def get_attrs(image, name):
     try:
+        # TODO test case
+        # If the image file has already been closed, open it
+        if image.closed:
+            image.open()
+
+        # Seek to the beginning of the file.  This is necessary if the
+        # image has already been read using this file handler
+        image.seek(0)
+
+        try:
+            # open image and rotate according to its exif.orientation
+            width, height = pil_image(image).size
+        except AttributeError:
+            width = image.width
+            height = image.height
+
         return {
             'class': "crop-thumb",
             'data-thumbnail-url': thumbnail(image),
             'data-field-name': name,
-            'data-org-width': image.width,
-            'data-org-height': image.height,
+            'data-org-width': width,
+            'data-org-height': height,
         }
     except ValueError:
         # can't create thumbnail from image
@@ -83,7 +100,8 @@ class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
                     get_model(app_name, model_name).objects.get(pk=value),
                     self.field_name,
                 )
-                attrs.update(get_attrs(image, name))
+                if image:
+                    attrs.update(get_attrs(image, name))
             except ObjectDoesNotExist:
                 logger.error("Can't find object: %s.%s with primary key %s "
                              "for cropping." % (app_name, model_name, value))
