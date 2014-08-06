@@ -16,7 +16,7 @@ class TemplateTagTestCase(TestCase):
         self.image = Image()
         self.image.image_field.save(
             os.path.basename(self.path),
-            File(open(self.path))
+            File(open(self.path, 'rb'))
         )
         self.image.save()
 
