@@ -7,43 +7,40 @@ from .test_factory import create_superuser, create_cropped_image
 
 class BrowserTestCase(LiveServerTestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        cls.selenium = WebDriver()
-        super(BrowserTestCase, cls).setUpClass()
+    def setUp(self):
+        self.browser = WebDriver()
+        super(BrowserTestCase, self).setUp()
 
-    @classmethod
-    def tearDownClass(cls):
-        cls.selenium.quit()
-        super(BrowserTestCase, cls).tearDownClass()
+    def tearDown(self):
+        self.browser.quit()
+        super(BrowserTestCase, self).tearDown()
 
     def login(self):
         create_superuser()
-        self.selenium.get('%s%s' % (self.live_server_url, '/admin'))
-        username_input = self.selenium.find_element_by_id("id_username")
-        password_input = self.selenium.find_element_by_id("id_password")
+        self.browser.get('%s%s' % (self.live_server_url, '/admin'))
+        username_input = self.browser.find_element_by_id("id_username")
+        password_input = self.browser.find_element_by_id("id_password")
         username_input.send_keys('admin')
         password_input.send_keys('admin')
-        self.selenium.find_element_by_xpath('//input[@value="Log in"]').click()
-        WebDriverWait(self.selenium, 10)
+        self.browser.find_element_by_xpath('//input[@value="Log in"]').click()
 
     def test_admin_cropping(self):
-        """Test if the thumbnail for cropping images gets correctly embedded in the admin."""
+        """Test if the thumb for cropping images gets embedded in the admin."""
         image = create_cropped_image()
         self.login()
         edit_view = reverse('admin:example_image_change', args=[image.pk])
-        self.selenium.get('%s%s' % (self.live_server_url, edit_view))
-        WebDriverWait(self.selenium, 10)
-        thumbnail = self.selenium.find_element_by_css_selector('.jcrop-holder img')
+        self.browser.get('%s%s' % (self.live_server_url, edit_view))
+        WebDriverWait(self.browser, 15)
+        thumbnail = self.browser.find_element_by_css_selector('.jcrop-holder img')
         thumbnail_source = thumbnail.get_attribute('src')
         self.assertTrue(image.image_field.url in thumbnail_source)
 
     def test_modelform_cropping(self):
-        """Test if the thumbnail for cropping images gets correctly embedded when using modelforms."""
+        """Test if the thumb for cropping images gets embedded when using ModelForms."""
         image = create_cropped_image()
         edit_view = reverse('modelform_example', args=[image.pk])
-        self.selenium.get('%s%s' % (self.live_server_url, edit_view))
-        WebDriverWait(self.selenium, 10)
-        thumbnail = self.selenium.find_element_by_css_selector('.jcrop-holder img')
+        self.browser.get('%s%s' % (self.live_server_url, edit_view))
+        WebDriverWait(self.browser, 15)
+        thumbnail = self.browser.find_element_by_css_selector('.jcrop-holder img')
         thumbnail_source = thumbnail.get_attribute('src')
         self.assertTrue(image.image_field.url in thumbnail_source)

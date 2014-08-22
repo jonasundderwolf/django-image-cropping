@@ -1,27 +1,17 @@
 language: python
-python:
-  - "2.6"
-  - "2.7"
-env:
-  - DJANGO=1.4.10
-  - DJANGO=1.5.5
-  - DJANGO=1.6
-matrix:
-  include:
-  - python: "3.3"
-    env: DJANGO=1.6
-  - python: "3.4"
-    env: DJANGO=1.6
-install:
-  - pip install -q django==$DJANGO --use-mirrors
-  - pip install -q pillow==2.1 --use-mirrors
-  - pip install -q selenium==2.37.2 --use-mirrors
-  - pip install -q easy_thumbnails==1.4 --use-mirrors
-  - pip install -q -e .
-notifications:
-  email: false
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
+  - sleep 3 # give xvfb some time to start
+install:
+  - pip install tox
 script:
-  - python setup.py test
+  - tox
+env:
+  - TOXENV=py26_django14
+  - TOXENV=py27_django16
+  - TOXENV=py33_django16
+  - TOXENV=py34_django16
+  - TOXENV=coverage
+notifications:
+  email: false
