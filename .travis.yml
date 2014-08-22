@@ -5,6 +5,7 @@ before_install:
   - sleep 3 # give xvfb some time to start
 install:
   - pip install tox
+  - pip install selenium>=2.42
 script:
   - tox
 env:

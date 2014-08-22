@@ -1,6 +1,8 @@
 from django.core.urlresolvers import reverse
 from django.test import LiveServerTestCase
 from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
 from .test_factory import create_superuser, create_cropped_image
 
 
@@ -8,13 +10,22 @@ class BrowserTestCase(LiveServerTestCase):
 
     def setUp(self):
         self.browser = WebDriver()
-        self.browser.implicitly_wait(15)
 
         super(BrowserTestCase, self).setUp()
 
     def tearDown(self):
         self.browser.quit()
         super(BrowserTestCase, self).tearDown()
+
+    def _ensure_page_loaded(self, url=None):
+        def readystate_complete(d):
+            return d.execute_script("return document.readyState") == "complete"
+        try:
+            if url:
+                self.browser.get(url)
+            WebDriverWait(self.browser, 30).until(readystate_complete)
+        except TimeoutException:
+            self.selenium.execute_script("window.stop();")
 
     def login(self):
         create_superuser()
@@ -30,7 +41,7 @@ class BrowserTestCase(LiveServerTestCase):
         image = create_cropped_image()
         self.login()
         edit_view = reverse('admin:example_image_change', args=[image.pk])
-        self.browser.get('%s%s' % (self.live_server_url, edit_view))
+        self._ensure_page_loaded('%s%s' % (self.live_server_url, edit_view))
         thumbnail = self.browser.find_elements_by_xpath(
             "//*[contains(concat(' ', normalize-space(@class), ' '), ' jcrop-holder ')]/img")[0]
         thumbnail_source = thumbnail.get_attribute('src')
@@ -40,7 +51,7 @@ class BrowserTestCase(LiveServerTestCase):
         """Test if the thumb for cropping images gets embedded when using ModelForms."""
         image = create_cropped_image()
         edit_view = reverse('modelform_example', args=[image.pk])
-        self.browser.get('%s%s' % (self.live_server_url, edit_view))
+        self._ensure_page_loaded('%s%s' % (self.live_server_url, edit_view))
         thumbnail = self.browser.find_elements_by_xpath(
             "//*[contains(concat(' ', normalize-space(@class), ' '), ' jcrop-holder ')]/img")[0]
         thumbnail_source = thumbnail.get_attribute('src')
