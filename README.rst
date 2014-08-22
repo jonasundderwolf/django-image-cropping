@@ -12,6 +12,10 @@ django-image-cropping
 django-image-cropping is an app for cropping uploaded images via Django's admin backend using `Jcrop
 <https://github.com/tapmodo/Jcrop>`_.
 
+Screenshot:
+
+.. image:: http://www.jonasundderwolf.de/media/images/django_image_cropping_example.png
+
 django-image-cropping is perfect when you need images with a specific size for your templates but want your
 users or editors to upload images of any dimension. It presents a selection with a fixed aspect ratio so your users
 can't break the layout with oddly-sized images.
@@ -23,11 +27,6 @@ The necessary fields, widgets and a template tag for displaying the
 cropped image in your templates are provided.
 
 Also works with `FeinCMS <https://github.com/feincms/feincms>`_ content types!
-
-Screenshot:
-
-.. image:: http://www.jonasundderwolf.de/media/images/django_image_cropping_example.png
-
 
 Installation
 ============

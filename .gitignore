@@ -9,4 +9,5 @@ _build/
 dist/
 media/
 .tox/
+.coverage/
 settings_local.py

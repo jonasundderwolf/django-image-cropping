@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 
-from .factory import create_superuser, create_cropped_image
+from .test_factory import create_superuser, create_cropped_image
 
 
 class BrowserTestBase(object):
@@ -30,16 +30,13 @@ class BrowserTestBase(object):
         super(BrowserTestBase, self).tearDown()
 
     def _ensure_page_loaded(self, url=None):
-        # http://stackoverflow.com/questions/18729483/reliably-detect-page-load-or-time-out-selenium-2
+        # see: http://stackoverflow.com/questions/18729483/reliably-detect-page-load-or-time-out-selenium-2
         def readystate_complete(d):
-            # AFAICT Selenium offers no better way to wait for the document to
-            # be loaded, if one is in ignorance of its contents.
             return d.execute_script("return document.readyState") == "complete"
 
         try:
             if url:
                 self.selenium.get(url)
-            # maximum wait: 30s
             WebDriverWait(self.selenium, 30).until(readystate_complete)
         except TimeoutException:
             self.selenium.execute_script("window.stop();")
@@ -63,19 +60,12 @@ class BrowserTestBase(object):
         self.assertTrue(self.image.image_field.url in img.get_attribute('src'))
 
     def test_ensure_jcrop_initialized(self):
-        WebDriverWait(self.selenium, 10)  # so jcrop gets loaded
+        # make sure jCrop is properly loaded
+        WebDriverWait(self.selenium, 10)
         try:
             self.selenium.find_element_by_css_selector('.jcrop-holder')
         except NoSuchElementException:
             self.fail('JCrop not initialized')
-
-    # TODO
-    #  - data-attributes are correct (false, true, ...)
-    #  - test cropping
-    #  - test ratio is preserved
-    #  - test size warning
-    #  - test allow_fullsize
-    #  - test free-cropping
 
 
 class AdminImageCroppingTestCase(BrowserTestBase, LiveServerTestCase):
@@ -87,8 +77,6 @@ class AdminImageCroppingTestCase(BrowserTestBase, LiveServerTestCase):
         username_input.send_keys('admin')
         password_input.send_keys('admin')
         self.selenium.find_element_by_xpath('//input[@value="Log in"]').click()
-        self._ensure_page_loaded()
-
         edit_view = reverse('admin:example_image_change', args=[self.image.pk])
         self._ensure_page_loaded('%s%s' % (self.live_server_url, edit_view))
 

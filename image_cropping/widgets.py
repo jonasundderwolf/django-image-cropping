@@ -36,6 +36,7 @@ def get_attrs(image, name):
             # open image and rotate according to its exif.orientation
             width, height = pil_image(image).size
         except AttributeError:
+            # invalid image -> AttributeError
             width = image.width
             height = image.height
 
@@ -46,7 +47,7 @@ def get_attrs(image, name):
             'data-org-width': width,
             'data-org-height': height,
         }
-    except ValueError:
+    except (ValueError, AttributeError):
         # can't create thumbnail from image
         return {}
 

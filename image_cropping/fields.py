@@ -2,7 +2,9 @@ from __future__ import unicode_literals
 from django.db import models
 from django import forms
 from django.conf import settings
+from django.db.models import signals
 from .widgets import ImageCropWidget
+from .utils import max_cropping
 
 
 class ImageCropField(models.ImageField):
@@ -79,6 +81,36 @@ class ImageRatioField(models.CharField):
             'fk_field': self.image_fk_field,
             'hidden': self.hide_image_field,
         }
+
+        # attach ratiofields to cls
+        if not hasattr(cls, 'ratio_fields'):
+            cls.add_to_class('ratio_fields', [])
+        cls.ratio_fields.append(name)
+
+        if not cls._meta.abstract:
+            signals.pre_save.connect(self.initial_cropping, sender=cls)
+
+    def initial_cropping(self, sender, instance, *args, **kwargs):
+        for ratiofieldname in getattr(instance, 'ratio_fields', []):
+            # cropping already set?
+            if getattr(instance, ratiofieldname):
+                continue
+
+            # get image
+            ratiofield = instance._meta.get_field(ratiofieldname)
+            image = getattr(instance, ratiofield.image_field)
+            if ratiofield.image_fk_field:  # image is ForeignKey
+                # get the imagefield
+                image = getattr(image, ratiofield.image_fk_field)
+            if not image:
+                continue
+
+            # calculate initial cropping
+            box = max_cropping(ratiofield.width, ratiofield.height,
+                               image.width, image.height,
+                               free_crop=ratiofield.free_crop)
+            box = ','.join(map(lambda i: str(i), box))
+            setattr(instance, ratiofieldname, box)
 
     def formfield(self, *args, **kwargs):
         ratio = self.width / float(self.height) if not self.free_crop else 0
