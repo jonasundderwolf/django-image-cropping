@@ -1,58 +1,88 @@
 from django.core.urlresolvers import reverse
+from django.core.management import call_command
 from django.test import LiveServerTestCase
+
 from selenium.webdriver.firefox.webdriver import WebDriver
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
+
 from .test_factory import create_superuser, create_cropped_image
 
 
-class BrowserTestCase(LiveServerTestCase):
+class BrowserTestBase(object):
+    @classmethod
+    def setUpClass(cls):
+        cls.selenium = WebDriver()
+        super(BrowserTestBase, cls).setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super(BrowserTestBase, cls).tearDownClass()
 
     def setUp(self):
-        self.browser = WebDriver()
-
-        super(BrowserTestCase, self).setUp()
+        self.image = create_cropped_image()
+        self.user = create_superuser()
+        super(BrowserTestBase, self).setUp()
 
     def tearDown(self):
-        self.browser.quit()
-        super(BrowserTestCase, self).tearDown()
+        call_command('thumbnail_cleanup')
+        super(BrowserTestBase, self).tearDown()
 
     def _ensure_page_loaded(self, url=None):
+        # see: http://stackoverflow.com/questions/18729483/reliably-detect-page-load-or-time-out-selenium-2
         def readystate_complete(d):
             return d.execute_script("return document.readyState") == "complete"
+
         try:
             if url:
-                self.browser.get(url)
-            WebDriverWait(self.browser, 30).until(readystate_complete)
+                self.selenium.get(url)
+            WebDriverWait(self.selenium, 30).until(readystate_complete)
         except TimeoutException:
             self.selenium.execute_script("window.stop();")
 
-    def login(self):
-        create_superuser()
-        self.browser.get('%s%s' % (self.live_server_url, '/admin'))
-        username_input = self.browser.find_element_by_id("id_username")
-        password_input = self.browser.find_element_by_id("id_password")
+    def test_widget_rendered(self):
+        widget = self.selenium.find_element_by_css_selector('.image-ratio')
+
+        self.assertEqual(int(widget.get_attribute('data-min-width')), 120)
+        self.assertEqual(int(widget.get_attribute('data-min-height')), 100)
+        self.assertEqual(widget.get_attribute('data-image-field'),
+                         'image_field')
+        self.assertEqual(widget.get_attribute('data-my-name'), 'cropping')
+        self.assertEqual(widget.get_attribute('data-allow-fullsize'), 'true')
+        self.assertEqual(widget.get_attribute('data-size-warning'), 'false')
+        self.assertEqual(widget.get_attribute('data-adapt-rotation'), 'false')
+        # TODO this differs by one pixel
+        #self.assertEqual(widget.get_attribute('value'), self.image.cropping)
+
+    def test_ensure_thumbnail_available(self):
+        img = self.selenium.find_element_by_css_selector('.image-ratio + img')
+        self.assertTrue(self.image.image_field.url in img.get_attribute('src'))
+
+    def test_ensure_jcrop_initialized(self):
+        # make sure jCrop is properly loaded
+        WebDriverWait(self.selenium, 10)
+        try:
+            self.selenium.find_element_by_css_selector('.jcrop-holder')
+        except NoSuchElementException:
+            self.fail('JCrop not initialized')
+
+
+class AdminImageCroppingTestCase(BrowserTestBase, LiveServerTestCase):
+    def setUp(self):
+        super(AdminImageCroppingTestCase, self).setUp()
+        self._ensure_page_loaded('%s%s' % (self.live_server_url, '/admin'))
+        username_input = self.selenium.find_element_by_id("id_username")
+        password_input = self.selenium.find_element_by_id("id_password")
         username_input.send_keys('admin')
         password_input.send_keys('admin')
-        self.browser.find_element_by_xpath('//input[@value="Log in"]').click()
-
-    def test_admin_cropping(self):
-        """Test if the thumb for cropping images gets embedded in the admin."""
-        image = create_cropped_image()
-        self.login()
-        edit_view = reverse('admin:example_image_change', args=[image.pk])
+        self.selenium.find_element_by_xpath('//input[@value="Log in"]').click()
+        edit_view = reverse('admin:example_image_change', args=[self.image.pk])
         self._ensure_page_loaded('%s%s' % (self.live_server_url, edit_view))
-        thumbnail = self.browser.find_elements_by_xpath(
-            "//*[contains(concat(' ', normalize-space(@class), ' '), ' jcrop-holder ')]/img")[0]
-        thumbnail_source = thumbnail.get_attribute('src')
-        self.assertTrue(image.image_field.url in thumbnail_source)
 
-    def test_modelform_cropping(self):
-        """Test if the thumb for cropping images gets embedded when using ModelForms."""
-        image = create_cropped_image()
-        edit_view = reverse('modelform_example', args=[image.pk])
+
+class ModelFormCroppingTestCase(BrowserTestBase, LiveServerTestCase):
+    def setUp(self):
+        super(ModelFormCroppingTestCase, self).setUp()
+        edit_view = reverse('modelform_example', args=[self.image.pk])
         self._ensure_page_loaded('%s%s' % (self.live_server_url, edit_view))
-        thumbnail = self.browser.find_elements_by_xpath(
-            "//*[contains(concat(' ', normalize-space(@class), ' '), ' jcrop-holder ')]/img")[0]
-        thumbnail_source = thumbnail.get_attribute('src')
-        self.assertTrue(image.image_field.url in thumbnail_source)
