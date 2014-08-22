@@ -9,6 +9,7 @@ class BrowserTestCase(LiveServerTestCase):
 
     def setUp(self):
         self.browser = WebDriver()
+
         super(BrowserTestCase, self).setUp()
 
     def tearDown(self):
@@ -30,8 +31,9 @@ class BrowserTestCase(LiveServerTestCase):
         self.login()
         edit_view = reverse('admin:example_image_change', args=[image.pk])
         self.browser.get('%s%s' % (self.live_server_url, edit_view))
-        WebDriverWait(self.browser, 15)
-        thumbnail = self.browser.find_element_by_css_selector('.jcrop-holder img')
+        WebDriverWait(self.browser, 10)
+        thumbnail = self.browser.find_elements_by_xpath(
+            "//*[contains(concat(' ', normalize-space(@class), ' '), ' jcrop-holder ')]/img")[0]
         thumbnail_source = thumbnail.get_attribute('src')
         self.assertTrue(image.image_field.url in thumbnail_source)
 
@@ -40,7 +42,8 @@ class BrowserTestCase(LiveServerTestCase):
         image = create_cropped_image()
         edit_view = reverse('modelform_example', args=[image.pk])
         self.browser.get('%s%s' % (self.live_server_url, edit_view))
-        WebDriverWait(self.browser, 15)
-        thumbnail = self.browser.find_element_by_css_selector('.jcrop-holder img')
+        WebDriverWait(self.browser, 10)
+        thumbnail = self.browser.find_elements_by_xpath(
+            "//*[contains(concat(' ', normalize-space(@class), ' '), ' jcrop-holder ')]/img")[0]
         thumbnail_source = thumbnail.get_attribute('src')
         self.assertTrue(image.image_field.url in thumbnail_source)
