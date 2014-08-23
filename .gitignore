@@ -10,4 +10,5 @@ dist/
 media/
 .tox/
 .coverage/
+coverage
 settings_local.py
