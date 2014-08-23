@@ -237,8 +237,8 @@ You can define the maximum size of the admin preview thumbnail in your ``setting
 Size warning
 ------------
 
-You can warn users about crop selections that are smaller than the size defined in the ``ImageRatioField``. 
-When users try to do a smaller selection, a red border appears around the image. 
+You can warn users about crop selections that are smaller than the size defined in the ``ImageRatioField``.
+When users try to do a smaller selection, a red border appears around the image.
 
 To use this functionality for a single image add the ``size_warning`` parameter to the ``ImageRatioField``::
 

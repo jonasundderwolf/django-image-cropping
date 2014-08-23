@@ -60,12 +60,12 @@ class BrowserTestBase(object):
         self.assertTrue(self.image.image_field.url in img.get_attribute('src'))
 
     def test_ensure_jcrop_initialized(self):
-        # make sure jCrop is properly loaded
-        WebDriverWait(self.selenium, 10)
+        # make sure Jcrop is properly loaded
+        WebDriverWait(self.selenium, 15)
         try:
             self.selenium.find_element_by_css_selector('.jcrop-holder')
         except NoSuchElementException:
-            self.fail('JCrop not initialized')
+            self.fail('Jcrop not initialized')
 
 
 class AdminImageCroppingTestCase(BrowserTestBase, LiveServerTestCase):
