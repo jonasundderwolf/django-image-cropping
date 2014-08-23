@@ -1,5 +1,4 @@
 from django.core.urlresolvers import reverse
-from django.core.management import call_command
 from django.test import LiveServerTestCase
 
 from selenium.webdriver.firefox.webdriver import WebDriver
@@ -24,10 +23,6 @@ class BrowserTestBase(object):
         self.image = create_cropped_image()
         self.user = create_superuser()
         super(BrowserTestBase, self).setUp()
-
-    def tearDown(self):
-        call_command('thumbnail_cleanup')
-        super(BrowserTestBase, self).tearDown()
 
     def _ensure_page_loaded(self, url=None):
         # see: http://stackoverflow.com/questions/18729483/reliably-detect-page-load-or-time-out-selenium-2
