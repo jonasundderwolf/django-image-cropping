@@ -12,7 +12,9 @@ def create_cropped_image(**kwargs):
         'image_name': 'example_image',
     }
     defaults.update(kwargs)
-    image = Image.objects.create(**{'cropping': defaults['image_cropping']})
+    image = Image.objects.create(
+        **{'cropping': defaults['image_cropping']}
+    )
     image.image_field.save(
         defaults['image_name'],
         File(open(defaults['image_path'], 'rb')))

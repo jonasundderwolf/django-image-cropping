@@ -5,7 +5,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 
-from .test_factory import create_superuser, create_cropped_image
+from .factory import create_superuser, create_cropped_image
 
 
 class BrowserTestBase(object):
