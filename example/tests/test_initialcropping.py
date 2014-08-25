@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core.files import File
 
 from image_cropping.utils import max_cropping
-from ..models import Image, ImageFK
+from example.models import Image, ImageFK
 
 
 class TemplateTagTestCase(TestCase):

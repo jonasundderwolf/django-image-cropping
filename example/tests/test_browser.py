@@ -36,25 +36,26 @@ class BrowserTestBase(object):
         except TimeoutException:
             self.selenium.execute_script("window.stop();")
 
-    def test_widget_rendered(self):
+    def _ensure_widget_rendered(self, **options):
+        defaults = {
+            'data-min-width': '120',
+            'data-min-height': '100',
+            'data-image-field': 'image_field',
+            'data-my-name': 'cropping',
+            'data-allow-fullsize': 'true',
+            'data-size-warning': 'false',
+            'data-adapt-rotation': 'false'
+        }
+        defaults.update(options)
         widget = self.selenium.find_element_by_css_selector('.image-ratio')
+        for attr in defaults.keys():
+            self.assertEqual(widget.get_attribute(attr), defaults[attr])
 
-        self.assertEqual(int(widget.get_attribute('data-min-width')), 120)
-        self.assertEqual(int(widget.get_attribute('data-min-height')), 100)
-        self.assertEqual(widget.get_attribute('data-image-field'),
-                         'image_field')
-        self.assertEqual(widget.get_attribute('data-my-name'), 'cropping')
-        self.assertEqual(widget.get_attribute('data-allow-fullsize'), 'true')
-        self.assertEqual(widget.get_attribute('data-size-warning'), 'false')
-        self.assertEqual(widget.get_attribute('data-adapt-rotation'), 'false')
-        # TODO this differs by one pixel
-        #self.assertEqual(widget.get_attribute('value'), self.image.cropping)
-
-    def test_ensure_thumbnail_available(self):
+    def _ensure_thumbnail_rendered(self):
         img = self.selenium.find_element_by_css_selector('.image-ratio + img')
         self.assertTrue(self.image.image_field.url in img.get_attribute('src'))
 
-    def test_ensure_jcrop_initialized(self):
+    def _ensure_jcrop_initialized(self):
         # make sure Jcrop is properly loaded
         WebDriverWait(self.selenium, 15)
         try:
@@ -72,12 +73,38 @@ class AdminImageCroppingTestCase(BrowserTestBase, LiveServerTestCase):
         username_input.send_keys('admin')
         password_input.send_keys('admin')
         self.selenium.find_element_by_xpath('//input[@value="Log in"]').click()
+
+    def test_widget_rendered(self):
         edit_view = reverse('admin:example_image_change', args=[self.image.pk])
         self._ensure_page_loaded('%s%s' % (self.live_server_url, edit_view))
+        self._ensure_widget_rendered()
+        self._ensure_thumbnail_rendered()
 
 
 class ModelFormCroppingTestCase(BrowserTestBase, LiveServerTestCase):
-    def setUp(self):
-        super(ModelFormCroppingTestCase, self).setUp()
+
+    def test_widget_rendered(self):
         edit_view = reverse('modelform_example', args=[self.image.pk])
         self._ensure_page_loaded('%s%s' % (self.live_server_url, edit_view))
+        self._ensure_widget_rendered()
+        self._ensure_thumbnail_rendered()
+
+
+class CropForeignKeyTest(AdminImageCroppingTestCase):
+
+    def test_fk_cropping(self):
+        changelist_view = reverse('admin:example_imagefk_changelist')
+        self._ensure_page_loaded('%s%s' % (self.live_server_url, changelist_view))
+        self.selenium.find_element_by_css_selector('.addlink').click()
+        self.selenium.find_element_by_css_selector('#lookup_id_image').click()
+        self.selenium.switch_to_window(self.selenium.window_handles[1])
+        self.selenium.find_element_by_css_selector('#result_list a').click()
+        self.selenium.switch_to_window(self.selenium.window_handles[0])
+        self.selenium.find_element_by_xpath(
+            '//input[@value="Save and continue editing"]').click()
+        self.selenium.find_element_by_css_selector('.jcrop-holder')
+        self._ensure_widget_rendered(**{
+            'data-allow-fullsize': 'false',
+            'data-image-field': 'image'}
+        )
+        self._ensure_thumbnail_rendered()
