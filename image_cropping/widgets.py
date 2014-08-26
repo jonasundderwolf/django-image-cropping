@@ -14,10 +14,11 @@ def thumbnail(image_path):
     thumbnailer = get_thumbnailer(image_path)
     thumbnail_options = {
         'detail': True,
+        'upscale': True,
         'size': settings.IMAGE_CROPPING_THUMB_SIZE,
     }
     thumb = thumbnailer.get_thumbnail(thumbnail_options)
-    return thumb.url
+    return thumb
 
 
 def get_attrs(image, name):
@@ -38,14 +39,14 @@ def get_attrs(image, name):
             # invalid image -> AttributeError
             width = image.width
             height = image.height
-
-        return {
+        attrs = {
             'class': "crop-thumb",
-            'data-thumbnail-url': thumbnail(image),
+            'data-thumbnail-url': thumbnail(image).url,
             'data-field-name': name,
             'data-org-width': width,
             'data-org-height': height,
         }
+        return attrs
     except (ValueError, AttributeError):
         # can't create thumbnail from image
         return {}

@@ -1,11 +1,13 @@
 from django.core.urlresolvers import reverse
 from django.test import LiveServerTestCase
+from django.test.utils import override_settings
 
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 
 from .factory import create_superuser, create_cropped_image
+from image_cropping.config import settings
 
 
 class BrowserTestBase(object):
@@ -108,3 +110,20 @@ class CropForeignKeyTest(AdminImageCroppingTestCase):
             'data-image-field': 'image'}
         )
         self._ensure_thumbnail_rendered()
+
+
+class SettingsTest(AdminImageCroppingTestCase):
+
+    def test_widget_width_default(self):
+        edit_view = reverse('admin:example_image_change', args=[self.image.pk])
+        self._ensure_page_loaded('%s%s' % (self.live_server_url, edit_view))
+        img = self.selenium.find_element_by_css_selector('.image-ratio + img')
+        self.assertEqual(
+            int(img.get_attribute('width')), settings.IMAGE_CROPPING_THUMB_SIZE[0])
+
+    @override_settings(IMAGE_CROPPING_THUMB_SIZE=(500, 500))
+    def test_widget_width_overridden(self):
+        edit_view = reverse('admin:example_image_change', args=[self.image.pk])
+        self._ensure_page_loaded('%s%s' % (self.live_server_url, edit_view))
+        img = self.selenium.find_element_by_css_selector('.image-ratio + img')
+        self.assertEqual(int(img.get_attribute('width')), 500)
