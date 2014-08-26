@@ -1,10 +1,10 @@
 from __future__ import unicode_literals
 from django.db import models
 from django import forms
-from django.conf import settings
 from django.db.models import signals
 from .widgets import ImageCropWidget
 from .utils import max_cropping
+from .config import settings
 
 
 class ImageCropField(models.ImageField):
@@ -28,8 +28,7 @@ class ImageRatioField(models.CharField):
     def __init__(self, image_field, size='0x0', free_crop=False,
                  adapt_rotation=False, allow_fullsize=False, verbose_name=None,
                  help_text=None, hide_image_field=False,
-                 size_warning=getattr(
-                     settings, 'IMAGE_CROPPING_SIZE_WARNING', False)):
+                 size_warning=settings.IMAGE_CROPPING_SIZE_WARNING):
         if '__' in image_field:
             self.image_field, self.image_fk_field = image_field.split('__')
         else:

@@ -57,7 +57,7 @@ class BrowserTestBase(object):
 
     def _ensure_jcrop_initialized(self):
         # make sure Jcrop is properly loaded
-        WebDriverWait(self.selenium, 15)
+        WebDriverWait(self.selenium, 30)
         try:
             self.selenium.find_element_by_css_selector('.jcrop-holder')
         except NoSuchElementException:

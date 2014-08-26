@@ -26,7 +26,8 @@ MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 SECRET_KEY = '0pfuvtvasdlkjasd76723"b)lna4*f_-xxkszs4##!+wpo'
 ROOT_URLCONF = 'example.urls'
-JQUERY_URL = 'js/jquery.min.js'
+
+IMAGE_CROPPING_JQUERY_URL = 'js/jquery.min.js'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),

@@ -258,13 +258,17 @@ Custom jQuery
 
 By default the image cropping widget embeds a recent version of jQuery.
 
-You can point to another version using the ``JQUERY_URL`` setting, though compatibility
-issues may arise if your jQuery version differs from the one that's included
-and tested against.
+You can point to another version using the ``IMAGE_CROPPING_JQUERY_URL`` setting, though compatibility
+issues may arise if your jQuery version differs from the one that is tested against.
 
 
 Changelog
 =========
+
+0.9
+---
+
+- Use django-appconf for handling defaults and settings. Note: JQUERY_URL changed to IMAGE_CROPPING_JQUERY_URL as part of this transition.
 
 0.8
 ---
