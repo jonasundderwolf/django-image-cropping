@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.template import Template, Context
+from django.template import Template, Context, TemplateSyntaxError
 from django.core.management import call_command
 
 from .factory import create_cropped_image
@@ -13,7 +13,10 @@ class TemplateTagTestCase(TestCase):
         self.context = Context({'image': self.image})
 
     def tearDown(self):
-        call_command('thumbnail_cleanup')
+        try:
+            call_command('thumbnail_cleanup')
+        except IndexError:
+            pass
 
     def _test_templatetag(self, crop_field, options={}):
         option_str = ' '.join(['%s=%s' % (option, value)
@@ -56,3 +59,10 @@ class TemplateTagTestCase(TestCase):
         self._test_free_cropping({'max_size': '200x200'})
         self.assertTrue(
             '200x200' in self._test_free_cropping({'max_size': '200x200'}))
+
+    def test_raise_exception_for_missing_required_arguments(self):
+        self.assertRaises(
+            TemplateSyntaxError,
+            Template,
+            "{% load cropping %}{% cropped_thumbnail image %}"
+        )
