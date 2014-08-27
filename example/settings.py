@@ -1,4 +1,6 @@
 import os
+import sys
+import logging
 import django.template
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -57,3 +59,7 @@ except ImportError:
     pass
 else:
     INSTALLED_APPS += ['django_extensions']
+
+# disable logging while testing
+if len(sys.argv) > 1 and sys.argv[1] == 'test':
+    logging.disable(logging.CRITICAL)
