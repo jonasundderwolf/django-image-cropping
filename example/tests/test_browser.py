@@ -104,12 +104,25 @@ class CropForeignKeyTest(AdminImageCroppingTestCase):
         self.selenium.switch_to_window(self.selenium.window_handles[0])
         self.selenium.find_element_by_xpath(
             '//input[@value="Save and continue editing"]').click()
+        WebDriverWait(self.selenium, 30)
         self.selenium.find_element_by_css_selector('.jcrop-holder')
         self._ensure_widget_rendered(**{
             'data-allow-fullsize': 'false',
             'data-image-field': 'image'}
         )
         self._ensure_thumbnail_rendered()
+
+    def test_fk_cropping_with_non_existent_fk_target(self):
+        """Test if referencing a non existing image as fk target is not allowed"""
+        changelist_view = reverse('admin:example_imagefk_changelist')
+        self._ensure_page_loaded('%s%s' % (self.live_server_url, changelist_view))
+        self.selenium.find_element_by_css_selector('.addlink').click()
+        image_input = self.selenium.find_element_by_id("id_image")
+        image_input.send_keys('10')
+        self.selenium.find_element_by_xpath(
+            '//input[@value="Save and continue editing"]').click()
+        WebDriverWait(self.selenium, 30)
+        self.selenium.find_element_by_css_selector('.form-row.errors.field-image')
 
 
 class SettingsTest(AdminImageCroppingTestCase):
