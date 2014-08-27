@@ -63,3 +63,10 @@ else:
 # disable logging while testing
 if len(sys.argv) > 1 and sys.argv[1] == 'test':
     logging.disable(logging.CRITICAL)
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",
+        },
+    }
