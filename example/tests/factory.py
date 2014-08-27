@@ -2,7 +2,8 @@ from __future__ import unicode_literals
 from django.core.files import File
 from django.conf import settings
 from django.contrib.auth.models import User
-from example.models import Image
+from PIL import Image, ImageDraw
+from example.models import Image as TestImage
 
 
 def create_cropped_image(**kwargs):
@@ -12,12 +13,21 @@ def create_cropped_image(**kwargs):
         'image_name': 'example_image',
     }
     defaults.update(kwargs)
-    image = Image.objects.create(
+    image = TestImage.objects.create(
         **{'cropping': defaults['image_cropping']}
     )
     image.image_field.save(
         defaults['image_name'],
         File(open(defaults['image_path'], 'rb')))
+    return image
+
+
+def create_pil_image(size=(400, 400)):
+    image = Image.new('RGB', size, (255, 255, 255))
+    draw = ImageDraw.Draw(image)
+    draw.rectangle(((20, 20), (200, 200)), fill="red", outline="black")
+    draw.rectangle(((220, 220), (390, 390)), fill="green", outline="black")
+    draw.ellipse((100, 100, 310, 310), fill="yellow", outline="black")
     return image
 
 
