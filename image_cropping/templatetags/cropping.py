@@ -75,8 +75,9 @@ class CroppingNode(template.Node):
         if ratiofield.image_fk_field:  # image is ForeignKey
             # get the imagefield
             image = getattr(image, ratiofield.image_fk_field)
-            if not image:
-                return
+
+        if not image:
+            return
 
         box = getattr(instance, self.ratiofieldname)
         if ratiofield.free_crop:
