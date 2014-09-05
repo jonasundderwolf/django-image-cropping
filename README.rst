@@ -3,14 +3,22 @@ django-image-cropping
 =====================
 
 .. image:: https://pypip.in/v/django-image-cropping/badge.png
-        :target: https://pypi.python.org/pypi/django-image-cropping
+    :target: https://pypi.python.org/pypi/django-image-cropping
 
 .. image:: https://travis-ci.org/jonasundderwolf/django-image-cropping.png?branch=master
     :target: http://travis-ci.org/jonasundderwolf/django-image-cropping
     :alt: Build Status
 
+.. image:: https://coveralls.io/repos/jonasundderwolf/django-image-cropping/badge.png
+    :target: https://coveralls.io/r/jonasundderwolf/django-image-cropping
+    :alt: Coverage
+
 django-image-cropping is an app for cropping uploaded images via Django's admin backend using `Jcrop
 <https://github.com/tapmodo/Jcrop>`_.
+
+Screenshot:
+
+.. image:: http://www.jonasundderwolf.de/media/images/django_image_cropping_example.png
 
 django-image-cropping is perfect when you need images with a specific size for your templates but want your
 users or editors to upload images of any dimension. It presents a selection with a fixed aspect ratio so your users
@@ -23,11 +31,6 @@ The necessary fields, widgets and a template tag for displaying the
 cropped image in your templates are provided.
 
 Also works with `FeinCMS <https://github.com/feincms/feincms>`_ content types!
-
-Screenshot:
-
-.. image:: http://www.jonasundderwolf.de/media/uploads/judw_logo.png
-
 
 Installation
 ============
@@ -238,8 +241,8 @@ You can define the maximum size of the admin preview thumbnail in your ``setting
 Size warning
 ------------
 
-You can warn users about crop selections that are smaller than the size defined in the ``ImageRatioField``. 
-When users try to do a smaller selection, a red border appears around the image. 
+You can warn users about crop selections that are smaller than the size defined in the ``ImageRatioField``.
+When users try to do a smaller selection, a red border appears around the image.
 
 To use this functionality for a single image add the ``size_warning`` parameter to the ``ImageRatioField``::
 
@@ -255,13 +258,17 @@ Custom jQuery
 
 By default the image cropping widget embeds a recent version of jQuery.
 
-You can point to another version using the ``JQUERY_URL`` setting, though compatibility
-issues may arise if your jQuery version differs from the one that's included
-and tested against.
+You can point to another version using the ``IMAGE_CROPPING_JQUERY_URL`` setting, though compatibility
+issues may arise if your jQuery version differs from the one that is tested against.
 
 
 Changelog
 =========
+
+0.9
+---
+
+- Use django-appconf for handling defaults and settings. Note: JQUERY_URL changed to IMAGE_CROPPING_JQUERY_URL as part of this transition.
 
 0.8
 ---

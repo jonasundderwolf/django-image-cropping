@@ -15,7 +15,10 @@ class TemplateTagTestBase(object):
         self.context = Context({'image': self.image})
 
     def tearDown(self):
-        call_command('thumbnail_cleanup')
+        try:
+            call_command('thumbnail_cleanup')
+        except IndexError:
+            pass
 
     def _test_templatetag(self, crop_field, options={}):
         option_str = ' '.join(['%s=%s' % (option, value)

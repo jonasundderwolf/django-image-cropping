@@ -3,9 +3,9 @@ import logging
 
 from django.db.models import get_model, ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
-from django.conf import settings
-
 from easy_thumbnails.files import get_thumbnailer
+from easy_thumbnails.source_generators import pil_image
+from .config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -14,22 +14,40 @@ def thumbnail(image_path):
     thumbnailer = get_thumbnailer(image_path)
     thumbnail_options = {
         'detail': True,
-        'size': getattr(settings, 'IMAGE_CROPPING_THUMB_SIZE', (300, 300)),
+        'upscale': True,
+        'size': settings.IMAGE_CROPPING_THUMB_SIZE,
     }
     thumb = thumbnailer.get_thumbnail(thumbnail_options)
-    return thumb.url
+    return thumb
 
 
 def get_attrs(image, name):
     try:
-        return {
+        # TODO test case
+        # If the image file has already been closed, open it
+        if image.closed:
+            image.open()
+
+        # Seek to the beginning of the file.  This is necessary if the
+        # image has already been read using this file handler
+        image.seek(0)
+
+        try:
+            # open image and rotate according to its exif.orientation
+            width, height = pil_image(image).size
+        except AttributeError:
+            # invalid image -> AttributeError
+            width = image.width
+            height = image.height
+        attrs = {
             'class': "crop-thumb",
-            'data-thumbnail-url': thumbnail(image),
+            'data-thumbnail-url': thumbnail(image).url,
             'data-field-name': name,
-            'data-org-width': image.width,
-            'data-org-height': image.height,
+            'data-org-width': width,
+            'data-org-height': height,
         }
-    except ValueError:
+        return attrs
+    except (ValueError, AttributeError):
         # can't create thumbnail from image
         return {}
 
@@ -37,8 +55,7 @@ def get_attrs(image, name):
 class CropWidget(object):
     class Media:
         js = (
-            getattr(settings, 'JQUERY_URL',
-                    'https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'),
+            settings.IMAGE_CROPPING_JQUERY_URL,
             "image_cropping/js/jquery.Jcrop.min.js",
             "image_cropping/image_cropping.js",
         )
@@ -83,7 +100,8 @@ class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
                     get_model(app_name, model_name).objects.get(pk=value),
                     self.field_name,
                 )
-                attrs.update(get_attrs(image, name))
+                if image:
+                    attrs.update(get_attrs(image, name))
             except ObjectDoesNotExist:
                 logger.error("Can't find object: %s.%s with primary key %s "
                              "for cropping." % (app_name, model_name, value))
