@@ -88,9 +88,10 @@ area.
 Frontend
 ========
 
-django-image-cropping provides a templatetag for displaying a cropped thumbnail::
+django-image-cropping provides a templatetag for displaying a cropped thumbnail.
+Any other processor parameter (like ``bw=True`` or ``upscale=True``) will be forwarded to ``easy-thumbnails``::
 
-    {% cropped_thumbnail yourmodelinstance "ratiofieldname" [scale=INT|width=INT|height=INT|max_size="INTxINT"] [upscale=True] %}
+    {% cropped_thumbnail yourmodelinstance "ratiofieldname" [scale=INT|width=INT|height=INT|max_size="INTxINT"] %}
 
 Example usage::
 

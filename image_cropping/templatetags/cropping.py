@@ -2,6 +2,7 @@ from django import template
 from easy_thumbnails.files import get_thumbnailer
 
 register = template.Library()
+VALID_OPTIONS = ('scale', 'width', 'height', 'max_size')
 
 
 @register.simple_tag(takes_context=True)
@@ -32,8 +33,7 @@ def cropped_thumbnail(context, instance, ratiofieldname, **kwargs):
     else:
         size = (int(ratiofield.width), int(ratiofield.height))
 
-    valid_options = ('scale', 'width', 'height', 'max_size')
-    if sum(k in kwargs for k in valid_options) > 1:
+    if sum(k in kwargs for k in VALID_OPTIONS) > 1:
         raise template.TemplateSyntaxError(
             'Only one size modifier is allowed.')
 
@@ -63,7 +63,7 @@ def cropped_thumbnail(context, instance, ratiofieldname, **kwargs):
             width = max_height * width / height
             height = max_height
 
-    if any(k in kwargs for k in valid_options):
+    if any(k in kwargs for k in VALID_OPTIONS):
         # adjust size based on given modifier
         size = (int(width), int(height))
 
@@ -77,7 +77,13 @@ def cropped_thumbnail(context, instance, ratiofieldname, **kwargs):
         'size': size,
         'box': box,
         'crop': True,
-        'detail': True,
+        'detail': kwargs.pop('detail', True),
         'upscale': kwargs.pop('upscale', False)
     }
+    # remove all cropping kwargs
+    for k in VALID_OPTIONS:
+        kwargs.pop(k, None)
+    # pass remaining arguments to easy_thumbnail
+    thumbnail_options.update(kwargs)
+
     return thumbnailer.get_thumbnail(thumbnail_options).url

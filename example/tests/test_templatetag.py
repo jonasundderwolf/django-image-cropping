@@ -1,10 +1,14 @@
 import itertools
+import urllib
 
+from PIL import Image
 from django.test import TestCase
+from django.conf import settings
 from django.template import Template, Context
 from django.core.management import call_command
 
 from .factory import create_cropped_image
+
 
 
 class TemplateTagTestBase(object):
@@ -104,6 +108,25 @@ class CroppingTestCase(TemplateTagTestBase, TestCase):
 
     def test_adapt_rotation(self):
         pass
+
+    def test_parameter_forward(self):
+        ''' converts image to greyscale '''
+        def is_greyscale(img_path):
+            # http://stackoverflow.com/a/23661373
+            im = Image.open(img_path).convert('RGB')
+            w, h = im.size
+            for i in range(w):
+                for j in range(h):
+                    r, g, b = im.getpixel((i, j))
+                    if r != g != b:
+                        return False
+            return True
+
+        url = self._test_cropping({'max_size': '"200x200"',
+                                    'bw': True})
+        self.assertTrue('120x100' in url)
+        path = settings.MEDIA_ROOT.rsplit('/', 1)[0] + urllib.unquote(url)
+        self.assertTrue(is_greyscale(path))
 
 
 class FreeCroppingTestCase(TemplateTagTestBase, TestCase):
