@@ -47,7 +47,7 @@ def get_attrs(image, name):
             'data-org-width': width,
             'data-org-height': height,
         }
-    except (ValueError, AttributeError):
+    except (ValueError, AttributeError, IOError):
         # can't create thumbnail from image
         return {}
 
