@@ -8,7 +8,7 @@ register = template.Library()
 def cropped_thumbnail(parser, token):
     '''
     Syntax:
-    {% cropped_thumbnail instancename ratiofieldname [scale=0.1|width=100|height=200] [upscale] %}
+    {% cropped_thumbnail instancename ratiofieldname [scale=0.1|width=100|height=200] [detail] [upscale] %}
     '''
     args = token.split_contents()
 
@@ -17,8 +17,9 @@ def cropped_thumbnail(parser, token):
         raise template.TemplateSyntaxError("%r tag requires at least two arguments" % args[0])
 
     option = None
+    detail = False
     upscale = False
-
+    
     instance = args[1]
     # strip quotes from ratio field
     ratiofieldname = args[2].strip('"\'')
@@ -51,17 +52,20 @@ def cropped_thumbnail(parser, token):
         except ValueError:  # check for upscale argument
             if arg == 'upscale':
                 upscale = True
+            elif arg == 'detail':
+                detail = True
             else:
                 raise template.TemplateSyntaxError("%s is an invalid option" % arg)
 
-    return CroppingNode(instance, ratiofieldname, option, upscale)
+    return CroppingNode(instance, ratiofieldname, option, detail, upscale)
 
 
 class CroppingNode(template.Node):
-    def __init__(self, instance, ratiofieldname, option=None, upscale=False):
+    def __init__(self, instance, ratiofieldname, option=None, detail=False, upscale=False):
         self.instance = instance
         self.ratiofieldname = ratiofieldname
         self.option = option
+        self.detail = detail
         self.upscale = upscale
 
     def render(self, context):
@@ -125,7 +129,7 @@ class CroppingNode(template.Node):
             'size': size,
             'box': box,
             'crop': True,
-            'detail': True,
+            'detail': self.detail,
             'upscale': self.upscale
         }
         return thumbnailer.get_thumbnail(thumbnail_options).url
