@@ -1,5 +1,8 @@
 import itertools
-import urllib
+try:
+    from urllib import unquote
+except ImportError:  # py3
+    from urllib.parse import unquote
 
 from PIL import Image
 from django.test import TestCase
@@ -8,7 +11,6 @@ from django.template import Template, Context
 from django.core.management import call_command
 
 from .factory import create_cropped_image
-
 
 
 class TemplateTagTestBase(object):
@@ -125,7 +127,7 @@ class CroppingTestCase(TemplateTagTestBase, TestCase):
         url = self._test_cropping({'max_size': '"200x200"',
                                     'bw': True})
         self.assertTrue('120x100' in url)
-        path = settings.MEDIA_ROOT.rsplit('/', 1)[0] + urllib.unquote(url)
+        path = settings.MEDIA_ROOT.rsplit('/', 1)[0] + unquote(url)
         self.assertTrue(is_greyscale(path))
 
 

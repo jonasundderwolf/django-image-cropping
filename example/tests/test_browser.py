@@ -59,10 +59,17 @@ class BrowserTestBase(object):
 
     def _ensure_jcrop_initialized(self):
         # make sure Jcrop is properly loaded
-        WebDriverWait(self.selenium, 30)
+        def jcrop_initialized(d):
+            try:
+                d.find_element_by_css_selector('.jcrop-holder')
+            except NoSuchElementException:
+                return False
+            return True
+
         try:
-            self.selenium.find_element_by_css_selector('.jcrop-holder')
-        except NoSuchElementException:
+            WebDriverWait(self.selenium, 30).until(jcrop_initialized)
+        except TimeoutException:
+            self.selenium.execute_script("window.stop();")
             self.fail('Jcrop not initialized')
 
 
@@ -75,6 +82,7 @@ class AdminImageCroppingTestCase(BrowserTestBase, LiveServerTestCase):
         username_input.send_keys('admin')
         password_input.send_keys('admin')
         self.selenium.find_element_by_xpath('//input[@value="Log in"]').click()
+        self._ensure_page_loaded()
 
     def test_widget_rendered(self):
         edit_view = reverse('admin:example_image_change', args=[self.image.pk])
@@ -104,7 +112,7 @@ class CropForeignKeyTest(AdminImageCroppingTestCase):
         self.selenium.switch_to_window(self.selenium.window_handles[0])
         self.selenium.find_element_by_xpath(
             '//input[@value="Save and continue editing"]').click()
-        WebDriverWait(self.selenium, 30)
+        self._ensure_jcrop_initialized()
         self.selenium.find_element_by_css_selector('.jcrop-holder')
         self._ensure_widget_rendered(**{
             'data-allow-fullsize': 'false',
@@ -121,7 +129,7 @@ class CropForeignKeyTest(AdminImageCroppingTestCase):
         image_input.send_keys('10')
         self.selenium.find_element_by_xpath(
             '//input[@value="Save and continue editing"]').click()
-        WebDriverWait(self.selenium, 30)
+        self._ensure_page_loaded()
         self.selenium.find_element_by_css_selector('.form-row.errors.field-image')
 
 
