@@ -13,7 +13,7 @@ class ImageCropField(models.ImageField):
         defaults.update(kwargs)
         return super(ImageCropField, self).formfield(**defaults)
 
-    def south_field_triple(self):
+    def south_field_triple(self):  # pragma: no cover
         """
         Return a suitable description of this field for South.
         """
@@ -48,7 +48,7 @@ class ImageRatioField(models.CharField):
         }
         super(ImageRatioField, self).__init__(**field_kwargs)
 
-    def deconstruct(self):
+    def deconstruct(self):  # pragma: no cover
         """
         Needed for Django 1.7+ migrations. Generate args and kwargs from current
         field values.
@@ -127,7 +127,7 @@ class ImageRatioField(models.CharField):
         })
         return super(ImageRatioField, self).formfield(*args, **kwargs)
 
-    def south_field_triple(self):
+    def south_field_triple(self):  # pragma: no cover
         """
         Return a suitable description of this field for South.
         """
