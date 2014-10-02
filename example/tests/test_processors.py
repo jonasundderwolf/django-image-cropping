@@ -1,6 +1,5 @@
-from PIL import ImageChops, Image
+from PIL import ImageChops
 from django.test import TestCase
-from django.conf import settings
 from image_cropping.thumbnail_processors import crop_corners
 from .factory import create_pil_image
 
@@ -38,13 +37,3 @@ class ProcessorTestCase(TestCase):
         """Test if the image is cropped to the correct dimensions (box as list)"""
         cropped = crop_corners(self.image, '0, 0, 200, 200')
         self.assertTrue(cropped.size, (200, 200))
-
-    # Test fails because one pixel differs for unknown reason
-    #def test_cropped_image_matches_sample(self):
-    #    """Test if the cropped image matches the expected output"""
-    #    img = create_pil_image((400, 400))
-    #    cropped_sample = Image.open(
-    #        '%s%s' % (settings.STATIC_ROOT, '/images/cropped_sample_90_90_290_290.png')
-    #    )
-    #    cropped_thumb = crop_corners(img, (90, 90, 290, 290))
-    #    self.assertImagesEqual(cropped_sample, cropped_thumb)

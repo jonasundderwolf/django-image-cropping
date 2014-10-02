@@ -54,7 +54,7 @@ class CroppingTestCase(TemplateTagTestBase, TestCase):
         def powerset(iterable):
             s = list(iterable)
             return itertools.chain.from_iterable(itertools.combinations(s, r)
-                                                 for r in range(2, len(s)+1))
+                                                 for r in range(2, len(s) + 1))
 
         valid_options = (('scale', 0.5), ('width', 100),
                          ('height', 100), ('max_size', '100x200'))
@@ -103,32 +103,23 @@ class CroppingTestCase(TemplateTagTestBase, TestCase):
         self.assertTrue(
             '60x50' in self._test_cropping({'max_size': '"60x50"'}))
 
-    def test_upscale(self):
-        # no upscale Test
-        # upscale test
-        pass
-
-    def test_adapt_rotation(self):
-        pass
-
     def test_parameter_forward(self):
-        ''' converts image to greyscale '''
-        def is_greyscale(img_path):
-            # http://stackoverflow.com/a/23661373
-            im = Image.open(img_path).convert('RGB')
-            w, h = im.size
-            for i in range(w):
-                for j in range(h):
-                    r, g, b = im.getpixel((i, j))
-                    if r != g != b:
-                        return False
-            return True
-
-        url = self._test_cropping({'max_size': '"200x200"',
-                                    'bw': True})
+        url = self._test_cropping({'max_size': '"200x200"', 'bw': True})
         self.assertTrue('120x100' in url)
         path = settings.MEDIA_ROOT.rsplit('/', 1)[0] + unquote(url)
-        self.assertTrue(is_greyscale(path))
+        self.assertTrue(self._is_greyscale(path))
+
+    def _is_greyscale(self, img_path):
+        """Converts an image to greyscale"""
+        # http://stackoverflow.com/a/23661373
+        im = Image.open(img_path).convert('RGB')
+        w, h = im.size
+        for i in range(w):
+            for j in range(h):
+                r, g, b = im.getpixel((i, j))
+                if r != g != b:
+                    return False
+        return True
 
 
 class FreeCroppingTestCase(TemplateTagTestBase, TestCase):
