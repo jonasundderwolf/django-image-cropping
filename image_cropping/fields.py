@@ -1,27 +1,9 @@
 from __future__ import unicode_literals
 from django.db import models
-from django import forms
 from django.db.models import signals
-from .widgets import ImageCropWidget
+from .widgets import RatioWidget
 from .utils import max_cropping
 from .config import settings
-
-
-class ImageCropField(models.ImageField):
-    def formfield(self, **kwargs):
-        defaults = {'widget': ImageCropWidget}
-        defaults.update(kwargs)
-        return super(ImageCropField, self).formfield(**defaults)
-
-    def south_field_triple(self):  # pragma: no cover
-        """
-        Return a suitable description of this field for South.
-        """
-        # We'll just introspect ourselves, since we inherit.
-        from south.modelsinspector import introspector
-        field_class = "django.db.models.fields.files.ImageField"
-        args, kwargs = introspector(self)
-        return (field_class, args, kwargs)
 
 
 class ImageRatioField(models.CharField):
@@ -72,16 +54,7 @@ class ImageRatioField(models.CharField):
 
     def contribute_to_class(self, cls, name):
         super(ImageRatioField, self).contribute_to_class(cls, name)
-        # attach a list of fields that are referenced by the ImageRatioField
-        # so we can set the correct widget in the ModelAdmin
-        if not hasattr(cls, 'crop_fields'):
-            cls.add_to_class('crop_fields', {})
-        cls.crop_fields[self.image_field] = {
-            'fk_field': self.image_fk_field,
-            'hidden': self.hide_image_field,
-        }
-
-        # attach ratiofields to cls
+        # attach ratiofields to cls for initial_cropping
         if not hasattr(cls, 'ratio_fields'):
             cls.add_to_class('ratio_fields', [])
         cls.ratio_fields.append(name)
@@ -114,7 +87,7 @@ class ImageRatioField(models.CharField):
     def formfield(self, *args, **kwargs):
         ratio = self.width / float(self.height) if not self.free_crop else 0
 
-        kwargs['widget'] = forms.TextInput(attrs={
+        kwargs['widget'] = RatioWidget(attrs={
             'data-min-width': self.width,
             'data-min-height': self.height,
             'data-ratio': ratio,

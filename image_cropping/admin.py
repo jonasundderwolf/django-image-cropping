@@ -1,24 +1,32 @@
 from __future__ import unicode_literals
-from . import widgets
+
+import json
+from django.http import HttpResponse, Http404
+from django.conf.urls import patterns, url
+from . import utils
 
 
 class ImageCroppingMixin(object):
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        crop_fields = getattr(self.model, 'crop_fields', {})
-        if db_field.name in crop_fields:
-            target = crop_fields[db_field.name]
-            if target['fk_field']:
-                # it's a ForeignKey
-                kwargs['widget'] = widgets.CropForeignKeyWidget(
-                    db_field.rel,
-                    field_name=target['fk_field'],
-                    admin_site=self.admin_site,
-                )
-            elif target['hidden']:
-                # it's a hidden ImageField
-                kwargs['widget'] = widgets.HiddenImageCropWidget
-            else:
-                # it's a regular ImageField
-                kwargs['widget'] = widgets.ImageCropWidget
+    def get_urls(self):
+        urls = super(ImageCroppingMixin, self).get_urls()
+        my_urls = patterns(
+            '',
+            url(r'(\d+)/cropping_thumbnail/([^\/]+)/$',
+                self.admin_site.admin_view(self.generate_thumbnail)),
+        )
+        return my_urls + urls
 
-        return super(ImageCroppingMixin, self).formfield_for_dbfield(db_field, **kwargs)
+    def generate_thumbnail(self, request, pk, imagepath):
+        obj = self.model.objects.get(pk=pk)
+        image = obj
+        for field in imagepath.split('__'):
+            image = getattr(obj, field, None)
+            if not image:
+                raise Http404()
+
+        data = utils.thumbnail_attrs(image)
+        if not data:
+            raise Http404()
+
+        return HttpResponse(content=json.dumps(data),
+                            content_type='application/json')

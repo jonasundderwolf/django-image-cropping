@@ -1,9 +1,9 @@
 from django.db import models
-from image_cropping.fields import ImageRatioField, ImageCropField
+from image_cropping.fields import ImageRatioField
 
 
 class Image(models.Model):
-    image_field = ImageCropField(upload_to='image/')
+    image_field = models.ImageField(upload_to='image/')
     cropping = ImageRatioField('image_field', '120x100', allow_fullsize=True)
     cropping_free = ImageRatioField('image_field', '300x230',
                                     free_crop=True, size_warning=True)

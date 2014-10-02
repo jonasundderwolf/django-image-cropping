@@ -7,3 +7,21 @@ body.change-form .jcrop-holder + .help,
 body.change-form .allow-fullsize + .help { clear: left; }
 body.change-form .jcrop-holder { float:left; }
 div.allow-fullsize { padding: 5px 0 0 10px; }
+
+.cropping-status {
+  display: block;
+  margin-left: 7em;
+  padding-left: 30px;
+}
+.cropping-status div{
+  width: 100px;
+  height: 100px;
+  background-repeat:no-repeat;
+  background-position: center center;
+}
+.cropping-status.loading div {
+  background-image: url("../img/loader.gif");
+}
+.cropping-status.error div {
+  background-image: url("../img/failed.png");
+}

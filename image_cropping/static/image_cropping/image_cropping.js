@@ -2,136 +2,108 @@ var image_cropping = function ($) {
 
     function init() {
       $('input.image-ratio').each(function() {
-        var $this = $(this),
-        // find the image field corresponding to this cropping value
-        // by stripping the last part of our id and appending the image field name
-            field = $this.attr('name').replace($this.data('my-name'), $this.data('image-field')),
+        var $this = $(this);
 
-        // there should only be one file field we're referencing but in special cases
-        // there can be several. Deal with it gracefully.
-            $image_input = $('input.crop-thumb[data-field-name=' + field + ']:first');
+        var url = $(location).attr('href');
+        url = url.replace($(location).attr('hash'), '');
+        url = url.replace($(location).attr('search'), '');
+        url = url + 'cropping_thumbnail/' + $this.data('image-field') + '/';
 
-        // skip this image if it's empty and hide the whole field, within admin and by itself
-        if (!$image_input.length || $image_input.data('thumbnail-url') === undefined) {
-          $this.hide().parents('div.form-row:first').hide();
-          return;
-        }
-        // check if the image field should be hidden
-        if ($image_input.data('hide-field')) {
-          $image_input.hide().parents('div.form-row:first').hide();
-        }
+        // hide textfield
+        $this.hide();
+        // add status indicator
+        var $indicator = $('<div><div></div></div>').addClass('cropping-status');
+        $this.after($indicator);
 
-        var image_id = $this.attr('id') + '-image',
-            org_width = $image_input.data('org-width'),
-            org_height = $image_input.data('org-height'),
-            min_width = $this.data('min-width'),
-            min_height = $this.data('min-height');
+        $indicator.addClass('loading');
+        // load thumbnail
+        $.getJSON(url)
+          .fail(function() {
+            $indicator.addClass('error');
+          }).done(function($data) {
+            var image_id = $this.attr('id') + '-image',
+                org_width = $data['org-width'],
+                org_height = $data['org-height'],
+                min_width = $this.data('min-width'),
+                min_height = $this.data('min-height');
 
-        var is_image_portrait = (org_height > org_width);
-        var is_select_portrait = (min_height > min_width);
+            var is_image_portrait = (org_height > org_width);
+            var is_select_portrait = (min_height > min_width);
 
-        if ($this.data('adapt-rotation') === true) {
-            if (is_image_portrait != is_select_portrait) {
+            if ($this.data('adapt-rotation') === true) {
+              if (is_image_portrait != is_select_portrait) {
                 // cropping height/width need to be switched, picture is in portrait mode
                 var x = min_width;
                 min_width = min_height;
                 min_height = x;
-            }
-        }
-
-        var $image = $('<img>', {
-          'id': image_id,
-          'src': $image_input.data('thumbnail-url')
-        });
-
-        var options = {
-          minSize: [5, 5],
-          keySupport: false,
-          trueSize: [org_width, org_height],
-          onSelect: update_selection($this),
-          addClass: ($this.data('size-warning') && ((org_width < min_width) || (org_height < min_height))) ? 'size-warning jcrop-image': 'jcrop-image'
-        };
-        if ($this.data('ratio')) {
-          options['aspectRatio'] = $this.data('ratio');
-        }
-
-        var cropping_disabled = false;
-        if($this.val()[0] == "-"){
-          cropping_disabled = true;
-          $this.val($this.val().substr(1));
-        }
-
-        // is the image bigger than the minimal cropping values?
-        // otherwise lock cropping area on full image
-        var initial;
-        if ($this.val()) {
-          initial = initial_cropping($this.val());
-        } else {
-
-          initial = max_cropping(min_width, min_height, org_width, org_height);
-
-            // set cropfield to initial value
-          $this.val(initial.join(','));
-        }
-
-        $.extend(options, {setSelect: initial});
-
-        // hide the input field, show image to crop instead
-        $this.hide().after($image);
-
-        var jcrop = {};
-
-        $('#' + image_id).Jcrop(options, function(){jcrop[image_id]=this;});
-
-        if ($this.data('allow-fullsize') === true) {
-          if(cropping_disabled){
-            jcrop[image_id].release();
-            $this.val('-'+$this.val());
-          }
-          var label = 'allow-fullsize-'+image_id;
-          var checked = cropping_disabled ? '' : ' checked="checked"';
-          var fullsize = $('<div class="field-box allow-fullsize">' +
-                           '<input type="checkbox" id="'+label+'" name="'+label+'"'+checked+'></div>');
-
-          if ($this.parent().find('.help').length) {
-            fullsize.insertBefore($this.parent().find('.help'));
-          } else {
-            fullsize.appendTo($this.parent());
-          }
-
-          $('#'+label).click(function(){
-            if (cropping_disabled === true){
-              $this.val($this.val().substr(1));
-              jcrop[image_id].setSelect($this.val().split(','));
-              cropping_disabled = false;
-            } else {
-              $this.val('-'+$this.val());
-              jcrop[image_id].release();
-              cropping_disabled = true;
-            }
-          });
-          $this.parent().find('.jcrop-tracker').mousedown(function(){
-              if (cropping_disabled){
-                $('#'+label).attr('checked','checked');
-                cropping_disabled = false;
               }
+            }
+
+            var $image = $('<img>', {
+              'id': image_id,
+              'src': $data['thumb-url']
+            }).insertAfter($this);
+            $image.load(function() {
+                $indicator.hide();
+            });
+
+            var options = {
+              minSize: [5, 5],
+              keySupport: false,
+              trueSize: [org_width, org_height],
+              onSelect: update_selection($this),
+              addClass: ($this.data('size-warning') && ((org_width < min_width) || (org_height < min_height))) ? 'size-warning jcrop-image': 'jcrop-image',
+              setSelect:initial_cropping($this.val()) // load initial cropping
+            };
+            if ($this.data('ratio')) {
+              options['aspectRatio'] = $this.data('ratio');
+            }
+
+            var jcrop = {};
+            $('#' + image_id).Jcrop(options, function(){jcrop[image_id]=this;});
+
+            var cropping_disabled = false;
+            if ($this.val()[0] == "-"){
+              cropping_disabled = true;
+              $this.val($this.val().substr(1));
+            }
+
+            if ($this.data('allow-fullsize') === true) {
+              if(cropping_disabled){
+                jcrop[image_id].release();
+                $this.val('-'+$this.val());
+              }
+              var label = 'allow-fullsize-'+image_id;
+              var checked = cropping_disabled ? '' : ' checked="checked"';
+              var fullsize = $('<div class="field-box allow-fullsize">' +
+                               '<input type="checkbox" id="'+label+'" name="'+label+'"'+checked+'></div>');
+
+              if ($this.parent().find('.help').length) {
+                fullsize.insertBefore($this.parent().find('.help'));
+              } else {
+                fullsize.appendTo($this.parent());
+              }
+
+              $('#'+label).click(function(){
+                if (cropping_disabled === true){
+                  $this.val($this.val().substr(1));
+                  jcrop[image_id].setSelect($this.val().split(','));
+                  cropping_disabled = false;
+                } else {
+                  $this.val('-'+$this.val());
+                  jcrop[image_id].release();
+                  cropping_disabled = true;
+                }
+              });
+              $this.parent().find('.jcrop-tracker').mousedown(function(){
+                  if (cropping_disabled){
+                    $('#'+label).attr('checked','checked');
+                    cropping_disabled = false;
+                  }
+              });
+            }
           });
-        }
       });
-    }
-
-    function max_cropping (width, height, image_width, image_height) {
-      var ratio = width/height;
-      var offset;
-
-      if (image_width < image_height * ratio) {
-        // width fits fully, height needs to be cropped
-        offset = Math.round((image_height-(image_width/ratio))/2);
-        return [0, offset, image_width, image_height - offset];
-      }
-      // height fits fully, width needs to be cropped
-      offset = Math.round((image_width-(image_height * ratio))/2);
-      return [offset, 0, image_width - offset, image_height];
     }
 
     function initial_cropping (val) {
