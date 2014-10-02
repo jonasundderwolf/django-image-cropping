@@ -104,13 +104,13 @@ class CroppingTestCase(TemplateTagTestBase, TestCase):
             '60x50' in self._test_cropping({'max_size': '"60x50"'}))
 
     def test_parameter_forward(self):
-        url = self._test_cropping({'max_size': '"200x200"', 'bw': True})
+        url = self._test_cropping({'max_size': '"200x200"', 'bw': 1})
         self.assertTrue('120x100' in url)
         path = settings.MEDIA_ROOT.rsplit('/', 1)[0] + unquote(url)
         self.assertTrue(self._is_greyscale(path))
 
     def _is_greyscale(self, img_path):
-        """Converts an image to greyscale"""
+        """Checks if an image is greyscale"""
         # http://stackoverflow.com/a/23661373
         im = Image.open(img_path).convert('RGB')
         w, h = im.size
