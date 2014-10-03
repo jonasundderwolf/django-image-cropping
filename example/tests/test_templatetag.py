@@ -152,3 +152,8 @@ class FreeCroppingTestCase(TemplateTagTestBase, TestCase):
         self._set_free_cropping(0, 0, 350, 350)
         self.assertTrue(
             '200x200' in self._test_free_cropping({'max_size': '"200x200"'}))
+
+    def test_missing_image(self):
+        # Simply testing that no error is thrown when the image isn't set.
+        self.image.image_field = ''
+        self._test_free_cropping()

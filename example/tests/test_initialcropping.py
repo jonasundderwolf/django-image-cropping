@@ -7,7 +7,7 @@ from image_cropping.utils import max_cropping
 from example.models import Image, ImageFK
 
 
-class TemplateTagTestCase(TestCase):
+class InitialCroppingTestCase(TestCase):
     def setUp(self):
         self.path = '%s%s' % (settings.STATIC_ROOT, "/images/example_image.jpg")
         self.width = 400

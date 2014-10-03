@@ -20,7 +20,7 @@ def cropped_thumbnail(context, instance, ratiofieldname, **kwargs):
         image = getattr(image, ratiofield.image_fk_field)
 
     if not image:
-        raise Exception('no valid image found')
+        return
 
     box = getattr(instance, ratiofieldname)
     if ratiofield.free_crop:

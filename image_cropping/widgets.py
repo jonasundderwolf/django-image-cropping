@@ -39,15 +39,14 @@ def get_attrs(image, name):
             # invalid image -> AttributeError
             width = image.width
             height = image.height
-        attrs = {
+        return {
             'class': "crop-thumb",
             'data-thumbnail-url': thumbnail(image).url,
             'data-field-name': name,
             'data-org-width': width,
             'data-org-height': height,
         }
-        return attrs
-    except (ValueError, AttributeError):
+    except (ValueError, AttributeError, IOError):
         # can't create thumbnail from image
         return {}
 
