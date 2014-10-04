@@ -282,6 +282,8 @@ Noteable changes and things to be considered when upgrading from an older versio
   * Note: Arguments for the the tag now need to be put in quotes.
   * If you are still using Django 1.4 remember that `you can't easily use <http://stackoverflow.com/q/11804315/630877>`_ ``True`` or ``False`` as template tag arguments.
 
+- Any processor parameter (like bw=True or upscale=True) can be used in the ``cropped_thumbnail`` tag.
+
 - Moved inline css to a dedicated ``image_cropping.css`` style sheet
 
 0.8
