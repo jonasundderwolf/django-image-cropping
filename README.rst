@@ -269,7 +269,20 @@ Changelog
 0.9
 ---
 
-- Use django-appconf for handling defaults and settings. Note: JQUERY_URL changed to IMAGE_CROPPING_JQUERY_URL as part of this transition.
+This release addresses mainly the test coverage and internal stuff.
+
+Noteable changes and things to be considered when upgrading from an older version:
+
+- `django-appconf <https://github.com/jezdez/django-appconf>`_ is now used for handling defaults and settings.
+
+  * JQUERY_URL changed to IMAGE_CROPPING_JQUERY_URL as part of this transition.
+
+- The ``cropped_thumbnail`` tag is now based on Django's ``simple tag``.
+
+  * Note: Arguments for the the tag now need to be put in quotes.
+  * If you are still using Django 1.4 remember that `you can't easily use <http://stackoverflow.com/q/11804315/630877>`_ ``True`` or ``False`` as template tag arguments.
+
+- Moved inline css to a dedicated ``image_cropping.css`` style sheet
 
 0.8
 ---
