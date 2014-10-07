@@ -9,7 +9,7 @@ django-image-cropping
     :target: http://travis-ci.org/jonasundderwolf/django-image-cropping
     :alt: Build Status
 
-.. image:: https://coveralls.io/repos/jonasundderwolf/django-image-cropping/badge.png
+.. image:: https://coveralls.io/repos/jonasundderwolf/django-image-cropping/badge.png?branch=master
     :target: https://coveralls.io/r/jonasundderwolf/django-image-cropping
     :alt: Coverage
 
