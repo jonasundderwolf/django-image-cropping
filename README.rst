@@ -35,9 +35,9 @@ Also works with `FeinCMS <https://github.com/feincms/feincms>`_ content types!
 Installation
 ============
 
-#. Install django-image-cropping using ``pip``::
+#. Install django-image-cropping and easy_thumbnails using ``pip``::
 
-    pip install django-image-cropping
+    pip install django-image-cropping easy_thumbnails
 
 #. Add ``easy_thumbnails`` and ``image_cropping`` to your ``INSTALLED_APPS``.
 
@@ -47,6 +47,13 @@ Installation
     THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
     ) + thumbnail_settings.THUMBNAIL_PROCESSORS
+
+#. To handle user-uploaded content, you need to set up `MEDIA_ROOT <https://docs.djangoproject.com/en/dev/ref/settings/#media-root>`_ and `MEDIA_URL <https://docs.djangoproject.com/en/dev/ref/settings/#media-url>`_ in your ``settings`` file::
+
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = 'media'
+
+#. To serve those files in development env, you can check out this `doc <https://docs.djangoproject.com/en/dev/howto/static-files/#serving-files-uploaded-by-a-user-during-development>`_
 
 Configuration
 =============
