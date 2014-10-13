@@ -81,42 +81,42 @@ var image_cropping = function ($) {
 
         var jcrop = {};
 
-        $('#' + image_id).Jcrop(options, function(){jcrop[image_id]=this;});
+        $('#' + image_id).Jcrop(options, function(){
+          jcrop[image_id]=this;
 
-        if ($this.data('allow-fullsize') === true) {
-          if(cropping_disabled){
-            jcrop[image_id].release();
-            $this.val('-'+$this.val());
-          }
-          var label = 'allow-fullsize-'+image_id;
-          var checked = cropping_disabled ? '' : ' checked="checked"';
-          var fullsize = $('<div class="field-box allow-fullsize">' +
-                           '<input type="checkbox" id="'+label+'" name="'+label+'"'+checked+'></div>');
-
-          if ($this.parent().find('.help').length) {
-            fullsize.insertBefore($this.parent().find('.help'));
-          } else {
-            fullsize.appendTo($this.parent());
-          }
-
-          $('#'+label).click(function(){
-            if (cropping_disabled === true){
-              $this.val($this.val().substr(1));
-              jcrop[image_id].setSelect($this.val().split(','));
-              cropping_disabled = false;
-            } else {
-              $this.val('-'+$this.val());
+          if ($this.data('allow-fullsize') === true) {
+            if(cropping_disabled){
               jcrop[image_id].release();
-              cropping_disabled = true;
+              $this.val('-'+$this.val());
             }
-          });
-          $this.parent().find('.jcrop-tracker').mousedown(function(){
+            var label = 'allow-fullsize-'+image_id;
+            var checked = cropping_disabled ? '' : ' checked="checked"';
+            var fullsize = $('<div class="field-box allow-fullsize">' +
+                             '<input type="checkbox" id="'+label+'" name="'+label+'"'+checked+'></div>');
+            if ($this.parent().find('.help').length) {
+              fullsize.insertBefore($this.parent().find('.help'));
+            } else {
+              fullsize.appendTo($this.parent());
+            }
+            $('#'+label).click(function(){
+              if (cropping_disabled === true){
+                $this.val($this.val().substr(1));
+                jcrop[image_id].setSelect($this.val().split(','));
+                cropping_disabled = false;
+              } else {
+                $this.val('-'+$this.val());
+                jcrop[image_id].release();
+                cropping_disabled = true;
+              }
+            });
+            $this.parent().find('.jcrop-tracker').mousedown(function(){
               if (cropping_disabled){
                 $('#'+label).attr('checked','checked');
                 cropping_disabled = false;
               }
-          });
-        }
+            });
+          }
+        });
       });
     }
 
