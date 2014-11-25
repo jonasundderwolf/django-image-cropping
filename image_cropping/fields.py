@@ -99,7 +99,7 @@ class ImageRatioField(models.CharField):
             # get image
             ratiofield = instance._meta.get_field(ratiofieldname)
             image = getattr(instance, ratiofield.image_field)
-            if ratiofield.image_fk_field:  # image is ForeignKey
+            if ratiofield.image_fk_field and image:  # image is ForeignKey
                 # get the imagefield
                 image = getattr(image, ratiofield.image_fk_field)
             if not image:
