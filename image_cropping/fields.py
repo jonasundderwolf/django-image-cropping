@@ -42,6 +42,7 @@ class ImageRatioField(models.CharField):
         self.hide_image_field = hide_image_field
         field_kwargs = {
             'max_length': 255,
+            'default': '',
             'blank': True,
             'verbose_name': verbose_name,
             'help_text': help_text
