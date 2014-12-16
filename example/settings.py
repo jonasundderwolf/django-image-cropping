@@ -27,6 +27,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 SECRET_KEY = '0pfuvtvasdlkjasd76723"b)lna4*f_-xxkszs4##!+wpo'
+
 ROOT_URLCONF = 'example.urls'
 
 IMAGE_CROPPING_JQUERY_URL = 'js/jquery.min.js'
@@ -34,6 +35,17 @@ IMAGE_CROPPING_JQUERY_URL = 'js/jquery.min.js'
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
 )
+
+if django.VERSION[:2] >= (1, 7):
+    MIDDLEWARE_CLASSES = (
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.common.CommonMiddleware',
+        'django.middleware.csrf.CsrfViewMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+        'django.contrib.messages.middleware.MessageMiddleware',
+        'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    )
 
 INSTALLED_APPS = [
     'django.contrib.auth',
@@ -47,6 +59,12 @@ INSTALLED_APPS = [
     'image_cropping',
     'example',
 ]
+
+
+if django.VERSION[:2] < (1, 6):
+    TEST_RUNNER = 'discover_runner.DiscoverRunner'
+else:
+    TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 from easy_thumbnails.conf import settings as thumbnail_settings
 THUMBNAIL_PROCESSORS = (
@@ -70,3 +88,5 @@ if len(sys.argv) > 1 and sys.argv[1] == 'test':
             "NAME": ":memory:",
         },
     }
+
+IMAGE_CROPPING_THUMB_SIZE = (300, 300)

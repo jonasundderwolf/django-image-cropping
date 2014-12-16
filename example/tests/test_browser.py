@@ -1,5 +1,8 @@
 from django.core.urlresolvers import reverse
-from django.test import LiveServerTestCase
+try:
+    from django.contrib.staticfiles.testing import StaticLiveServerTestCase as LiveServerTestCase
+except ImportError:
+    from django.test import LiveServerTestCase
 from django.test.utils import override_settings
 
 from selenium.webdriver.firefox.webdriver import WebDriver
