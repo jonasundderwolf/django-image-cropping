@@ -8,10 +8,9 @@ install:
 script:
   - tox
 env:
-  - TOXENV=py26_django14
-  - TOXENV=py27_django16
-  - TOXENV=py33_django16
-  - TOXENV=py34_django16
+  - TOXENV=py27_django14
+  - TOXENV=py27_django17
+  - TOXENV=py34_django17
   - TOXENV=coverage
 notifications:
   email: false
