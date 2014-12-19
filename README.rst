@@ -38,7 +38,7 @@ Installation
 #. Install django-image-cropping using ``pip``::
 
     pip install django-image-cropping
-    
+
 #. If you haven't installed easy_thumbnails already, install it::
 
     pip install easy_thumbnails
@@ -67,7 +67,7 @@ size for the final image::
     from image_cropping import ImageRatioField
 
     class MyModel(models.Model):
-        image = models.ImageField(blank=True, null=True, upload_to='uploaded_images')
+        image = models.ImageField(blank=True, upload_to='uploaded_images')
         # size is "width x height"
         cropping = ImageRatioField('image', '430x360')
 
@@ -128,7 +128,7 @@ an ``ImageCropField``::
     from image_cropping import ImageCropField, ImageRatioField
 
     class MyModel(models.Model):
-        image = ImageCropField(blank=True, null=True, upload_to='uploaded_images')
+        image = ImageCropField(blank=True, upload_to='uploaded_images')
         # size is "width x height"
         cropping = ImageRatioField('image', '430x360')
 
@@ -164,12 +164,12 @@ If you're selectively including or excluding fields from the ModelForm, remember
 Multiple formats
 ================
 
-If you need the same image in multiple formats, simply specify another ``ImageRatioField``. 
+If you need the same image in multiple formats, simply specify another ``ImageRatioField``.
 This will allow the image to be cropped twice::
 
     from image_cropping import ImageRatioField, ImageCropField
 
-    image = ImageCropField(blank=True, null=True, upload_to='uploaded_images')
+    image = ImageCropField(blank=True, upload_to='uploaded_images')
     # size is "width x height"
     list_page_cropping = ImageRatioField('image', '200x100')
     detail_page_cropping = ImageRatioField('image', '430x360')
@@ -210,7 +210,7 @@ In this case the size parameter is the desired minimum and is also used for the 
 
     from image_cropping import ImageRatioField, ImageCropField
 
-    image = ImageCropField(blank=True, null=True, upload_to='uploaded_images')
+    image = ImageCropField(blank=True, upload_to='uploaded_images')
 
     # size is "width x height" so a minimum size of 200px x 100px would look like this:
     min_free_cropping = ImageRatioField('image', '200x100', free_crop=True)
