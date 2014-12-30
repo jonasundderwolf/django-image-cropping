@@ -1,3 +1,5 @@
+var jcrop = {};
+
 var image_cropping = function ($) {
 
     function init() {
@@ -78,8 +80,6 @@ var image_cropping = function ($) {
 
         // hide the input field, show image to crop instead
         $this.hide().after($image);
-
-        var jcrop = {};
 
         $('#' + image_id).Jcrop(options, function(){jcrop[image_id]=this;});
 

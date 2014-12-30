@@ -53,8 +53,10 @@ def get_attrs(image, name):
 
 class CropWidget(object):
     class Media:
-        js = (
-            settings.IMAGE_CROPPING_JQUERY_URL,
+        js = (,)
+        if settings.IMAGE_CROPPING_JQUERY_URL:
+            js += (settings.IMAGE_CROPPING_JQUERY_URL,)
+        js += (
             "image_cropping/js/jquery.Jcrop.min.js",
             "image_cropping/image_cropping.js",
         )
