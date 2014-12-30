@@ -56,6 +56,12 @@ var image_cropping = function ($) {
         if ($this.data('ratio')) {
           options['aspectRatio'] = $this.data('ratio');
         }
+        if ($this.data('box_max_width')) {
+          options['boxWidth'] = $this.data('box_max_width');
+        }
+        if ($this.data('box_max_height')) {
+          options['boxHeight'] = $this.data('box_max_height');
+        }
 
         var cropping_disabled = false;
         if($this.val()[0] == "-"){

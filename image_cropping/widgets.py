@@ -45,6 +45,8 @@ def get_attrs(image, name):
             'data-field-name': name,
             'data-org-width': width,
             'data-org-height': height,
+            'data-max-width': width,
+            'data-max-height': height,
         }
     except (ValueError, AttributeError, IOError):
         # can't create thumbnail from image
