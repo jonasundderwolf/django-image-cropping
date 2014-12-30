@@ -29,7 +29,7 @@ class ImageRatioField(models.CharField):
                  adapt_rotation=False, allow_fullsize=False, verbose_name=None,
                  help_text=None, hide_image_field=False,
                  size_warning=settings.IMAGE_CROPPING_SIZE_WARNING,
-                 box_max_width=None, box_max_height=None):
+                 box_max_width='', box_max_height=''):
         if '__' in image_field:
             self.image_field, self.image_fk_field = image_field.split('__')
         else:
