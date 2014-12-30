@@ -45,6 +45,8 @@ def get_attrs(image, name):
             'data-field-name': name,
             'data-org-width': width,
             'data-org-height': height,
+            'data-max-width': width,
+            'data-max-height': height,
         }
     except (ValueError, AttributeError, IOError):
         # can't create thumbnail from image
@@ -53,11 +55,17 @@ def get_attrs(image, name):
 
 class CropWidget(object):
     class Media:
-        js = (
-            settings.IMAGE_CROPPING_JQUERY_URL,
-            "image_cropping/js/jquery.Jcrop.min.js",
-            "image_cropping/image_cropping.js",
-        )
+        if settings.IMAGE_CROPPING_JQUERY_URL:
+            js = (
+                settings.IMAGE_CROPPING_JQUERY_URL,
+                "image_cropping/js/jquery.Jcrop.min.js",
+                "image_cropping/image_cropping.js",
+            )
+        else:
+            js = (
+                "image_cropping/js/jquery.Jcrop.min.js",
+                "image_cropping/image_cropping.js",
+            )
         css = {'all': ("image_cropping/css/jquery.Jcrop.min.css",
                        "image_cropping/css/image_cropping.css",)}
 
