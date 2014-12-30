@@ -28,7 +28,8 @@ class ImageRatioField(models.CharField):
     def __init__(self, image_field, size='0x0', free_crop=False,
                  adapt_rotation=False, allow_fullsize=False, verbose_name=None,
                  help_text=None, hide_image_field=False,
-                 size_warning=settings.IMAGE_CROPPING_SIZE_WARNING):
+                 size_warning=settings.IMAGE_CROPPING_SIZE_WARNING,
+                 box_max_width='', box_max_height=''):
         if '__' in image_field:
             self.image_field, self.image_fk_field = image_field.split('__')
         else:
@@ -40,6 +41,8 @@ class ImageRatioField(models.CharField):
         self.allow_fullsize = allow_fullsize
         self.size_warning = size_warning
         self.hide_image_field = hide_image_field
+        self.box_max_width = box_max_width
+        self.box_max_height = box_max_height
         field_kwargs = {
             'max_length': 255,
             'default': '',
@@ -68,6 +71,8 @@ class ImageRatioField(models.CharField):
             'help_text': self.help_text,
             'hide_image_field': self.hide_image_field,
             'size_warning': self.size_warning,
+            'box_max_width': self.box_max_width,
+            'box_max_height': self.box_max_height,
         }
         return self.name, 'image_cropping.fields.ImageRatioField', args, kwargs
 
@@ -118,6 +123,8 @@ class ImageRatioField(models.CharField):
         kwargs['widget'] = forms.TextInput(attrs={
             'data-min-width': self.width,
             'data-min-height': self.height,
+            'data-box_max_width': self.box_max_width,
+            'data-box_max_height': self.box_max_height,
             'data-ratio': ratio,
             'data-image-field': self.image_field,
             'data-my-name': self.name,

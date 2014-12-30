@@ -1,3 +1,5 @@
+var jcrop = {};
+
 var image_cropping = function ($) {
 
     function init() {
@@ -54,6 +56,12 @@ var image_cropping = function ($) {
         if ($this.data('ratio')) {
           options['aspectRatio'] = $this.data('ratio');
         }
+        if ($this.data('box_max_width')) {
+          options['boxWidth'] = $this.data('box_max_width');
+        }
+        if ($this.data('box_max_height')) {
+          options['boxHeight'] = $this.data('box_max_height');
+        }
 
         var cropping_disabled = false;
         if($this.val()[0] == "-"){
@@ -78,8 +86,6 @@ var image_cropping = function ($) {
 
         // hide the input field, show image to crop instead
         $this.hide().after($image);
-
-        var jcrop = {};
 
         $('#' + image_id).Jcrop(options, function(){jcrop[image_id]=this;});
 
