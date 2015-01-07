@@ -28,21 +28,19 @@ class ImageRatioField(models.CharField):
     def __init__(self, image_field, size='0x0', free_crop=False,
                  adapt_rotation=False, allow_fullsize=False, verbose_name=None,
                  help_text=None, hide_image_field=False,
-                 size_warning=settings.IMAGE_CROPPING_SIZE_WARNING,
-                 box_max_width='', box_max_height=''):
+                 size_warning=settings.IMAGE_CROPPING_SIZE_WARNING):
         if '__' in image_field:
             self.image_field, self.image_fk_field = image_field.split('__')
         else:
             self.image_field, self.image_fk_field = image_field, None
-
         self.width, self.height = list(map(int, size.split('x')))
         self.free_crop = free_crop
         self.adapt_rotation = adapt_rotation
         self.allow_fullsize = allow_fullsize
         self.size_warning = size_warning
         self.hide_image_field = hide_image_field
-        self.box_max_width = box_max_width
-        self.box_max_height = box_max_height
+        self.box_max_width = settings.IMAGE_CROPPING_THUMB_SIZE[0]
+        self.box_max_height = settings.IMAGE_CROPPING_THUMB_SIZE[1]
         field_kwargs = {
             'max_length': 255,
             'default': '',

@@ -282,9 +282,6 @@ of javascript:
 
 to handle image input values changes.
 
-To preserve size constraints on the image you will also have to provide ``box_max_width`` and/or ``box_max_height``
-to ``ImageRatioField`` fields on your models.
-
 
 Changelog
 =========
