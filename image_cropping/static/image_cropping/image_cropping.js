@@ -1,7 +1,6 @@
-var jcrop = {};
 
 var image_cropping = function ($) {
-
+    var jcrop = {};
     function init() {
       $('input.image-ratio').each(function() {
         var $this = $(this),
@@ -180,7 +179,8 @@ var image_cropping = function ($) {
     }
 
     return {
-      init: init
+      init: init,
+      jcrop: jcrop
     };
 
 }(jQuery);
