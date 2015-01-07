@@ -277,7 +277,7 @@ of javascript:
 
     reader  = new FileReader();
     reader.onloadend = function () {
-        jcrop[widget_name].setImage(reader.result);
+        image_cropping.jcrop[widget_name].setImage(reader.result);
     };
 
 to handle image input values changes.
