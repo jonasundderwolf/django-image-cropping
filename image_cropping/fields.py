@@ -69,8 +69,6 @@ class ImageRatioField(models.CharField):
             'help_text': self.help_text,
             'hide_image_field': self.hide_image_field,
             'size_warning': self.size_warning,
-            'box_max_width': self.box_max_width,
-            'box_max_height': self.box_max_height,
         }
         return self.name, 'image_cropping.fields.ImageRatioField', args, kwargs
 
