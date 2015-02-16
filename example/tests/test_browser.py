@@ -9,8 +9,11 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 
-from .factory import create_superuser, create_cropped_image
+from . import factory
 from image_cropping.config import settings
+
+
+DEFAULT_IMAGE_CROPPING_JQUERY_URL = settings.IMAGE_CROPPING_JQUERY_URL
 
 
 class BrowserTestBase(object):
@@ -25,8 +28,8 @@ class BrowserTestBase(object):
         super(BrowserTestBase, cls).tearDownClass()
 
     def setUp(self):
-        self.image = create_cropped_image()
-        self.user = create_superuser()
+        self.image = factory.create_cropped_image()
+        self.user = factory.create_superuser()
         super(BrowserTestBase, self).setUp()
 
     def _ensure_page_loaded(self, url=None):
@@ -82,8 +85,8 @@ class AdminImageCroppingTestCase(BrowserTestBase, LiveServerTestCase):
         self._ensure_page_loaded('%s%s' % (self.live_server_url, '/admin'))
         username_input = self.selenium.find_element_by_id("id_username")
         password_input = self.selenium.find_element_by_id("id_password")
-        username_input.send_keys('admin')
-        password_input.send_keys('admin')
+        username_input.send_keys(factory.TEST_USERNAME)
+        password_input.send_keys(factory.TEST_PASSWORD)
         self.selenium.find_element_by_xpath('//input[@value="Log in"]').click()
         self._ensure_page_loaded()
 

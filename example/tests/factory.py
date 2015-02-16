@@ -6,6 +6,11 @@ from PIL import Image, ImageDraw
 from example.models import Image as TestImage
 
 
+TEST_USERNAME = 'admin'
+TEST_PASSWORD = 'admin'
+TEST_EMAIL = 'admin@example.com'
+
+
 def create_cropped_image(**kwargs):
     defaults = {
         'image_cropping': '50,50,170,100',  # size: 120x100  as in model.py
@@ -33,9 +38,9 @@ def create_pil_image(size=(400, 400)):
 
 def create_superuser(**kwargs):
     defaults = {
-        'password': 'admin',
-        'username': 'admin',
-        'email': 'admin@admin.test',
+        'password': TEST_PASSWORD,
+        'username': TEST_USERNAME,
+        'email': TEST_EMAIL,
     }
     defaults.update(kwargs)
     return User.objects.create_superuser(**defaults)
