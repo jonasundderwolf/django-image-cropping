@@ -13,9 +13,6 @@ from . import factory
 from image_cropping.config import settings
 
 
-DEFAULT_IMAGE_CROPPING_JQUERY_URL = settings.IMAGE_CROPPING_JQUERY_URL
-
-
 class BrowserTestBase(object):
     @classmethod
     def setUpClass(cls):
