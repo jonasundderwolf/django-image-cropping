@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import logging
 
+from django import forms
 from django.db.models import get_model, ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
 from easy_thumbnails.files import get_thumbnailer
@@ -54,17 +55,19 @@ def get_attrs(image, name):
 
 
 class CropWidget(object):
-    class Media:
+
+    def _media(self):
         js = [
             "image_cropping/js/jquery.Jcrop.min.js",
             "image_cropping/image_cropping.js",
         ]
-
         if settings.IMAGE_CROPPING_JQUERY_URL:
             js.insert(0, settings.IMAGE_CROPPING_JQUERY_URL)
-
         css = {'all': ("image_cropping/css/jquery.Jcrop.min.css",
                        "image_cropping/css/image_cropping.css",)}
+        return forms.Media(css=css, js=js)
+
+    media = property(_media)
 
 
 class ImageCropWidget(AdminFileWidget, CropWidget):
