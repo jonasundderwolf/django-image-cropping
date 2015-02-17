@@ -13,3 +13,4 @@ media/
 .coverage/
 coverage
 settings_local.py
+.idea/
