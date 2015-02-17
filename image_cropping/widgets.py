@@ -50,7 +50,16 @@ def get_attrs(image, name):
         }
     except (ValueError, AttributeError, IOError):
         # can't create thumbnail from image
-        return {}
+        # thumbnail not necessarry but some stub default values useful to keep the js code ok
+        return {
+            'class': "crop-thumb",
+            'data-thumbnail-url': '',
+            'data-field-name': name,
+            'data-org-width': 0,
+            'data-org-height': 0,
+            'data-max-width': 300,
+            'data-max-height': 300,
+        }
 
 
 class CropWidget(object):
@@ -74,8 +83,9 @@ class ImageCropWidget(AdminFileWidget, CropWidget):
     def render(self, name, value, attrs=None):
         if not attrs:
             attrs = {}
-        if value:
-            attrs.update(get_attrs(value, name))
+        # if value:
+        # get_attrs will return defaults when value is none
+        attrs.update(get_attrs(value, name))
         return super(AdminFileWidget, self).render(name, value, attrs)
 
 
