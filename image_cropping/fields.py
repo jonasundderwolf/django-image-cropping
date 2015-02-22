@@ -119,8 +119,8 @@ class ImageRatioField(models.CharField):
         kwargs['widget'] = forms.TextInput(attrs={
             'data-min-width': self.width,
             'data-min-height': self.height,
-            'data-box_max_width': self.box_max_width,
-            'data-box_max_height': self.box_max_height,
+            'data-box-max-width': self.box_max_width,
+            'data-box-max-height': self.box_max_height,
             'data-ratio': ratio,
             'data-image-field': self.image_field,
             'data-my-name': self.name,
