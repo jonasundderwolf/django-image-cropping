@@ -269,20 +269,6 @@ issues may arise if your jQuery version differs from the one that is tested agai
 You can also set ``IMAGE_CROPPING_JQUERY_URL`` to ``None`` to disable inclusion of jQuery by the widget.
 
 
-Jcrop setImage
---------------
-
-Widget supports dynamic changes of the source image by use of FileReader, but you do need to add a piece
-of javascript:
-
-    reader  = new FileReader();
-    reader.onloadend = function () {
-        image_cropping.jcrop[widget_name].setImage(reader.result);
-    };
-
-to handle image input values changes.
-
-
 Changelog
 =========
 
