@@ -4,13 +4,13 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 5 # give xvfb some time to start
 install:
-  - pip install tox
+  - pip install -U tox
 script:
   - tox
 env:
   - TOXENV=py27_django14
   - TOXENV=py27_django17
-  - TOXENV=py34_django17
+  - TOXENV=py33_django17
   - TOXENV=coverage
 notifications:
   email: false
