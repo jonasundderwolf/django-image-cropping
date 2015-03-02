@@ -1,5 +1,6 @@
 from django import template
 from easy_thumbnails.files import get_thumbnailer
+from easy_thumbnails.exceptions import InvalidImageFormatError
 
 register = template.Library()
 VALID_OPTIONS = ('scale', 'width', 'height', 'max_size')
@@ -86,4 +87,11 @@ def cropped_thumbnail(context, instance, ratiofieldname, **kwargs):
     # pass remaining arguments to easy_thumbnail
     thumbnail_options.update(kwargs)
 
-    return thumbnailer.get_thumbnail(thumbnail_options).url
+    # catch exceptions connected with corrupted image
+    # ex. in case filesystem corruption, accidentaly removed file, or file on CDN is not ready
+    # if image is not valid do not blow up webpage with 500, but simply do not show it, 
+    try:
+        url = thumbnailer.get_thumbnail(thumbnail_options).url
+    except InvalidImageFormatError:
+        url = ''
+    return url
