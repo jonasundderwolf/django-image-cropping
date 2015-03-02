@@ -108,9 +108,7 @@ class ImageRatioField(models.CharField):
 
             # calculate initial cropping
             try:
-                # catch exceptions connected with corrupted image
-                # ex. in case filesystem corruption, accidentaly removed file, or file on CDN is not ready
-                # if image is not valid do not blow up webpage with 500, but still let user to save adminmodel 
+                # handle corrupt or accidentally removed images
                 box = max_cropping(ratiofield.width, ratiofield.height,
                                    image.width, image.height,
                                    free_crop=ratiofield.free_crop)
