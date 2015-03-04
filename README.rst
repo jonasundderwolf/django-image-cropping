@@ -272,6 +272,11 @@ You can also set ``IMAGE_CROPPING_JQUERY_URL`` to ``None`` to disable inclusion 
 Changelog
 =========
 
+1.0
+---
+
+"If your software is being used in production, it should probably already be 1.0.0." (http://semver.org)
+
 0.9
 ---
 
