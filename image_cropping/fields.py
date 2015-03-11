@@ -74,21 +74,21 @@ class ImageRatioField(models.CharField):
 
     def contribute_to_class(self, cls, name):
         super(ImageRatioField, self).contribute_to_class(cls, name)
-        # attach a list of fields that are referenced by the ImageRatioField
-        # so we can set the correct widget in the ModelAdmin
-        if not hasattr(cls, 'crop_fields'):
-            cls.add_to_class('crop_fields', {})
-        cls.crop_fields[self.image_field] = {
-            'fk_field': self.image_fk_field,
-            'hidden': self.hide_image_field,
-        }
-
-        # attach ratiofields to cls
-        if not hasattr(cls, 'ratio_fields'):
-            cls.add_to_class('ratio_fields', [])
-        cls.ratio_fields.append(name)
-
         if not cls._meta.abstract:
+            # attach a list of fields that are referenced by the ImageRatioField
+            # so we can set the correct widget in the ModelAdmin
+            if not hasattr(cls, 'crop_fields'):
+                cls.add_to_class('crop_fields', {})
+            cls.crop_fields[self.image_field] = {
+                'fk_field': self.image_fk_field,
+                'hidden': self.hide_image_field,
+            }
+
+            # attach ratiofields to cls
+            if not hasattr(cls, 'ratio_fields'):
+                cls.add_to_class('ratio_fields', [])
+            cls.ratio_fields.append(name)
+
             signals.pre_save.connect(self.initial_cropping, sender=cls)
 
     def initial_cropping(self, sender, instance, *args, **kwargs):
