@@ -37,7 +37,7 @@ class BrowserTestBase(object):
         try:
             if url:
                 self.selenium.get(url)
-            WebDriverWait(self.selenium, 30).until(readystate_complete)
+            WebDriverWait(self.selenium, 45).until(readystate_complete)
         except TimeoutException:
             self.selenium.execute_script("window.stop();")
 
@@ -70,7 +70,7 @@ class BrowserTestBase(object):
             return True
 
         try:
-            WebDriverWait(self.selenium, 30).until(jcrop_initialized)
+            WebDriverWait(self.selenium, 45).until(jcrop_initialized)
         except TimeoutException:
             self.selenium.execute_script("window.stop();")
             self.fail('Jcrop not initialized')
