@@ -1,5 +1,6 @@
-django==1.7.5
+django==1.7.7
 easy_thumbnails==2.2
+pyvirtualdisplay==0.1.5
 selenium==2.45
 WebTest==2.0.18
 django-webtest==1.7.7

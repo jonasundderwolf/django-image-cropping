@@ -8,20 +8,24 @@ from django.test.utils import override_settings
 from selenium.webdriver.firefox.webdriver import WebDriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
-
-from . import factory
+from pyvirtualdisplay import Display
 from image_cropping.config import settings
+from . import factory
 
 
 class BrowserTestBase(object):
+
     @classmethod
     def setUpClass(cls):
+        cls.display = Display(visible=0, size=(1024, 768))
+        cls.display.start()
         cls.selenium = WebDriver()
         super(BrowserTestBase, cls).setUpClass()
 
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
+        cls.display.stop()
         super(BrowserTestBase, cls).tearDownClass()
 
     def setUp(self):

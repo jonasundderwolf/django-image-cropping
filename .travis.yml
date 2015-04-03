@@ -5,6 +5,7 @@ before_install:
   - sleep 5 # give xvfb some time to start
 install:
   - pip install -U tox
+  - pip install pyvirtualdisplay==0.1.5
 script:
   - tox
 env:
