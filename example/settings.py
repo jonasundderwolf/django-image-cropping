@@ -86,3 +86,4 @@ if len(sys.argv) > 1 and sys.argv[1] == 'test':
 IMAGE_CROPPING_THUMB_SIZE = (300, 300)
 IMAGE_CROPPING_JQUERY_URL = 'js/jquery.min.js'
 THUMBNAIL_DEBUG = True
+HEADLESS = False

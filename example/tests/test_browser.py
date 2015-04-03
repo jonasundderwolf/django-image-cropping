@@ -17,15 +17,17 @@ class BrowserTestBase(object):
 
     @classmethod
     def setUpClass(cls):
-        cls.display = Display(visible=0, size=(1024, 768))
-        cls.display.start()
+        if settings.HEADLESS:
+            cls.display = Display(visible=0, size=(1024, 768))
+            cls.display.start()
         cls.selenium = WebDriver()
         super(BrowserTestBase, cls).setUpClass()
 
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
-        cls.display.stop()
+        if settings.HEADLESS:
+            cls.display.stop()
         super(BrowserTestBase, cls).tearDownClass()
 
     def setUp(self):
