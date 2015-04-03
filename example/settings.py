@@ -30,7 +30,6 @@ SECRET_KEY = '0pfuvtvasdlkjasd76723"b)lna4*f_-xxkszs4##!+wpo'
 
 ROOT_URLCONF = 'example.urls'
 
-IMAGE_CROPPING_JQUERY_URL = 'js/jquery.min.js'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
@@ -81,12 +80,9 @@ else:
 # disable logging while testing
 if len(sys.argv) > 1 and sys.argv[1] == 'test':
     logging.disable(logging.CRITICAL)
-
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": ":memory:",
-        },
-    }
+    # use an in-memory db while testing
+    DATABASES['default']['NAME'] = ':memory:'
 
 IMAGE_CROPPING_THUMB_SIZE = (300, 300)
+IMAGE_CROPPING_JQUERY_URL = 'js/jquery.min.js'
+THUMBNAIL_DEBUG = True
