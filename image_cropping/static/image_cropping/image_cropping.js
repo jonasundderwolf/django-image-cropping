@@ -1,5 +1,4 @@
-
-var image_cropping = function ($) {
+var image_cropping = (function ($) {
     var jcrop = {};
     function init() {
       $('input.image-ratio').each(function() {
@@ -183,7 +182,17 @@ var image_cropping = function ($) {
       jcrop: jcrop
     };
 
-}(jQuery);
+})(jQuery);
 
-// init image cropping when DOM is ready
-jQuery.noConflict(true)(function() {image_cropping.init();});
+jQuery(function() {
+  var image_cropping_jquery_url = jQuery('.image-ratio:first').data('jquery-url');
+  if (image_cropping_jquery_url == "None") {
+    // JQUERY_URL is set to `none`. We therefore use the existing version of
+    // jQuery and leave it otherwise untouched.
+    jQ = jQuery;
+  } else {
+    // JQUERY_URL is specified. Image Cropping's jQuery is included in no conflict mode,
+    jQ = jQuery.noConflict(true);
+  }
+  jQ(function() {image_cropping.init();});
+});
