@@ -12,12 +12,14 @@ from pyvirtualdisplay import Display
 from image_cropping.config import settings
 from . import factory
 
+TEST_HEADLESS = getattr(settings, 'TEST_HEADLESS', False)
+
 
 class BrowserTestBase(object):
 
     @classmethod
     def setUpClass(cls):
-        if settings.HEADLESS:
+        if TEST_HEADLESS:
             cls.display = Display(visible=0, size=(1024, 768))
             cls.display.start()
         cls.selenium = WebDriver()
@@ -26,7 +28,7 @@ class BrowserTestBase(object):
     @classmethod
     def tearDownClass(cls):
         cls.selenium.quit()
-        if settings.HEADLESS:
+        if TEST_HEADLESS:
             cls.display.stop()
         super(BrowserTestBase, cls).tearDownClass()
 
