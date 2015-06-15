@@ -2,11 +2,7 @@ from __future__ import unicode_literals
 import logging
 
 from django import forms
-try:
-    from django.apps import apps
-except ImportError:
-    # django.apps is not available until Django 1.7
-    apps = None
+from django.contrib.admin.templatetags import admin_static
 
 from django.db.models import get_model, ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
@@ -60,22 +56,6 @@ def get_attrs(image, name):
         return {}
 
 
-_static = None
-
-def static(path):
-    if apps is None:
-        # Django < 1.7 compatibility
-        return path
-
-    global _static
-    if _static is None:
-        if apps.is_installed('django.contrib.staticfiles'):
-            from django.contrib.staticfiles.templatetags.staticfiles import static as _static
-        else:
-            from django.templatetags.static import static as _static
-    return _static(path)
-
-
 class CropWidget(object):
 
     def _media(self):
@@ -83,7 +63,7 @@ class CropWidget(object):
             "image_cropping/js/jquery.Jcrop.min.js",
             "image_cropping/image_cropping.js",
         ]
-        js = [static(path) for path in js]
+        js = [admin_static.static(path) for path in js]
 
         if settings.IMAGE_CROPPING_JQUERY_URL:
             js.insert(0, settings.IMAGE_CROPPING_JQUERY_URL)
@@ -92,7 +72,7 @@ class CropWidget(object):
             "image_cropping/css/jquery.Jcrop.min.css",
             "image_cropping/css/image_cropping.css",
         ]
-        css = {'all': [static(path) for path in css]}
+        css = {'all': [admin_static.static(path) for path in css]}
 
         return forms.Media(css=css, js=js)
 
