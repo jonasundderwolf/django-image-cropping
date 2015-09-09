@@ -90,7 +90,7 @@ def cropped_thumbnail(context, instance, ratiofieldname, **kwargs):
 
     try:
         url = thumbnailer.get_thumbnail(thumbnail_options).url
-    except InvalidImageFormatError:
+    except (InvalidImageFormatError, IOError):
         # only raise an exception if THUMBNAIL_DEBUG is set to `True`
         if getattr(settings, 'THUMBNAIL_DEBUG', False):
             raise
