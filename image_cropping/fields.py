@@ -128,6 +128,7 @@ class ImageRatioField(models.CharField):
             'data-ratio': ratio,
             'data-image-field': self.image_field,
             'data-my-name': self.name,
+            'data-jquery-url': settings.IMAGE_CROPPING_JQUERY_URL,
             'data-adapt-rotation': str(self.adapt_rotation).lower(),
             'data-allow-fullsize': str(self.allow_fullsize).lower(),
             'data-size-warning': str(self.size_warning).lower(),
