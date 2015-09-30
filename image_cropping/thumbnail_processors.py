@@ -31,7 +31,9 @@ def crop_corners(image, box=None, **kwargs):
         width = abs(box[2] - box[0])
         height = abs(box[3] - box[1])
         if width and height and (width, height) != image.size:
+            png_info = image.info
             image = image.crop(box)
+            image.info = png_info
     else:
         logger.warning(
             '"box" parameter requires four values. Ignoring "%r".' % box)
