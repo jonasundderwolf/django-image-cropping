@@ -1,4 +1,4 @@
-django==1.7.7
+django==1.9
 easy_thumbnails==2.2
 pyvirtualdisplay==0.1.5
 selenium==2.45
