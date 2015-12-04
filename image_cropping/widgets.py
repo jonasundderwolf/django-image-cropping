@@ -4,7 +4,7 @@ import logging
 from django import forms
 from django.contrib.admin.templatetags import admin_static
 
-from django.db.models import get_model, ObjectDoesNotExist
+from django.apps import apps
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
 from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.source_generators import pil_image
@@ -113,12 +113,12 @@ class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
             model_name = self.rel.to._meta.object_name.lower()
             try:
                 image = getattr(
-                    get_model(app_name, model_name).objects.get(pk=value),
+                    apps.get_model(app_name, model_name).objects.get(pk=value),
                     self.field_name,
                 )
                 if image:
                     attrs.update(get_attrs(image, name))
-            except ObjectDoesNotExist:
+            except LookupError:
                 logger.error("Can't find object: %s.%s with primary key %s "
                              "for cropping." % (app_name, model_name, value))
             except AttributeError:
