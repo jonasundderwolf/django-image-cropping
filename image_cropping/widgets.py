@@ -6,7 +6,6 @@ from django.contrib.admin.templatetags import admin_static
 
 from django.apps import apps
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
-from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.source_generators import pil_image
 from .config import settings
 
@@ -14,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def thumbnail(image_path):
+    from easy_thumbnails.files import get_thumbnailer
     thumbnailer = get_thumbnailer(image_path)
     thumbnail_options = {
         'detail': True,
