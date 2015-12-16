@@ -13,3 +13,4 @@ env:
   - TOXENV=coverage
 notifications:
   email: false
+sudo: false
