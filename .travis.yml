@@ -8,9 +8,9 @@ install:
 script:
   - tox -r
 env:
-  - TOXENV=py27_django17
-  - TOXENV=py34_django18
-  - TOXENV=coverage
+  - TOXENV=py27_django18
+  - TOXENV=py27_django19
+  - TOXENV=py34_django19
 notifications:
   email: false
 sudo: false
