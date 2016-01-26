@@ -1,6 +1,10 @@
 (function ($) {
     var className = 'image-ratio';
 
+    if ((typeof jQ !== 'undefined') && (typeof jQ.fn.Jcrop === 'function')) {
+        $ = jQ;
+    }
+
     function createImage($item) {
         var $img, imageId;
 
@@ -17,7 +21,10 @@
     }
 
     function loadedImage(img, fileUrl, $item) {
-        var $img, imageId, objUrl, sourceWidth, sourceHeight, options, ary;
+        var $img, imageId, objUrl, sourceWidth, sourceHeight, options, ary, parentCls;
+
+        parentCls = '.field-' + $item.data('my-name');
+        $item.parents(parentCls + ':hidden:first').show();
 
         imageId = $item.attr('id') + '-image';
         $img = $('#' + imageId);
@@ -65,10 +72,12 @@
                 if ((ary[0] + ary[2]) > sourceWidth) {
                     ary[0] = 0;
                 }
-                if ((ary[1] + ary[3]) > sourceWidth) {
+                if ((ary[1] + ary[3]) > sourceHeight) {
                     ary[1] = 0;
                 }
                 options['setSelect'] = ary;
+            } else {
+                options['setSelect'] = [0, 0, sourceWidth / 2, sourceHeight / 2];
             }
             $img.Jcrop(options, function () {
                 image_cropping.jcrop[imageId] = this;
@@ -79,19 +88,21 @@
                 boxHeight: $item.data('box-max-height'),
                 trueSize: [sourceWidth, sourceHeight]
             };
+            image_cropping.jcrop[imageId].setImage(objUrl);
+            image_cropping.jcrop[imageId].setOptions(options);
             if ($item.val() !== '') {
                 // [ x,y,w,h ]
                 ary = $item.val().split(',');
                 if ((ary[0] + ary[2]) > sourceWidth) {
                     ary[0] = 0;
                 }
-                if ((ary[1] + ary[3]) > sourceWidth) {
+                if ((ary[1] + ary[3]) > sourceHeight) {
                     ary[1] = 0;
                 }
-                options['setSelect'] = ary;
+            } else {
+                ary = [0, 0, sourceWidth / 2, sourceHeight / 2];
             }
-            image_cropping.jcrop[imageId].setImage(objUrl);
-            image_cropping.jcrop[imageId].setOptions(options);
+            image_cropping.jcrop[imageId].setSelect(ary);
         }
     }
 
@@ -140,7 +151,15 @@
 
         count = 0;
         $('.image-ratio').each(function (idx, node) {
-            var $node = $(node), imgField, name, prefix;
+            var $node = $(node), imgField, name, prefix, $inlineGroup;
+
+            $inlineGroup = $node.parents('.inline-group:first');
+            if (($inlineGroup.length > 0) && ($inlineGroup.data('bind-load-image') !== 'binded')) {
+                $inlineGroup.find('.add-row').click(function () {
+                    window.bindLoadImage();
+                });
+                $inlineGroup.data('bind-load-image', 'binded');
+            }
 
             name = $node.attr('name');
             prefix = name.replace($node.data('my-name'), '');
@@ -158,32 +177,43 @@
         for (key in line) {
             if (line.hasOwnProperty(key)) {
                 findTarget(line[key]).each(function (idx, item) {
-                    // {# 產生 image tag #}
+                    // 產生 image tag
                     createImage($(item));
                 });
 
                 $('input[name="' + key + '"]').each(function (idx, node) {
-                    var $target = findTarget(line[key]);
+                    var $target = findTarget(line[key]), $node = $(node);
 
                     if (($target.length <= 0) || (typeof loadImage !== 'function')) {
                         return false;
                     }
 
-                    $(node).on('change', function (e) {
-                        // {# 載入圖片 #}
-                        loadImage(
-                            e.target.files[0],
-                            function (img) {
-                                $target.each(function (i, item) {
-                                    loadedImage(img, e.target.files[0], $(item));
-                                });
-                            },
-                            {} // Options
-                        );
-                    });
+                    if ($node.data('bind-load-image') === 'binded') {
+                        return;
+                    }
+
+                    $node
+                        .on('change', function (e) {
+                            // 載入圖片
+                            loadImage(
+                                e.target.files[0],
+                                function (img) {
+                                    $target.each(function (i, item) {
+                                        loadedImage(img, e.target.files[0], $(item));
+                                    });
+                                },
+                                {} // Options
+                            );
+                        })
+                        .data('bind-load-image', 'binded');
                 });
             }
         }
     }
-    init();
+    $(function () {
+        window.bindLoadImage = function () {
+            init();
+        }
+        init();
+    });
 }(jQuery));
