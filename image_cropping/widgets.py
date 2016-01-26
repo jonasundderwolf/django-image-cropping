@@ -69,7 +69,9 @@ class CropWidget(object):
     def _media(self):
         js = [
             "image_cropping/js/jquery.Jcrop.min.js",
+            "image_cropping/js/load-image.all.min.js",
             "image_cropping/image_cropping.js",
+            "image_cropping/load-image.js",
         ]
         js = [admin_static.static(path) for path in js]
 
