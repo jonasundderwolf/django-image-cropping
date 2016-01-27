@@ -20,8 +20,8 @@
         return $img;
     }
 
-    function loadedImage(img, fileUrl, $item) {
-        var $img, imageId, objUrl, sourceWidth, sourceHeight, options, ary, parentCls;
+    function loadedImage(img, fileUrl, $item, sourceWidth, sourceHeight) {
+        var $img, imageId, imgScale, objUrl, options, ary, parentCls;
 
         parentCls = '.field-' + $item.data('my-name');
         $item.parents(parentCls + ':hidden:first').show();
@@ -36,18 +36,15 @@
             return;
         }
 
-        sourceWidth = img.width;
-        sourceHeight = img.height;
-
-        img = loadImage.scale(img, {
+        imgScale = loadImage.scale(img, {
             maxWidth: $item.data('box-max-width'),
             maxHeight: $item.data('box-max-height')
         });
         objUrl = loadImage.createObjectURL(fileUrl);
         $img.attr('src', objUrl);
         $img.css({
-            'width': img.width,
-            'height': img.height
+            'width': imgScale.width,
+            'height': imgScale.height
         });
 
         if (typeof image_cropping.jcrop[imageId] === 'undefined') {
@@ -66,6 +63,7 @@
                     ].join(','));
                 }
             };
+
             if ($item.val() !== '') {
                 // [ x,y,w,h ]
                 ary = $item.val().split(',');
@@ -90,6 +88,7 @@
             };
             image_cropping.jcrop[imageId].setImage(objUrl);
             image_cropping.jcrop[imageId].setOptions(options);
+
             if ($item.val() !== '') {
                 // [ x,y,w,h ]
                 ary = $item.val().split(',');
@@ -194,12 +193,15 @@
 
                     $node
                         .on('change', function (e) {
+                            var w, h;
                             // 載入圖片
                             loadImage(
                                 e.target.files[0],
                                 function (img) {
+                                    w = img.width;
+                                    h = img.height;
                                     $target.each(function (i, item) {
-                                        loadedImage(img, e.target.files[0], $(item));
+                                        loadedImage(img, e.target.files[0], $(item), w, h);
                                     });
                                 },
                                 {} // Options
