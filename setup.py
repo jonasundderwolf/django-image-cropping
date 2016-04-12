@@ -28,7 +28,7 @@ setup(
     author_email="jvp@jonasundderwolf.de",
     url="http://github.com/jonasundderwolf/django-image-cropping",
     packages=find_packages(),
-    install_requires=["django-appconf==1.0.1"],
+    install_requires=["django-appconf==1.0.1", "six"],
     include_package_data=True,
     test_suite='example.runtests.runtests',
     classifiers=[

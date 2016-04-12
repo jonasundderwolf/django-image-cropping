@@ -7,8 +7,8 @@ from django.contrib.admin.templatetags import admin_static
 from django.db.models import ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
 
-from easy_thumbnails.source_generators import pil_image
 from .config import settings
+from .utils import get_backend
 
 try:
     # Django >= 1.9
@@ -20,16 +20,13 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-def thumbnail(image_path):
-    from easy_thumbnails.files import get_thumbnailer
-    thumbnailer = get_thumbnailer(image_path)
+def thumbnail_url(image_path):
     thumbnail_options = {
         'detail': True,
         'upscale': True,
         'size': settings.IMAGE_CROPPING_THUMB_SIZE,
     }
-    thumb = thumbnailer.get_thumbnail(thumbnail_options)
-    return thumb
+    return get_backend().get_thumbnail_url(image_path, thumbnail_options)
 
 
 def get_attrs(image, name):
@@ -45,14 +42,14 @@ def get_attrs(image, name):
 
         try:
             # open image and rotate according to its exif.orientation
-            width, height = pil_image(image).size
+            width, height = get_backend().get_size(image)
         except AttributeError:
             # invalid image -> AttributeError
             width = image.width
             height = image.height
         return {
             'class': "crop-thumb",
-            'data-thumbnail-url': thumbnail(image).url,
+            'data-thumbnail-url': thumbnail_url(image),
             'data-field-name': name,
             'data-org-width': width,
             'data-org-height': height,

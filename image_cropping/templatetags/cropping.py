@@ -1,7 +1,6 @@
 from django import template
 from django.conf import settings
-from easy_thumbnails.files import get_thumbnailer
-from easy_thumbnails.exceptions import InvalidImageFormatError
+from ..utils import get_backend
 
 register = template.Library()
 VALID_OPTIONS = ('scale', 'width', 'height', 'max_size')
@@ -74,7 +73,6 @@ def cropped_thumbnail(context, instance, ratiofieldname, **kwargs):
             # box needs rotation
             size = (size[1], size[0])
 
-    thumbnailer = get_thumbnailer(image)
     thumbnail_options = {
         'size': size,
         'box': box,
@@ -89,8 +87,9 @@ def cropped_thumbnail(context, instance, ratiofieldname, **kwargs):
     thumbnail_options.update(kwargs)
 
     try:
-        url = thumbnailer.get_thumbnail(thumbnail_options).url
-    except (InvalidImageFormatError, IOError):
+        backend = get_backend()
+        url = backend.get_thumbnail_url(image, thumbnail_options)
+    except backend.exceptions_to_catch:
         # only raise an exception if THUMBNAIL_DEBUG is set to `True`
         if getattr(settings, 'THUMBNAIL_DEBUG', False):
             raise
