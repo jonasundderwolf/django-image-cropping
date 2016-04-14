@@ -21,6 +21,11 @@ class ImageBackend(six.with_metaclass(abc.ABCMeta)):
         'ImageCropField': widgets.ImageCropWidget,
     }
 
+    def __init__(self, **kwargs):
+        self.kwargs = kwargs
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
     @abc.abstractmethod
     def get_thumbnail_url(self, image_path, thumbnail_options):
         pass

@@ -28,4 +28,4 @@ def get_backend():
             _("Can't retrieve the image backend '{}'. Message: '{}'.").format(
                 settings.IMAGE_CROPPING_BACKEND, e))
 
-    return cls()
+    return cls(**settings.IMAGE_CROPPING_BACKEND_PARAMS)
