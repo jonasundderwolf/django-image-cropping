@@ -32,13 +32,17 @@ def thumbnail_url(image_path):
 def get_attrs(image, name):
     try:
         # TODO test case
-        # If the image file has already been closed, open it
-        if image.closed:
-            image.open()
+        try:
+            # try to use image as a file
+            # If the image file has already been closed, open it
+            if image.closed:
+                image.open()
 
-        # Seek to the beginning of the file.  This is necessary if the
-        # image has already been read using this file handler
-        image.seek(0)
+            # Seek to the beginning of the file.  This is necessary if the
+            # image has already been read using this file handler
+            image.seek(0)
+        except:
+            pass
 
         try:
             # open image and rotate according to its exif.orientation
