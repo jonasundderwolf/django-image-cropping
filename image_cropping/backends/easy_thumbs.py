@@ -1,6 +1,8 @@
 """
-Backend for "easy_thumbnails" package. This module can't be named
+Backend for easy_thumbnails_ package. This module can't be named
 "easy_thumbnails" in order to avoid Python import conflicts.
+
+.. _easy_thumbnails: https://github.com/SmileyChris/easy-thumbnails
 """
 
 from .base import ImageBackend
