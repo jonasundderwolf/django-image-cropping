@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from easy_thumbnails.files import get_thumbnailer
+from image_cropping.utils import get_backend
 from .models import Image, ImageFK
 from .forms import ImageForm
 
@@ -30,12 +30,12 @@ def thumbnail_foreign_key(request, instance_id=None):
 
 def show_thumbnail(request, image_id):
     image = get_object_or_404(Image, pk=image_id)
-    thumbnail_url = get_thumbnailer(image.image_field).get_thumbnail({
+    thumbnail_url = get_backend().get_thumbnail_url(image.image_field, {
         'size': (430, 360),
         'box': image.cropping,
         'crop': True,
         'detail': True,
-    }).url
+    })
     return render(request, 'thumbnail.html', {'thumbnail_url': thumbnail_url})
 
 
