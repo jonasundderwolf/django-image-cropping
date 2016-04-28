@@ -1,0 +1,27 @@
+[run]
+branch = True
+include = example/*
+omit =
+    */migrations/*
+    */conf/*
+    */tests/*
+    */manage.py
+    */wsgi.py
+    */settings*.py
+
+
+[report]
+show_missing = True
+exclude_lines =
+  pragma: no cover
+
+  # Don't complain about missing debug-only code:
+  def __unicode__
+  def __repr__
+
+  # Don't complain if tests don't hit defensive assertion code:
+  raise AssertionError
+  raise NotImplementedError
+
+  # Don't complain if non-runnable code isn't run:
+  if __name__ == .__main__.:

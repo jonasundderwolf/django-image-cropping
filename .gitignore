@@ -12,3 +12,5 @@ media/
 .coverage
 coverage_html_report
 settings_local.py
+.cache
+test_results.html

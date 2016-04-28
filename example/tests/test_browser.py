@@ -17,7 +17,6 @@ except ImportError:
     from django.test import LiveServerTestCase
 
 
-
 class BrowserTestBase(object):
 
     @classmethod

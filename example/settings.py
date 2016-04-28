@@ -63,11 +63,6 @@ INSTALLED_APPS = [
 ]
 
 
-if django.VERSION[:2] < (1, 6):
-    TEST_RUNNER = 'discover_runner.DiscoverRunner'
-else:
-    TEST_RUNNER = 'django.test.runner.DiscoverRunner'
-
 THUMBNAIL_PROCESSORS = (
     'image_cropping.thumbnail_processors.crop_corners',
 ) + thumbnail_settings.THUMBNAIL_PROCESSORS

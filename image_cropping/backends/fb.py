@@ -30,7 +30,8 @@ class FileBrowserBackend(ImageBackend):
     WIDGETS['FileBrowseField'] = CropFileBrowseWidget
 
     def get_thumbnail_url(self, image_path, thumbnail_options):
-        image = image_path if isinstance(image_path, FileObject) else FileObject(image_path)
+        image = image_path if isinstance(
+            image_path, FileObject) else FileObject(image_path)
         return image.version_generate(self.version_suffix, thumbnail_options).url
 
     def get_size(self, image):
