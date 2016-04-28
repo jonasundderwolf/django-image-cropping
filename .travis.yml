@@ -10,7 +10,7 @@ script:
 env:
   - TOXENV=py27_django18
   - TOXENV=py27_django19
-  - TOXENV=py34_django19
+  - TOXENV=py35_django19
 notifications:
   email: false
 sudo: false
