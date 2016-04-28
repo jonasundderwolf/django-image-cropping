@@ -1,5 +1,6 @@
 from django import template
 from django.conf import settings
+
 from ..utils import get_backend
 
 register = template.Library()

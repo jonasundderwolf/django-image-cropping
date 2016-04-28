@@ -11,7 +11,9 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os
+import os
+import sys
+
 sys.path.append(os.path.abspath('..'))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'example.settings'
 

@@ -1,16 +1,21 @@
+from pyvirtualdisplay import Display
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.support.ui import WebDriverWait
+
 from django.core.urlresolvers import reverse
-try:
-    from django.contrib.staticfiles.testing import StaticLiveServerTestCase as LiveServerTestCase
-except ImportError:
-    from django.test import LiveServerTestCase
 from django.test.utils import override_settings
 
-from selenium.webdriver.firefox.webdriver import WebDriver
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
-from selenium.webdriver.support.ui import WebDriverWait
-from pyvirtualdisplay import Display
 from image_cropping.config import settings
+
 from . import factory
+
+try:
+    from django.contrib.staticfiles.testing import (
+        StaticLiveServerTestCase as LiveServerTestCase)
+except ImportError:
+    from django.test import LiveServerTestCase
+
 
 
 class BrowserTestBase(object):
@@ -36,7 +41,8 @@ class BrowserTestBase(object):
         super(BrowserTestBase, self).setUp()
 
     def _ensure_page_loaded(self, url=None):
-        # see: http://stackoverflow.com/questions/18729483/reliably-detect-page-load-or-time-out-selenium-2
+        # see: http://stackoverflow.com/questions/18729483/
+        #             reliably-detect-page-load-or-time-out-selenium-2
         def readystate_complete(d):
             return d.execute_script("return document.readyState") == "complete"
 

@@ -1,10 +1,12 @@
 from __future__ import unicode_literals
-from django.db import models
+
 from django import forms
+from django.db import models
 from django.db.models import signals
-from .widgets import ImageCropWidget
-from .utils import max_cropping
+
 from .config import settings
+from .utils import max_cropping
+from .widgets import ImageCropWidget
 
 
 class ImageCropField(models.ImageField):

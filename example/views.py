@@ -1,9 +1,11 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+
 from image_cropping.utils import get_backend
-from .models import Image, ImageFK
+
 from .forms import ImageForm
+from .models import Image, ImageFK
 
 
 def thumbnail_options(request):

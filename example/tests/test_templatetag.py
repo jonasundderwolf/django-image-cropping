@@ -1,16 +1,20 @@
 import itertools
+
+from PIL import Image
+
+from django.conf import settings
+from django.core.management import call_command
+from django.template import Context, Template
+from django.test import TestCase
+
+from .factory import create_cropped_image
+
 try:
     from urllib import unquote
 except ImportError:  # py3
     from urllib.parse import unquote
 
-from PIL import Image
-from django.test import TestCase
-from django.conf import settings
-from django.template import Template, Context
-from django.core.management import call_command
 
-from .factory import create_cropped_image
 
 
 class TemplateTagTestBase(object):

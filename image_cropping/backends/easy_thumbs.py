@@ -5,11 +5,11 @@ Backend for easy_thumbnails_ package. This module can't be named
 .. _easy_thumbnails: https://github.com/SmileyChris/easy-thumbnails
 """
 
-from .base import ImageBackend
-
+from easy_thumbnails.exceptions import InvalidImageFormatError
 from easy_thumbnails.files import get_thumbnailer
 from easy_thumbnails.source_generators import pil_image
-from easy_thumbnails.exceptions import InvalidImageFormatError
+
+from .base import ImageBackend
 
 
 class EasyThumbnailsBackend(ImageBackend):

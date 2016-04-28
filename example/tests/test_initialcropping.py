@@ -1,10 +1,12 @@
 import os
-from django.test import TestCase
+
+from example.models import Image, ImageFK
+
 from django.conf import settings
 from django.core.files import File
+from django.test import TestCase
 
 from image_cropping.utils import max_cropping
-from example.models import Image, ImageFK
 
 
 class InitialCroppingTestCase(TestCase):

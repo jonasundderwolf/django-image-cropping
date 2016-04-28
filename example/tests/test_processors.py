@@ -1,6 +1,9 @@
 from PIL import ImageChops
+
 from django.test import TestCase
+
 from image_cropping.thumbnail_processors import crop_corners
+
 from .factory import create_pil_image
 
 

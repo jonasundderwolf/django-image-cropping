@@ -1,10 +1,12 @@
 from __future__ import unicode_literals
-from django.core.files import File
-from django.conf import settings
-from django.contrib.auth.models import User
+
 from PIL import Image, ImageDraw
+
 from example.models import Image as TestImage
 
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.core.files import File
 
 TEST_USERNAME = 'admin'
 TEST_PASSWORD = 'admin'

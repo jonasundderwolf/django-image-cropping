@@ -1,5 +1,6 @@
 from django.db import models
-from image_cropping.fields import ImageRatioField, ImageCropField
+
+from image_cropping.fields import ImageCropField, ImageRatioField
 
 
 class Image(models.Model):

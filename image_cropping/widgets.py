@@ -1,11 +1,11 @@
 from __future__ import unicode_literals
+
 import logging
 
 from django import forms
 from django.contrib.admin.templatetags import admin_static
-
-from django.db.models import ObjectDoesNotExist
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
+from django.db.models import ObjectDoesNotExist
 
 from .config import settings
 from .utils import get_backend
