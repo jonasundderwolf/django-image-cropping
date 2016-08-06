@@ -39,7 +39,45 @@ Installation
 
     pip install django-image-cropping
 
-#. Install your backend of choice.
+#. Configure the backend of your choice. By default the `easy-thumbnails`-backend is used which requires `easy-thumbnails` to also be installed.
+
+
+Configuration
+=============
+
+Add an ``ImageRatioField`` to the model that contains the ``ImageField`` for the images you want to crop.
+
+The ``ImageRatioField`` simply stores the boundaries of the cropped image.
+It expects the name of the associated ``ImageField`` and the desired size of the cropped image as arguments.
+
+The size is passed in as a string and defines the aspect ratio of the selection *as well* as the minimum
+size for the final image::
+
+    from django.db import models
+    from image_cropping import ImageRatioField
+
+    class MyModel(models.Model):
+        image = models.ImageField(blank=True, upload_to='uploaded_images')
+        # size is "width x height"
+        cropping = ImageRatioField('image', '430x360')
+
+You can configure a `size warning`_ if users try to crop a selection smaller than the defined minimum.
+
+Admin Integration
+=================
+
+Add the ``ImageCroppingMixin`` to your ``ModelAdmin``::
+
+    from django.contrib import admin
+    from image_cropping import ImageCroppingMixin
+
+    class MyModelAdmin(ImageCroppingMixin, admin.ModelAdmin):
+        pass
+
+    admin.site.register(MyModel, MyModelAdmin)
+
+If your setup is correct you should now see the enhanced image widget that provides a selection
+area.
 
 
 Backends
@@ -47,9 +85,8 @@ Backends
 
 django-image-cropping delegates the cropped image generation to a backend.
 
-There are two built-in backends, but can register any custom class
-as a backend by overriding the default settings. The ``IMAGE_CROPPING_BACKEND``
-setting expects a dotted path to a class that implements the required methods.
+There are two built-in backends, but it is possible to provide custom backends.
+The ``IMAGE_CROPPING_BACKEND`` setting expects a dotted path to a class that implements the required methods.
 
 You can provide an optional dict that will be used to populate the backend's
 constructor params.
@@ -123,44 +160,6 @@ package.
         'image_cropping.thumbnail_processors.crop_corners',
         'filebrowser.utils.scale_and_crop',
     )
-
-
-Configuration
-=============
-
-Add an ``ImageRatioField`` to the model that contains the ``ImageField`` for the images you want to crop.
-
-The ``ImageRatioField`` simply stores the boundaries of the cropped image.
-It expects the name of the associated ``ImageField`` and the desired size of the cropped image as arguments.
-
-The size is passed in as a string and defines the aspect ratio of the selection *as well* as the minimum
-size for the final image::
-
-    from django.db import models
-    from image_cropping import ImageRatioField
-
-    class MyModel(models.Model):
-        image = models.ImageField(blank=True, upload_to='uploaded_images')
-        # size is "width x height"
-        cropping = ImageRatioField('image', '430x360')
-
-You can configure a `size warning`_ if users try to crop a selection smaller than the defined minimum.
-
-Admin Integration
-=================
-
-Add the ``ImageCroppingMixin`` to your ``ModelAdmin``::
-
-    from django.contrib import admin
-    from image_cropping import ImageCroppingMixin
-
-    class MyModelAdmin(ImageCroppingMixin, admin.ModelAdmin):
-        pass
-
-    admin.site.register(MyModel, MyModelAdmin)
-
-If your setup is correct you should now see the enhanced image widget that provides a selection
-area.
 
 Frontend
 ========
