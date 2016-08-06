@@ -2,7 +2,7 @@
 django-image-cropping
 =====================
 
-.. image:: https://pypip.in/v/django-image-cropping/badge.png
+.. image:: https://img.shields.io/pypi/v/django-image-cropping.svg
     :target: https://pypi.python.org/pypi/django-image-cropping
 
 .. image:: https://travis-ci.org/jonasundderwolf/django-image-cropping.png?branch=master
