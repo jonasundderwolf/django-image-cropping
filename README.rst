@@ -39,11 +39,38 @@ Installation
 
     pip install django-image-cropping
 
-#. If you haven't installed easy_thumbnails already, install it::
+#. Install your backend of choice.
+
+
+Backends
+========
+
+django-image-cropping delegates the cropped image generation to a backend.
+
+There are two built-in backends, but can register any custom class
+as a backend by overriding the default settings. The ``IMAGE_CROPPING_BACKEND``
+setting expects a dotted path to a class that implements the required methods.
+
+You can provide an optional dict that will be used to populate the backend's
+constructor params.
+
+Default settings::
+
+    IMAGE_CROPPING_BACKEND = 'image_cropping.backends.easy_thumbs.EasyThumbnailsBackend'
+    IMAGE_CROPPING_BACKEND_PARAMS = {}
+
+
+easy_thumbnails
+---------------
+
+A backend for the `easy_thumbnails <https://github.com/SmileyChris/easy-thumbnails>`_
+package.
+
+#. If you haven't installed ``easy_thumbnails`` already, install it::
 
     pip install easy_thumbnails
 
-#. Add ``easy_thumbnails`` and ``image_cropping`` to your ``INSTALLED_APPS``.
+#. Add ``easy_thumbnails`` to your ``INSTALLED_APPS``.
 
 #. Adjust the thumbnail processors for ``easy-thumbnails`` in your ``settings``::
 
@@ -51,6 +78,52 @@ Installation
     THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
     ) + thumbnail_settings.THUMBNAIL_PROCESSORS
+
+
+django-filebrowser
+------------------
+
+A backend for the `django-filebrowser <https://github.com/sehmaschine/django-filebrowser>`_
+package.
+
+#. If you haven't installed ``django-filebrowser`` already, install it::
+
+    pip install django-filebrowser
+
+#. Add ``django-filebrowser`` and ``grappelli`` to your ``INSTALLED_APPS`` (before django.contrib.admin)::
+
+    INSTALLED_APPS = (
+        'grappelli',
+        'filebrowser',
+        'django.contrib.admin',
+    )
+
+#. Add the ``django-filebrowser`` site to your url-patterns (before any admin-urls)::
+
+    from filebrowser.sites import site
+
+    urlpatterns = [
+       url(r'^admin/filebrowser/', include(site.urls)),
+       url(r'^grappelli/', include('grappelli.urls')),
+       url(r'^admin/', include(admin.site.urls)),
+    ]
+
+
+#. Change the ``IMAGE_CROPPING_BACKEND`` in your ``settings``::
+
+    IMAGE_CROPPING_BACKEND = 'image_cropping.backends.fb.FileBrowserBackend'
+
+    # specify a custom version suffix
+    # IMAGE_CROPPING_BACKEND_PARAMS = {'version_suffix': 'crop'}
+
+
+#. Adjust the image processors for ``django-filebrowser`` in your ``settings``::
+
+    FILEBROWSER_PROCESSORS = (
+        'image_cropping.thumbnail_processors.crop_corners',
+        'filebrowser.utils.scale_and_crop',
+    )
+
 
 Configuration
 =============
@@ -93,7 +166,7 @@ Frontend
 ========
 
 django-image-cropping provides a templatetag for displaying a cropped thumbnail.
-Any other processor parameter (like ``bw=True`` or ``upscale=True``) will be forwarded to ``easy-thumbnails``::
+Any other processor parameter (like ``bw=True`` or ``upscale=True``) will be forwarded to the backend::
 
     {% cropped_thumbnail yourmodelinstance "ratiofieldname" [scale=INT|width=INT|height=INT|max_size="INTxINT"] %}
 
@@ -101,6 +174,23 @@ Example usage::
 
     {% load cropping %}
     <img src="{% cropped_thumbnail yourmodel "cropping" scale=0.5 %}">
+
+Or generate the URL from Python code in your view::
+
+    from image_cropping.utils import get_backend
+    thumbnail_url = get_backend().get_thumbnail_url(
+        yourmodel.image,
+        {
+            'size': (430, 360),
+            'box': yourmodel.cropping,
+            'crop': True,
+            'detail': True,
+        }
+    )
+
+
+easy_thumbnails
+---------------
 
 You can also use the standard ``easy-thumbnails`` templatetag with the ``box`` parameter::
 
@@ -268,6 +358,22 @@ issues may arise if your jQuery version differs from the one that is tested agai
 
 You can also set ``IMAGE_CROPPING_JQUERY_URL`` to ``None`` to disable inclusion of jQuery by the widget.
 You are now responsible for including ``jQuery`` yourself, both in the frontend and in the admin interface.
+
+Custom backend
+--------------
+
+You can define a custom backend::
+
+    IMAGE_CROPPING_BACKEND = 'image_cropping.backends.easy_thumbs.EasyThumbnailsBackend'
+
+You can provide an optional dict that will be used to populate the backend's
+constructor::
+
+    IMAGE_CROPPING_BACKEND_PARAMS = {'version_suffix': 'thumb'}
+
+.. seealso::
+
+    See the built-in backends on Backends_.
 
 
 Troubleshooting
