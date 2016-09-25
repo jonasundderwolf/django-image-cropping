@@ -39,7 +39,15 @@ Installation
 
     pip install django-image-cropping
 
-#. Configure the backend of your choice. By default the `easy-thumbnails`-backend is used which requires `easy-thumbnails` to also be installed.
+By default ``django-image-cropping`` ships with an ``easy-thumbnails``-backend which requires ``easy-thumbnails`` to also be installed
+and added to the ``INSTALLED_APPS``.
+
+The `easy-thumbnails` backend requires that you adjust the thumbnail processors in your ``settings``::
+
+    from easy_thumbnails.conf import Settings as thumbnail_settings
+    THUMBNAIL_PROCESSORS = (
+        'image_cropping.thumbnail_processors.crop_corners',
+    ) + thumbnail_settings.THUMBNAIL_PROCESSORS
 
 
 Configuration
@@ -85,10 +93,11 @@ Backends
 
 django-image-cropping delegates the cropped image generation to a backend.
 
-There are two built-in backends, but it is possible to provide custom backends.
+A backend based on `easy-thumbnails` is provided, but it's possible to use a custom backend.
 The ``IMAGE_CROPPING_BACKEND`` setting expects a dotted path to a class that implements the required methods.
+You can omit this setting if you want to use the default backend.
 
-You can provide an optional dict that will be used to populate the backend's
+In case you use a custom backend you can provide an optional dict that will be used to populate the backend's
 constructor params.
 
 Default settings::
@@ -96,70 +105,6 @@ Default settings::
     IMAGE_CROPPING_BACKEND = 'image_cropping.backends.easy_thumbs.EasyThumbnailsBackend'
     IMAGE_CROPPING_BACKEND_PARAMS = {}
 
-
-easy_thumbnails
----------------
-
-A backend for the `easy_thumbnails <https://github.com/SmileyChris/easy-thumbnails>`_
-package.
-
-#. If you haven't installed ``easy_thumbnails`` already, install it::
-
-    pip install easy_thumbnails
-
-#. Add ``easy_thumbnails`` to your ``INSTALLED_APPS``.
-
-#. Adjust the thumbnail processors for ``easy-thumbnails`` in your ``settings``::
-
-    from easy_thumbnails.conf import Settings as thumbnail_settings
-    THUMBNAIL_PROCESSORS = (
-        'image_cropping.thumbnail_processors.crop_corners',
-    ) + thumbnail_settings.THUMBNAIL_PROCESSORS
-
-
-django-filebrowser
-------------------
-
-A backend for the `django-filebrowser <https://github.com/sehmaschine/django-filebrowser>`_
-package.
-
-#. If you haven't installed ``django-filebrowser`` already, install it::
-
-    pip install django-filebrowser
-
-#. Add ``django-filebrowser`` and ``grappelli`` to your ``INSTALLED_APPS`` (before django.contrib.admin)::
-
-    INSTALLED_APPS = (
-        'grappelli',
-        'filebrowser',
-        'django.contrib.admin',
-    )
-
-#. Add the ``django-filebrowser`` site to your url-patterns (before any admin-urls)::
-
-    from filebrowser.sites import site
-
-    urlpatterns = [
-       url(r'^admin/filebrowser/', include(site.urls)),
-       url(r'^grappelli/', include('grappelli.urls')),
-       url(r'^admin/', include(admin.site.urls)),
-    ]
-
-
-#. Change the ``IMAGE_CROPPING_BACKEND`` in your ``settings``::
-
-    IMAGE_CROPPING_BACKEND = 'image_cropping.backends.fb.FileBrowserBackend'
-
-    # specify a custom version suffix
-    # IMAGE_CROPPING_BACKEND_PARAMS = {'version_suffix': 'crop'}
-
-
-#. Adjust the image processors for ``django-filebrowser`` in your ``settings``::
-
-    FILEBROWSER_PROCESSORS = (
-        'image_cropping.thumbnail_processors.crop_corners',
-        'filebrowser.utils.scale_and_crop',
-    )
 
 Frontend
 ========
@@ -384,6 +329,11 @@ The cropping widget is not displayed when using a ``ForeignKey``.
 
 Changelog
 =========
+
+1.1 (unreleased)
+----------------
+
+- Move and encapsulate the logic for creating cropped thumbnails to a swappable backend. (`@fgmacedo <https://github.com/fgmacedo>`_ in #92)
 
 1.0
 ---
