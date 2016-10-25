@@ -44,6 +44,12 @@ and added to the ``INSTALLED_APPS``.
 
 The `easy-thumbnails` backend requires that you adjust the thumbnail processors in your ``settings``::
 
+    INSTALLED_APPS = [ 
+        ...
+        'easy_thumbnails',
+        'image_cropping',
+    ]
+
     from easy_thumbnails.conf import Settings as thumbnail_settings
     THUMBNAIL_PROCESSORS = (
         'image_cropping.thumbnail_processors.crop_corners',
