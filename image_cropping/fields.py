@@ -108,13 +108,13 @@ class ImageRatioField(models.CharField):
             if not image:
                 continue
 
-            # get image dimensions
-            try:
-                width, height = get_backend().get_size(image)
-            except AttributeError:
-                width, height = (100, 100)
-
             # calculate initial cropping
+            width, height = (100, 100)
+            try:
+                width, height = (image.width, image.height)
+            except AttributeError:
+                width, height = get_backend().get_size(image)
+
             try:
                 # handle corrupt or accidentally removed images
                 box = max_cropping(ratiofield.width, ratiofield.height,
