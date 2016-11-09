@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import signals
 
 from .config import settings
-from .utils import max_cropping
+from .utils import get_backend, max_cropping
 from .widgets import ImageCropWidget
 
 
@@ -108,11 +108,17 @@ class ImageRatioField(models.CharField):
             if not image:
                 continue
 
+            # get image dimensions
+            try:
+                width, height = get_backend().get_size(image)
+            except AttributeError:
+                width, height = (100, 100)
+
             # calculate initial cropping
             try:
                 # handle corrupt or accidentally removed images
                 box = max_cropping(ratiofield.width, ratiofield.height,
-                                   image.width, image.height,
+                                   width, height,
                                    free_crop=ratiofield.free_crop)
                 box = ','.join(map(lambda i: str(i), box))
             except IOError:
