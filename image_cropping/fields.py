@@ -133,7 +133,7 @@ class ImageRatioField(models.CharField):
             'data-min-height': self.height,
             'data-box-max-width': self.box_max_width,
             'data-box-max-height': self.box_max_height,
-            'data-ratio': ratio,
+            'data-ratio': str(ratio),
             'data-image-field': self.image_field,
             'data-my-name': self.name,
             'data-jquery-url': settings.IMAGE_CROPPING_JQUERY_URL,
