@@ -2,7 +2,7 @@ language: python
 cache: pip
 python:
   - 2.7
-  - 3.5
+  - 3.6
 
 before_install:
   - "export DISPLAY=:99.0"
@@ -14,7 +14,8 @@ script:
   - tox -r
 env:
   - TOXENV=django18
-  - TOXENV=django19
+  - TOXENV=django110
+  - TOXENV=django111
 notifications:
   email: false
 sudo: false
