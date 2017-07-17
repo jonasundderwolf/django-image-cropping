@@ -16,6 +16,7 @@ before_install:
   - export PATH=$PATH:$PWD/geckodriver
 install:
   - pip install -U tox
+  - pip install -U pip
 script:
   - tox -r
 env:
