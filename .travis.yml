@@ -1,11 +1,10 @@
 language: python
 addons:
-  firefox: latest
+  firefox: "53.0.3"
 cache: pip
 python:
   - 2.7
   - 3.6
-
 before_install:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
