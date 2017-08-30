@@ -25,7 +25,7 @@ class TemplateTagTestBase(object):
     def tearDown(self):
         try:
             call_command('thumbnail_cleanup')
-        except IndexError:
+        except (IndexError, ValueError):
             pass
 
     def _test_templatetag(self, crop_field, options={}):
