@@ -44,7 +44,7 @@ and added to the ``INSTALLED_APPS``.
 
 The `easy-thumbnails` backend requires that you adjust the thumbnail processors in your ``settings``::
 
-    INSTALLED_APPS = [ 
+    INSTALLED_APPS = [
         ...
         'easy_thumbnails',
         'image_cropping',
@@ -336,8 +336,13 @@ The cropping widget is not displayed when using a ``ForeignKey``.
 Changelog
 =========
 
-1.1 (unreleased)
-----------------
+1.1
+---
+
+- Make django-image-cropping comapatible with Django 1.11
+
+1.0.4
+-----
 
 - Move and encapsulate the logic for creating cropped thumbnails to a swappable backend. (`@fgmacedo <https://github.com/fgmacedo>`_ in #92)
 
