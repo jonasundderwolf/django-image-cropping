@@ -337,7 +337,7 @@ Changelog
 1.1
 ---
 
-- Make django-image-cropping comapatible with Django 1.11
+- Make django-image-cropping compatible with Django 1.11
 
 1.0.4
 -----
