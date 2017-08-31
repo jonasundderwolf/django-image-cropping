@@ -321,9 +321,7 @@ constructor::
 
     IMAGE_CROPPING_BACKEND_PARAMS = {'version_suffix': 'thumb'}
 
-.. seealso::
-
-    See the built-in backends on Backends_.
+See the built-in backends on Backends_.
 
 
 Troubleshooting
