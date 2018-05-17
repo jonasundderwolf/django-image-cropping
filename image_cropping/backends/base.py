@@ -40,7 +40,7 @@ class ImageBackend(six.with_metaclass(abc.ABCMeta)):
         if target['fk_field']:
             # it's a ForeignKey
             return self.WIDGETS['foreign_key'](
-                db_field.rel,
+                db_field.remote_field,
                 field_name=target['fk_field'],
                 admin_site=admin_site,
             )

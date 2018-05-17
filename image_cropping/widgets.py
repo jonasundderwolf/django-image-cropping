@@ -118,8 +118,8 @@ class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
             attrs = {}
 
         if value:
-            app_name = self.rel.to._meta.app_label
-            model_name = self.rel.to._meta.object_name.lower()
+            app_name = self.rel.model._meta.app_label
+            model_name = self.rel.model._meta.object_name.lower()
             try:
                 image = getattr(
                     get_model(app_name, model_name).objects.get(pk=value),
