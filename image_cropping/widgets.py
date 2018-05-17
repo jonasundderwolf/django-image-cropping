@@ -119,10 +119,10 @@ class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
             attrs = {}
 
         if value:
-            if django.VERSION < (2,):
-                rel_to = self.rel.to
-            else:
+            if django.VERSION[:2] >= (2, 0):
                 rel_to = self.rel.model
+            else:
+                rel_to = self.rel.to
             app_name = rel_to._meta.app_label
             model_name = rel_to._meta.object_name.lower()
             try:
