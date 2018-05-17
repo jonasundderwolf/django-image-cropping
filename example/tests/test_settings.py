@@ -1,10 +1,10 @@
 from django_webtest import WebTest
+from django.test.utils import override_settings
 
 try:
     from django.urls import reverse
 except ImportError:
     from django.core.urlresolvers import reverse
-from django.test.utils import override_settings
 
 from . import factory
 
