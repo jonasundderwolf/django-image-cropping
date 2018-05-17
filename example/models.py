@@ -18,7 +18,7 @@ class Image(models.Model):
 
 
 class ImageFK(models.Model):
-    image = models.ForeignKey(Image)
+    image = models.ForeignKey(Image, on_delete=models.CASCADE)
     cropping = ImageRatioField('image__image_field', '120x100')
 
     class Meta:
