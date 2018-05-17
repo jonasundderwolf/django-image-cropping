@@ -1,11 +1,9 @@
-import typing
-from django.contrib.admin.options import BaseModelAdmin
-
+from __future__ import unicode_literals
 from .utils import get_backend
 
 
 class ImageCroppingMixin(object):
-    def formfield_for_dbfield(self: typing.Union['ImageCroppingMixin', BaseModelAdmin], db_field, **kwargs):
+    def formfield_for_dbfield(self, db_field, **kwargs):
         crop_fields = getattr(self.model, 'crop_fields', {})
         if db_field.name in crop_fields:
             target = crop_fields[db_field.name]

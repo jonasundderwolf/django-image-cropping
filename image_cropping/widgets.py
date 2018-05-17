@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 import logging
 
-from django import forms
+from django import forms, VERSION as DJANGO_VERSION
 from django.contrib.admin.templatetags import admin_static
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
 from django.db.models import ObjectDoesNotExist
@@ -118,8 +118,12 @@ class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
             attrs = {}
 
         if value:
-            app_name = self.rel.model._meta.app_label
-            model_name = self.rel.model._meta.object_name.lower()
+            if DJANGO_VERSION < (2,):
+                rel_to = self.rel.to
+            else:
+                rel_to = self.rel.model
+            app_name = rel_to._meta.app_label
+            model_name = rel_to._meta.object_name.lower()
             try:
                 image = getattr(
                     get_model(app_name, model_name).objects.get(pk=value),
