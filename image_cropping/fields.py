@@ -74,8 +74,8 @@ class ImageRatioField(models.CharField):
         }
         return self.name, 'image_cropping.fields.ImageRatioField', args, kwargs
 
-    def contribute_to_class(self, cls, name):
-        super(ImageRatioField, self).contribute_to_class(cls, name)
+    def contribute_to_class(self, cls, name, **kwargs):
+        super(ImageRatioField, self).contribute_to_class(cls, name, **kwargs)
         if not cls._meta.abstract:
             # attach a list of fields that are referenced by the ImageRatioField
             # so we can set the correct widget in the ModelAdmin

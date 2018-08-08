@@ -12,6 +12,14 @@ env:
   - TOXENV=django18
   - TOXENV=django110
   - TOXENV=django111
+  - TOXENV=django20
+  - TOXENV=django21
+matrix:
+  exclude:
+    - python: 2.7
+      env: TOXENV=django20
+    - python: 2.7
+      env: TOXENV=django21
 notifications:
   email: false
 sudo: false
