@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^show_thumbnail/(?P<image_id>\d+)/$',
         views.show_thumbnail,
         name='show_thumbnail'),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
 ]
 
 urlpatterns += static.static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

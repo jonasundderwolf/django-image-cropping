@@ -1,7 +1,7 @@
 import abc
 
 import six
-
+import django
 from django.utils.translation import ugettext as _
 
 from .. import widgets
@@ -40,7 +40,7 @@ class ImageBackend(six.with_metaclass(abc.ABCMeta)):
         if target['fk_field']:
             # it's a ForeignKey
             return self.WIDGETS['foreign_key'](
-                db_field.rel,
+                db_field.remote_field if django.VERSION[:2] >= (2, 0) else db_field.rel,
                 field_name=target['fk_field'],
                 admin_site=admin_site,
             )
