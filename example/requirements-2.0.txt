@@ -1,5 +1,0 @@
---requirement=requirements-base.txt
-
-easy-thumbnails==2.5
-WebTest==2.0.29
-django-webtest==1.9.3
