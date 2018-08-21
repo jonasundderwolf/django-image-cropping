@@ -1,6 +1,7 @@
 import abc
 
 import six
+
 import django
 from django.utils.translation import ugettext as _
 
