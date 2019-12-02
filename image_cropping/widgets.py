@@ -4,7 +4,7 @@ import logging
 
 import django
 from django import forms
-from django.contrib.admin.templatetags import admin_static
+from django.templatetags.static import static
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
 from django.db.models import ObjectDoesNotExist
 
@@ -73,7 +73,7 @@ class CropWidget(object):
             "image_cropping/js/jquery.Jcrop.min.js",
             "image_cropping/image_cropping.js",
         ]
-        js = [admin_static.static(path) for path in js]
+        js = [static.static(path) for path in js]
 
         if settings.IMAGE_CROPPING_JQUERY_URL:
             js.insert(0, settings.IMAGE_CROPPING_JQUERY_URL)
@@ -82,7 +82,7 @@ class CropWidget(object):
             "image_cropping/css/jquery.Jcrop.min.css",
             "image_cropping/css/image_cropping.css",
         ]
-        css = {'all': [admin_static.static(path) for path in css]}
+        css = {'all': [static.static(path) for path in css]}
 
         return forms.Media(css=css, js=js)
 
