@@ -4,7 +4,12 @@ import logging
 
 import django
 from django import forms
-from django.contrib.admin.templatetags import admin_static
+try:
+    from django.contrib.admin.templatetags import admin_static
+except ImportError:
+    class admin_static:
+        def static(path):
+            return path
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
 from django.db.models import ObjectDoesNotExist
 
