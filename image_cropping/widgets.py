@@ -1,10 +1,7 @@
-from __future__ import unicode_literals
-
 import logging
 
 import django
 from django import forms
-from django.contrib.admin.templatetags import admin_static
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
 from django.db.models import ObjectDoesNotExist
 
@@ -66,23 +63,22 @@ def get_attrs(image, name):
         return {}
 
 
-class CropWidget(object):
+class CropWidget:
 
     def _media(self):
         js = [
             "image_cropping/js/jquery.Jcrop.min.js",
             "image_cropping/image_cropping.js",
         ]
-        js = [admin_static.static(path) for path in js]
 
         if settings.IMAGE_CROPPING_JQUERY_URL:
             js.insert(0, settings.IMAGE_CROPPING_JQUERY_URL)
-
-        css = [
-            "image_cropping/css/jquery.Jcrop.min.css",
-            "image_cropping/css/image_cropping.css",
-        ]
-        css = {'all': [admin_static.static(path) for path in css]}
+        css = {
+            "all": [
+                "image_cropping/css/jquery.Jcrop.min.css",
+                "image_cropping/css/image_cropping.css",
+            ]
+        }
 
         return forms.Media(css=css, js=js)
 
@@ -98,7 +94,7 @@ class ImageCropWidget(AdminFileWidget, CropWidget):
         render_args = [name, value, attrs]
         if renderer:
             render_args.append(renderer)
-        return super(AdminFileWidget, self).render(*render_args)
+        return super().render(*render_args)
 
 
 class HiddenImageCropWidget(ImageCropWidget):
@@ -112,23 +108,20 @@ class HiddenImageCropWidget(ImageCropWidget):
         render_args = [name, value, attrs]
         if renderer:
             render_args.append(renderer)
-        return super(HiddenImageCropWidget, self).render(*render_args)
+        return super().render(*render_args)
 
 
 class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
     def __init__(self, *args, **kwargs):
         self.field_name = kwargs.pop('field_name')
-        super(CropForeignKeyWidget, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None, renderer=None):
         if attrs is None:
             attrs = {}
 
         if value:
-            if django.VERSION[:2] >= (2, 0):
-                rel_to = self.rel.model
-            else:
-                rel_to = self.rel.to
+            rel_to = self.rel.model
             app_name = rel_to._meta.app_label
             model_name = rel_to._meta.object_name.lower()
             try:
@@ -148,4 +141,4 @@ class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
         render_args = [name, value, attrs]
         if renderer:
             render_args.append(renderer)
-        return super(CropForeignKeyWidget, self).render(*render_args)
+        return super().render(*render_args)

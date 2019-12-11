@@ -1,25 +1,23 @@
 language: python
 cache: pip
 python:
-  - 2.7
+  - 3.5
   - 3.6
+  - 3.7
+  - 3.8
 install:
   - pip install -U tox
   - pip install -U pip
 script:
   - tox -r
 env:
-  - TOXENV=django18
-  - TOXENV=django110
-  - TOXENV=django111
-  - TOXENV=django20
-  - TOXENV=django21
+  - TOXENV=django22
+  - TOXENV=django30
 matrix:
   exclude:
-    - python: 2.7
-      env: TOXENV=django20
-    - python: 2.7
-      env: TOXENV=django21
+    - python: 3.5
+      env: TOXENV=django30
+
 notifications:
   email: false
 sudo: false
