@@ -1,4 +1,4 @@
-easy_thumbnails==2.6.0
+easy_thumbnails==2.7.0
 WebTest==2.0.33
 django-webtest==1.9.7
 coverage==4.5.4
