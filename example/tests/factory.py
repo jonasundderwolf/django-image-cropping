@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from PIL import Image, ImageDraw
 
 from example.models import Image as TestImage

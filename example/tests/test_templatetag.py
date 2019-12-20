@@ -15,7 +15,7 @@ except ImportError:  # py3
     from urllib.parse import unquote
 
 
-class TemplateTagTestBase(object):
+class TemplateTagTestBase:
     def setUp(self):
         # size of the example image is 400x400
         # cropping size is 120x100

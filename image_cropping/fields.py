@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django import forms
 from django.db import models
 from django.db.models import signals
@@ -13,7 +11,7 @@ class ImageCropField(models.ImageField):
     def formfield(self, **kwargs):
         defaults = {'widget': ImageCropWidget}
         defaults.update(kwargs)
-        return super(ImageCropField, self).formfield(**defaults)
+        return super().formfield(**defaults)
 
     def south_field_triple(self):  # pragma: no cover
         """
@@ -50,7 +48,7 @@ class ImageRatioField(models.CharField):
             'verbose_name': verbose_name,
             'help_text': help_text
         }
-        super(ImageRatioField, self).__init__(**field_kwargs)
+        super().__init__(**field_kwargs)
 
     def deconstruct(self):  # pragma: no cover
         """
@@ -75,7 +73,7 @@ class ImageRatioField(models.CharField):
         return self.name, 'image_cropping.fields.ImageRatioField', args, kwargs
 
     def contribute_to_class(self, cls, name, **kwargs):
-        super(ImageRatioField, self).contribute_to_class(cls, name, **kwargs)
+        super().contribute_to_class(cls, name, **kwargs)
         if not cls._meta.abstract:
             # attach a list of fields that are referenced by the ImageRatioField
             # so we can set the correct widget in the ModelAdmin
@@ -142,7 +140,7 @@ class ImageRatioField(models.CharField):
             'data-size-warning': str(self.size_warning).lower(),
             'class': 'image-ratio',
         })
-        return super(ImageRatioField, self).formfield(*args, **kwargs)
+        return super().formfield(*args, **kwargs)
 
     def south_field_triple(self):  # pragma: no cover
         """

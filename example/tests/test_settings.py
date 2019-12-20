@@ -13,7 +13,7 @@ from . import factory
 class SettingsTestCase(WebTest):
 
     def setUp(self):
-        super(SettingsTestCase, self).setUp()
+        super().setUp()
         self.user = factory.create_superuser()
         self.image = factory.create_cropped_image()
 
