@@ -334,12 +334,17 @@ The cropping widget is not displayed when using a ``ForeignKey``.
 Changelog
 =========
 
-X.X
+1.3
 ---
 
+- Add support for Django 3.0
 - Drop support for Python < 3.5
 - Drop support for Django < 2.2
-- Add Support for Django 2.2, 3.0
+
+1.2
+---
+
+- Add support for Django 2.1
 
 1.1
 ---
