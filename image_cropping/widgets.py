@@ -68,7 +68,7 @@ class CropWidget:
     def _media(self):
         js = [
             "image_cropping/js/jquery.Jcrop.min.js",
-            "image_cropping/image_cropping.js",
+            "image_cropping/image_cropping.min.js",
         ]
 
         if settings.IMAGE_CROPPING_JQUERY_URL:
