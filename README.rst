@@ -392,6 +392,6 @@ Noteable (breaking) changes and things to be considered when upgrading from an o
 0.7
 ---
 
-- Made the widget for the ``ImageCropField`` overwriteable to allow custom widgets. (Remember to use the ``ImageCroppingMixin`` in the admin as the image cropping widgets are no longer implicitly set.)
+- Made the widget for the ``ImageCropField`` overwritable to allow custom widgets. (Remember to use the ``ImageCroppingMixin`` in the admin as the image cropping widgets are no longer implicitly set.)
 - Updated ``Jcrop`` and ``jQuery`` dependencies.
 - Moved docs to *Read the Docs*: https://django-image-cropping.readthedocs.org
