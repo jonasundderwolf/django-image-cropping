@@ -1,4 +1,3 @@
-import codecs
 import os
 import re
 
@@ -7,7 +6,7 @@ from setuptools import find_packages, setup
 
 def read(*parts):
     filename = os.path.join(os.path.dirname(__file__), *parts)
-    with codecs.open(filename, encoding='utf-8') as fp:
+    with open(filename) as fp:
         return fp.read()
 
 
@@ -32,6 +31,7 @@ setup(
     install_requires=["django-appconf>=1.0.2"],
     include_package_data=True,
     test_suite='example.runtests.runtests',
+    python_requires=">=3.5",
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
