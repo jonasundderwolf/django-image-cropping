@@ -10,6 +10,7 @@
 .python-version
 .tox/
 _build/
+assets/
 build/
 coverage_html_report
 dist/
