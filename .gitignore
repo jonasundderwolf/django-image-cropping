@@ -5,6 +5,7 @@
 *.sqlite3
 *.swp
 *~
+.idea
 .cache
 .coverage
 .python-version
