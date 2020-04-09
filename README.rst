@@ -333,6 +333,12 @@ The cropping widget is not displayed when using a ``ForeignKey``.
 Changelog
 =========
 
+1.4
+---
+
+- Removed more old code
+- Move testing and packaging to GitHub Actions
+
 1.3
 ---
 
