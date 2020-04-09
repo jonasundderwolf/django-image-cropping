@@ -26,13 +26,14 @@ jobs:
         pip install -r example/requirements.txt
     - name: Run Tox
       run: tox
-    - name: Report to coverall  # by the package as the action is broken, but won't work on external forks!
-      if: matrix.python-version == 3.7
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-      run: |
-        pip install coveralls
-        coveralls
+    # TODO: re-enable when coverage is fixed (see tox.ini)
+#    - name: Report to coverall  # by the package as the action is broken, but won't work on external forks!
+#      if: matrix.python-version == 3.7
+#      env:
+#        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+#      run: |
+#        pip install coveralls
+#        coveralls
      # The official action is broken as only supports LCOV format, not supported by python coverage
      # Think about moving to codecov or another provider?
 #    - name: Coveralls
