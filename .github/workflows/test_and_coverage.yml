@@ -1,8 +1,8 @@
 name: Python tox + coverage CI
 
 # You may need to add pull_request for the coverall action
-#on: ["push", "pull_request"]
-on: "push"
+on: ["push", "pull_request"]
+# on: "push"
 
 jobs:
   build:
