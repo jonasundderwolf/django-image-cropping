@@ -12,6 +12,10 @@ django-image-cropping
 .. image:: https://img.shields.io/pypi/pyversions/django-image-cropping.svg
     :target: https://pypi.python.org/pypi/django-image-cropping
 
+.. image:: https://img.shields.io/pypi/djversions/django-image-cropping
+    :alt: PyPI - Django Version
+    :target: https://pypi.python.org/pypi/django-image-cropping
+
 django-image-cropping is an app for cropping uploaded images via Django's admin backend using `Jcrop
 <https://github.com/tapmodo/Jcrop>`_.
 
