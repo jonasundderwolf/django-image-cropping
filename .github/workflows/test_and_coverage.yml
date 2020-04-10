@@ -1,0 +1,42 @@
+name: Python tox + coverage CI
+
+# You may need to add pull_request for the coverall action
+on: ["push", "pull_request"]
+# on: "push"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.5, 3.6, 3.7, 3.8]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v1
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install tox tox-gh-actions
+        pip install -r example/requirements.txt
+    - name: Run Tox
+      run: tox
+    # TODO: re-enable when coverage is fixed (see tox.ini)
+#    - name: Report to coverall  # by the package as the action is broken, but won't work on external forks!
+#      if: matrix.python-version == 3.7
+#      env:
+#        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+#      run: |
+#        pip install coveralls
+#        coveralls
+     # The official action is broken as only supports LCOV format, not supported by python coverage
+     # Think about moving to codecov or another provider?
+#    - name: Coveralls
+#      uses: coverallsapp/github-action@master
+#      with:
+#        github-token: ${{ secrets.GITHUB_TOKEN }}

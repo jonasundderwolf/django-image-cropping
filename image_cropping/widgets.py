@@ -8,12 +8,8 @@ from django.db.models import ObjectDoesNotExist
 from .config import settings
 from .utils import get_backend
 
-try:
-    # Django >= 1.9
-    from django.apps import apps
-    get_model = apps.get_model
-except ImportError:
-    from django.db.models import get_model
+from django.apps import apps
+
 
 logger = logging.getLogger(__name__)
 
@@ -126,7 +122,7 @@ class CropForeignKeyWidget(ForeignKeyRawIdWidget, CropWidget):
             model_name = rel_to._meta.object_name.lower()
             try:
                 image = getattr(
-                    get_model(app_name, model_name).objects.get(pk=value),
+                    apps.get_model(app_name, model_name).objects.get(pk=value),
                     self.field_name,
                 )
                 if image:

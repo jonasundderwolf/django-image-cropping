@@ -9,10 +9,7 @@ from django.test import TestCase
 
 from .factory import create_cropped_image
 
-try:
-    from urllib import unquote
-except ImportError:  # py3
-    from urllib.parse import unquote
+from urllib.parse import unquote
 
 
 class TemplateTagTestBase:
