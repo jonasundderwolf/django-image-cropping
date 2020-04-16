@@ -14,7 +14,6 @@ _build/
 assets/
 build/
 coverage_html_report
-dist/
 media/
 settings_local.py
 test_results.html
