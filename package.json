@@ -1,0 +1,12 @@
+{
+  "name": "django-image-cropping",
+  "version": "1.0.0",
+  "scripts": {
+    "minify": "uglifyjs --compress --mangle --output image_cropping/static/image_cropping/js/dist/image_cropping.min.js -- ./image_cropping/static/image_cropping/js/src/jquery.Jcrop.min.js ./image_cropping/static/image_cropping/js/src/image_cropping.js",
+	"watch": "watch 'npm run minify' ./image_cropping/static/image_cropping/js/src"
+  },
+  "dependencies": {
+    "uglify-js": "^3.9.1",
+    "watch": "^1.0.2"
+  }
+}
