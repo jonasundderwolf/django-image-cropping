@@ -2,14 +2,12 @@ import logging
 
 import django
 from django import forms
+from django.apps import apps
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
 from django.db.models import ObjectDoesNotExist
 
 from .config import settings
 from .utils import get_backend
-
-from django.apps import apps
-
 
 logger = logging.getLogger(__name__)
 

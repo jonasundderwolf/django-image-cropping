@@ -1,7 +1,7 @@
 from django_webtest import WebTest
 
-from django.urls import reverse
 from django.test.utils import override_settings
+from django.urls import reverse
 
 from . import factory
 

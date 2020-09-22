@@ -1,8 +1,8 @@
+from example import views
+
 from django.conf import settings
 from django.conf.urls import include, static, url
 from django.contrib import admin
-from example import views
-
 
 urlpatterns = [
     url(r'^$', views.thumbnail_options,
