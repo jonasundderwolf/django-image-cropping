@@ -87,8 +87,8 @@ def cropped_thumbnail(context, instance, ratiofieldname, **kwargs):
     # pass remaining arguments to easy_thumbnail
     thumbnail_options.update(kwargs)
 
+    backend = get_backend()
     try:
-        backend = get_backend()
         url = backend.get_thumbnail_url(image, thumbnail_options)
     except backend.exceptions_to_catch:
         # only raise an exception if THUMBNAIL_DEBUG is set to `True`

@@ -13,16 +13,6 @@ class ImageCropField(models.ImageField):
         defaults.update(kwargs)
         return super().formfield(**defaults)
 
-    def south_field_triple(self):  # pragma: no cover
-        """
-        Return a suitable description of this field for South.
-        """
-        # We'll just introspect ourselves, since we inherit.
-        from south.modelsinspector import introspector
-        field_class = "django.db.models.fields.files.ImageField"
-        args, kwargs = introspector(self)
-        return (field_class, args, kwargs)
-
 
 class ImageRatioField(models.CharField):
     def __init__(self, image_field, size='0x0', free_crop=False,
@@ -107,7 +97,6 @@ class ImageRatioField(models.CharField):
                 continue
 
             # calculate initial cropping
-            width, height = (100, 100)
             try:
                 width, height = (image.width, image.height)
             except AttributeError:
@@ -123,7 +112,7 @@ class ImageRatioField(models.CharField):
                 box = ''
             setattr(instance, ratiofieldname, box)
 
-    def formfield(self, *args, **kwargs):
+    def formfield(self, **kwargs):
         ratio = self.width / float(self.height) if not self.free_crop else 0
 
         kwargs['widget'] = forms.TextInput(attrs={
@@ -140,14 +129,4 @@ class ImageRatioField(models.CharField):
             'data-size-warning': str(self.size_warning).lower(),
             'class': 'image-ratio',
         })
-        return super().formfield(*args, **kwargs)
-
-    def south_field_triple(self):  # pragma: no cover
-        """
-        Return a suitable description of this field for South.
-        """
-        # We'll just introspect ourselves, since we inherit.
-        from south.modelsinspector import introspector
-        field_class = "django.db.models.fields.CharField"
-        args, kwargs = introspector(self)
-        return (field_class, args, kwargs)
+        return super().formfield(**kwargs)

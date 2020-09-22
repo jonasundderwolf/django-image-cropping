@@ -1,6 +1,5 @@
 import abc
 
-import django
 from django.utils.translation import ugettext as _
 
 from .. import widgets
