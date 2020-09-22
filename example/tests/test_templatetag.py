@@ -1,4 +1,5 @@
 import itertools
+from urllib.parse import unquote
 
 from PIL import Image
 
@@ -8,8 +9,6 @@ from django.template import Context, Template
 from django.test import TestCase
 
 from .factory import create_cropped_image
-
-from urllib.parse import unquote
 
 
 class TemplateTagTestBase:
