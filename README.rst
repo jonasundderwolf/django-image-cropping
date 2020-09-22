@@ -337,6 +337,16 @@ The cropping widget is not displayed when using a ``ForeignKey``.
 Changelog
 =========
 
+1.5
+---
+
+- Drop support for Python 3.5 (although it should still work)
+- Add support for Django 3.1
+- Minified JS and reduce potential for incompatibility with other django libraries (See #148)
+- Fix formfield_for_dbfield signature (#134)
+- Fix CSS property word separator (#131)
+- Enforce isort in tests
+
 1.4
 ---
 
