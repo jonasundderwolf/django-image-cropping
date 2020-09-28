@@ -15,11 +15,10 @@ def crop_corners(image, box=None, **kwargs):
     if not isinstance(box, (list, tuple)):
         # convert cropping string to a list of integers if necessary
         try:
-            box = list(map(int, box.split(',')))
+            box = list(map(int, box.split(",")))
         except (ValueError, AttributeError):
             # there's garbage in the cropping field, ignore
-            logger.warning(
-                'Unable to parse "box" parameter "%s". Ignoring.' % box)
+            logger.warning('Unable to parse "box" parameter "%s". Ignoring.' % box)
             box = []
 
     if len(box) == 4:
@@ -31,6 +30,5 @@ def crop_corners(image, box=None, **kwargs):
         if width and height and (width, height) != image.size:
             image = image.crop(box)
     else:
-        logger.warning(
-            '"box" parameter requires four values. Ignoring "%r".' % box)
+        logger.warning('"box" parameter requires four values. Ignoring "%r".' % box)
     return image

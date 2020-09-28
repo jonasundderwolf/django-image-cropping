@@ -10,3 +10,4 @@ pytest-env==0.6.2
 pytest-factoryboy==2.0.3
 pytest-html==2.1.1
 pytest-isort==1.2.0
+pytest-black==0.3.11
