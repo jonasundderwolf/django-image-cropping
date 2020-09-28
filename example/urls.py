@@ -1,7 +1,7 @@
 from example import views
 
 from django.conf import settings
-from django.conf.urls import include, static, url
+from django.conf.urls import static, url
 from django.contrib import admin
 
 urlpatterns = [

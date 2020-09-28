@@ -1,6 +1,5 @@
 import logging
 
-import django
 from django import forms
 from django.apps import apps
 from django.contrib.admin.widgets import AdminFileWidget, ForeignKeyRawIdWidget
