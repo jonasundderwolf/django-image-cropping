@@ -26,6 +26,11 @@ jobs:
         pip install -r example/requirements.txt
     - name: Run Tox
       run: tox
+    - name: Run isort and black
+      # needs to be run outside of pytest else only the example app is tested
+      run: |
+        isort .
+        black .
     # TODO: re-enable when coverage is fixed (see tox.ini)
 #    - name: Report to coverall  # by the package as the action is broken, but won't work on external forks!
 #      if: matrix.python-version == 3.7

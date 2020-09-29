@@ -11,14 +11,13 @@ from image_cropping.utils import max_cropping
 
 class InitialCroppingTestCase(TestCase):
     def setUp(self):
-        self.path = '%s%s' % (settings.STATIC_ROOT, "/images/example_image.jpg")
+        self.path = "%s%s" % (settings.STATIC_ROOT, "/images/example_image.jpg")
         self.width = 400
         self.height = 400
 
         self.image = Image()
         self.image.image_field.save(
-            os.path.basename(self.path),
-            File(open(self.path, 'rb'))
+            os.path.basename(self.path), File(open(self.path, "rb"))
         )
         self.image.save()
 
@@ -39,19 +38,30 @@ class InitialCroppingTestCase(TestCase):
         self.assertEqual([25, 0, 75, 100], max_cropping(100, 200, 100, 100))
 
     def test_initialcropping(self):
-        self.assertEqual(self.image.cropping,
-                         ','.join(map(lambda d: str(d),
-                                      max_cropping(120, 100, self.width, self.height))))
+        self.assertEqual(
+            self.image.cropping,
+            ",".join(
+                map(lambda d: str(d), max_cropping(120, 100, self.width, self.height))
+            ),
+        )
 
         # free crop
-        self.assertEqual(self.image.cropping_free,
-                         ','.join(map(lambda d: str(d),
-                                      max_cropping(120, 100,
-                                                   self.width, self.height, True))))
+        self.assertEqual(
+            self.image.cropping_free,
+            ",".join(
+                map(
+                    lambda d: str(d),
+                    max_cropping(120, 100, self.width, self.height, True),
+                )
+            ),
+        )
 
     def test_fk_initialcropping(self):
         image = ImageFK(image=self.image)
         image.save()
-        self.assertEqual(image.cropping,
-                         ','.join(map(lambda d: str(d),
-                                      max_cropping(120, 100, self.width, self.height))))
+        self.assertEqual(
+            image.cropping,
+            ",".join(
+                map(lambda d: str(d), max_cropping(120, 100, self.width, self.height))
+            ),
+        )
