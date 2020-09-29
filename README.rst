@@ -21,7 +21,8 @@ django-image-cropping is an app for cropping uploaded images via Django's admin 
 
 Screenshot:
 
-.. image:: http://www.jonasundderwolf.de/media/images/django_image_cropping_example.png
+.. image:: docs/django_image_cropping_example.png
+    :alt: Screenshot of the cropping
 
 django-image-cropping is perfect when you need images with a specific size for your templates but want your
 users or editors to upload images of any dimension. It presents a selection with a fixed aspect ratio so your users
