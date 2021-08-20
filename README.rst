@@ -338,6 +338,11 @@ The cropping widget is not displayed when using a ``ForeignKey``.
 Changelog
 =========
 
+1.6.1
+---
+
+- Add default setting for jquery url to app conf
+
 1.6
 ---
 
