@@ -339,7 +339,7 @@ Changelog
 =========
 
 1.6.1
----
+-----
 
 - Add default setting for jquery url to app conf
 
