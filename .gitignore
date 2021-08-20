@@ -8,6 +8,7 @@
 .idea
 .cache
 .coverage
+.DS_Store
 .python-version
 .tox/
 _build/
