@@ -305,7 +305,7 @@ You can enable this functionality project-wide by adding the following line to y
 Custom jQuery
 -------------
 
-By default the image cropping widget embeds a recent version of jQuery.
+By default the image cropping widget embeds the jQuery version vendored with the Django admin.
 
 You can point to another version using the ``IMAGE_CROPPING_JQUERY_URL`` setting, though compatibility
 issues may arise if your jQuery version differs from the one that is tested against.

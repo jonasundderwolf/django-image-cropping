@@ -8,4 +8,4 @@ class ImageCroppingAppConf(AppConf):
     SIZE_WARNING = False
     BACKEND = "image_cropping.backends.easy_thumbs.EasyThumbnailsBackend"
     BACKEND_PARAMS = {}
-    JQUERY_URL = ""
+    JQUERY_URL = settings.STATIC_URL + "admin/js/vendor/jquery/jquery.min.js"
