@@ -1,3 +1,4 @@
+-e .
 easy_thumbnails==2.7.0
 WebTest==2.0.35
 django-webtest==1.9.7
