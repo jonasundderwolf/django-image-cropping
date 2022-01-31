@@ -332,9 +332,9 @@ Testing
 =======
 
 - Setup a virtualenv with one of the supported versions of Python
-- Install the example project: `pip install -r example/requirements.txt`
-- Run `pytest`
-- In case you want to test against multiple Python versions install and run `tox`
+- Install the example project: ``pip install -r example/requirements.txt``
+- Run ``pytest``
+- In case you want to test against multiple Python versions install and run ``tox``
 
 
 Troubleshooting
