@@ -2,8 +2,8 @@ from example import views
 
 from django.conf import settings
 from django.conf.urls import static
-from django.urls import re_path
 from django.contrib import admin
+from django.urls import re_path
 
 urlpatterns = [
     re_path(r"^$", views.thumbnail_options, name="thumbnail_options"),
