@@ -1,12 +1,12 @@
 -e .
-easy_thumbnails==2.7.0
+easy_thumbnails==2.8.1
 WebTest==3.0.0
-django-webtest==1.9.7
+django-webtest==1.9.9
 coverage==6.3
 isort==5.10.1
 pytest==6.2.5
 pytest-cov==3.0.0
-pytest-django==3.10.0
+pytest-django==4.5.2
 pytest-env==0.6.2
 pytest-factoryboy==2.1.0
 pytest-html==3.1.1
