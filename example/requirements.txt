@@ -2,7 +2,7 @@
 easy_thumbnails==2.8.1
 WebTest==3.0.0
 django-webtest==1.9.9
-coverage==6.3
+coverage==5.5
 isort==5.10.1
 pytest==6.2.5
 pytest-cov==3.0.0
