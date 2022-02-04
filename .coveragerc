@@ -1,7 +1,6 @@
 [run]
 branch = True
 include =
-    example/*
     image_cropping/*
 omit =
     */migrations/*
