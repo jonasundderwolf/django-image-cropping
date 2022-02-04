@@ -4,8 +4,6 @@ import sys
 
 from easy_thumbnails.conf import settings as thumbnail_settings
 
-import django.template
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DEBUG = True
@@ -18,6 +16,8 @@ DATABASES = {
 }
 
 TIME_ZONE = "Europe/Berlin"
+# Keep pre Django 4.0 behaviour after upgrading
+USE_TZ = False
 LANGUAGE_CODE = "en-us"
 
 SITE_ID = 1

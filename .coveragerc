@@ -1,6 +1,8 @@
 [run]
 branch = True
-include = example/*
+include =
+    example/*
+    image_cropping/*
 omit =
     */migrations/*
     */conf/*
