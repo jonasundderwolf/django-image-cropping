@@ -347,6 +347,11 @@ The cropping widget is not displayed when using a ``ForeignKey``.
 Changelog
 =========
 
+1.7
+---
+
+- Add support for Django 4.0 (`@jwedel <https://github.com/jwedel>`_ in `#176 <https://github.com/jonasundderwolf/django-image-cropping/pull/176>`_)
+
 1.6.2
 -----
 
