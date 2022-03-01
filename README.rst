@@ -88,6 +88,8 @@ Add the ``ImageCroppingMixin`` to your ``ModelAdmin``::
     from django.contrib import admin
     from image_cropping import ImageCroppingMixin
 
+    from .models import MyModel
+
     class MyModelAdmin(ImageCroppingMixin, admin.ModelAdmin):
         pass
 
@@ -126,7 +128,7 @@ Any other processor parameter (like ``bw=True`` or ``upscale=True``) will be for
 Example usage::
 
     {% load cropping %}
-    <img src="{% cropped_thumbnail yourmodel "cropping" scale=0.5 %}">
+    <img src="{% cropped_thumbnail yourmodel 'cropping' scale=0.5 %}">
 
 Or generate the URL from Python code in your view::
 
